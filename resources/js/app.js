@@ -1,1 +1,2 @@
 import './bootstrap';
+AOS.init();
