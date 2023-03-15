@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('landing-page', [
+        'title' => 'Selamat Datang di Bidji Course'
+    ]);
+})->name('landing-page');
