@@ -18,3 +18,15 @@ Route::get('/', function () {
         'title' => 'Selamat Datang di Bidji Course'
     ]);
 })->name('landing-page');
+
+Route::get('/dashboard', function () {
+    return view('dashboard.index', [
+        'title' => 'Dashboard'
+    ]);
+})->name('dashboard');
+
+Route::get('/dashboard/courses', function () {
+    return view('dashboard.courses', [
+        'title' => 'Dashboard: Courses'
+    ]);
+})->name('courses');

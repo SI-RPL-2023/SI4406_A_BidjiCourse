@@ -30,7 +30,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/main.css">
 
@@ -44,17 +44,12 @@
 </head>
 
 {{-- <body style="background-color: rgb(255, 255, 255)"> --}}
-<header>
-    @include('layouts.navbar')
-    {{-- @include('layouts.input-modal') --}}
-</header>
+@include('dashboard.layouts.navbar')
 {{-- <div class="navbar-margin-bottom">‎</div> --}}
 <main>
+    @include('dashboard.layouts.sidebar')
     @yield('main')
 </main>
-<footer>
-    @include('layouts.footer')
-</footer>
 
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
