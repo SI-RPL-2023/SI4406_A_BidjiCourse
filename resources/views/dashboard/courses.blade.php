@@ -1,10 +1,11 @@
 @extends('dashboard.index')
 @section('main')
-    <div class="container-fluid">
-        <div class="row">
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <h1>Hello World</h1>
-            </main>
-        </div>
-    </div>
+    <textarea class="mb-5" name="jodit" id="jodit"></textarea>
+@endsection
+@section('script')
+    <script>
+        const jodit = Jodit.make('#jodit');
+        $(".jodit-placeholder").text("Tulis materi di sini...");
+        $(".jodit-status-bar-link").remove();
+    </script>
 @endsection
