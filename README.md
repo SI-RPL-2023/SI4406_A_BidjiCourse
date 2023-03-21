@@ -11,13 +11,13 @@ Repository ini dibuat bertujuan untuk memenuhi tugas besar mata kuliah Rekayasa 
 
 # Anggota Kelompok
 
-| No  | Nama                                                            | NIM        |
-| --- | --------------------------------------------------------------- | ---------- |
-| 1   | [Putu Wisnu Wirayuda Putra](https://www.instagram.com/puutuuu_) | 1202200244 |
-| 2   | [Nazla Nabila](https://www.instagram.com/)                      | 1202204344 |
-| 3   | [M. Rayhan Ampurama](https://www.instagram.com/)                | 1202204036 |
-| 4   | [Herro Arya Setiawan](https://www.instagram.com/herroaryst)     | 1202204068 |
-| 5   | [Alfatha Huga Anaku](https://www.instagram.com/)                | 1202201281 |
-| 6   | [Fathan](https://www.instagram.com/)                            | 1202184140 |
+| No  | Nama                                                            | NIM        | Role            |
+| --- | --------------------------------------------------------------- | ---------- | --------------- |
+| 1   | [M. Rayhan Ampurama](https://www.instagram.com/ray_ampurama)    | 1202204036 | Project Manager |
+| 2   | [Nazla Nabila](https://www.instagram.com/nazlaanbl)             | 1202204344 | Analyst         |
+| 3   | [Putu Wisnu Wirayuda Putra](https://www.instagram.com/puutuuu_) | 1202200244 | Programmer      |
+| 4   | [Herro Arya Setiawan](https://www.instagram.com/herroaryst)     | 1202204068 | Programmer      |
+| 5   | [Alfatha Huga Anaku](https://www.instagram.com/alfathahuga_)    | 1202201281 | Programmer      |
+| 6   | [Fathan](https://www.instagram.com/fathan147)                   | 1202184140 | Programmer      |
 
 # Beberapa preview tampilan website kami :
