@@ -186,57 +186,54 @@
     {{-- <h3 class="loading-animation"></h3> --}}
 </head>
 
-@include('dashboard.layouts.navbar')
+<body>
+    @include('dashboard.layouts.navbar')
 
-{{-- <div class="navbar-margin-bottom">‎</div> --}}
-
-<div class="container-fluid">
-    <div class="row">
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @include('dashboard.layouts.sidebar')
-            @yield('main')
-        </main>
+    <div class="container-fluid">
+        <div class="row">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                @include('dashboard.layouts.sidebar')
+                @yield('main')
+            </main>
+        </div>
     </div>
-</div>
 
-<!-- Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous">
-</script>
-
-<!-- Animation -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-<!-- Custom JS -->
-<script src="/js/main.js"></script>
-
-<!-- Font Awesome -->
-<script src="/js/font-awesome/fontawesome.min.js"></script>
-<script src="/js/font-awesome/regular.min.js"></script>
-<script src="/js/font-awesome/solid.min.js"></script>
-<script src="/js/font-awesome/light.min.js"></script>
-
-<!-- Feather Icons -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
-<script>
-    feather.replace({
-        'aria-hidden': 'true'
-    })
-</script>
-
-@yield('script')
-
-@if (session()->has('alert'))
-    <script>
-        Swal.fire({
-            icon: '{{ session('alert') }}',
-            text: '{{ session('text') }}'
-        });
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
     </script>
-@endif
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous">
+    </script>
+
+    <!-- Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/js/main.js"></script>
+
+    <!-- Font Awesome -->
+    <script src="/js/font-awesome/fontawesome.min.js"></script>
+    <script src="/js/font-awesome/regular.min.js"></script>
+    <script src="/js/font-awesome/solid.min.js"></script>
+    <script src="/js/font-awesome/light.min.js"></script>
+
+    <!-- Feather Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <script>
+        feather.replace();
+    </script>
+
+    @yield('script')
+
+    @if (session()->has('alert'))
+        <script>
+            Swal.fire({
+                icon: '{{ session('alert') }}',
+                text: '{{ session('text') }}'
+            });
+        </script>
+    @endif
 
 </body>
 
