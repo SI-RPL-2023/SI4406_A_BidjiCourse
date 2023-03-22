@@ -25,9 +25,6 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 //HomeController
 Route::resource('', HomeController::class)->except('show');
 
-//DashboardController
-Route::resource('dashboard', DashboardController::class)->except('show');
-
 //LoginController
 Route::resource('login', LoginController::class)->except('show')->middleware('guest');
 
@@ -37,8 +34,11 @@ Route::resource('register', RegisterController::class)->except('show')->middlewa
 //LogoutController
 Route::get('logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth');
 
+//DashboardController
+Route::resource('dashboard', DashboardController::class)->except('show')->middleware('admin');
+
 //DashboardUsersController
-Route::resource('dashboard/users', DashboardUsersController::class)->except('show');
+Route::resource('dashboard/users', DashboardUsersController::class)->except('show')->middleware('admin');
 
 //DashboardCoursesController
-Route::resource('dashboard/courses', DashboardCoursesController::class)->except('show');
+Route::resource('dashboard/courses', DashboardCoursesController::class)->except('show')->middleware('admin');
