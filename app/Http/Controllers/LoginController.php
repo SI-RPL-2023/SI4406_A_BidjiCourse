@@ -38,7 +38,7 @@ class LoginController extends Controller
         ];
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect()->intended('/')
+            return redirect()->intended(auth()->user()->is_admin ? '/dashboard' : '/')
                 ->with('alert', 'info')
                 ->with('text', 'Selamat datang, ' . auth()->user()->full_name . '!');
         };
