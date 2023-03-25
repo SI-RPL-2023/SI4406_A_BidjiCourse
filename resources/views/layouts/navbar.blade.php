@@ -1,7 +1,7 @@
 <nav
     class="navbar navbar-v3-2 bg-white default-layout-navbar navbar-expand-lg navbar-light d-flex flex-row fixed-top-sm fixed-top shadow">
     <div class="container-xl">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{{ route('index') }}">
             <img src="{{ ('img/Bidji Logo.svg ') }}" width="70" height="auto">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
