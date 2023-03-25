@@ -8,7 +8,6 @@
             /* box-shadow: 0px 3px 12px rgba(160, 159, 159, 0.8); */
             border-radius: 5px;
         }
-
         .submit-btn:hover {
             background-color: rgb(0, 0, 0);
         }
