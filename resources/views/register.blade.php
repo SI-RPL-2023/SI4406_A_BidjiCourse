@@ -15,6 +15,7 @@
     </style>
 @endsection
 @section('main')
+
     <div class="text-center" style="padding-top: 100px">
         <h3>Daftar Bidji Course, yuk!</h3>
     </div>
