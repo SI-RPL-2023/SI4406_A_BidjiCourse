@@ -71,7 +71,7 @@
         }
         .carousel-control-prev,
         .carousel-control-next {
-            background-color: #e1e1e1;
+            background-color: #0C1939;
             width: 6vh;
             height: 6vh;
             border-radius: 50%;
@@ -153,13 +153,7 @@
                 <p class="lead mx-5">Materi yang ada di Bidji Course akan sesuai dengan kebutuhan belajar kamu.</p>
             </div>
             <div class="col-md-5">
-                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
-                    height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%"
-                        fill="#aaa" dy=".3em">500x500</text>
-                </svg>
+                <img src="img/foto 1.svg" width="500" height="500">
             </div>
         </div>
 
@@ -212,67 +206,71 @@
     <div class="carousel-inner">
         <div class="carousel-item active">
             <div class="card">
-                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="img-wrapper"><img src="img/math.jpg" class="d-block w-100" alt="..."> </div>
                 <div class="card-body">
-                    <h5 class="card-title">Card title 1</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Matematika</h5>
+                    <p class="card-text">Disini bisa belajar aljabar, himpunan, linear, segitiga & segiempat, dan peluang.</p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
                 </div>
             </div>
         </div>
         <div class="carousel-item">
             <div class="card">
-                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="img-wrapper"><img src="img/science.jpg" class="d-block w-100" alt="..."> </div>
                 <div class="card-body">
-                    <h5 class="card-title">Card title 2</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Ilmu Pengetahuan Alam</h5>
+                    <p class="card-text">Disini bisa belajar perubahan fisika dan kimia, sistem reproduksi, sistem organ tubuh manusia, struktur pada tumbuhan, dan klasifikasi zat.</p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
                 </div>
             </div>
         </div>
         <div class="carousel-item">
             <div class="card">
-                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="img-wrapper"><img src="img/english.jpg" class="d-block w-100" alt="..."> </div>
                 <div class="card-body">
-                    <h5 class="card-title">Card title 3</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Bahasa Inggris</h5>
+                    <p class="card-text">Disini bisa belajar grammar, descriptive text, narative text, report, dan advertisement</p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
                 </div>
             </div>
         </div>
         <div class="carousel-item">
             <div class="card">
-                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="img-wrapper"><img src="img/globe.jpg" class="d-block w-100" alt="..."> </div>
                 <div class="card-body">
-                    <h5 class="card-title">Card title 4</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Ilmu Pengetahuan Sosial</h5>
+                    <p class="card-text">Disini bisa belajar letak geografis, sejarah, ekonomi, interaksi sosial, dan badan usaha</p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
                 </div>
             </div>
         </div>
         <div class="carousel-item">
             <div class="card">
-                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="img-wrapper"><img src="img/garuda.jpg" class="d-block w-100" alt="..."> </div>
                 <div class="card-body">
-                    <h5 class="card-title">Card title 5</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Pendidikan Kewarganegaraan</h5>
+                    <p class="card-text">Disini bisa belajar UUD 1945, pancasila, norma, hukum, dan sejarah indonesia </p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
                 </div>
             </div>
         </div>
         <div class="carousel-item">
             <div class="card">
-                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="img-wrapper"><img src="img/indo.jpg" class="d-block w-100" alt="..."> </div>
                 <div class="card-body">
-                    <h5 class="card-title">Card title 6</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Bahasa indonesia</h5>
+                    <p class="card-text">Disini bisa belajar puisi, surat, literasi buku, fabel, dan teks deskripsi</p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="img-wrapper"><img src="img/mosque.jpg" class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Pendidikan Agama Islam</h5>
+                    <p class="card-text">Disini bisa belajar sejarah islam, tajwid, zakat, haji, dan qurban</p>
+                    <a href="#" class="btn btn-secondary">Coba belajar</a>
                 </div>
             </div>
         </div>
@@ -303,19 +301,13 @@
 
         <div class="row featurette">
             <div class="col-md-7 order-md-2">
-                <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-muted">See for
-                        yourself.</span></h2>
-                <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how
-                    this layout would work with some actual real-world content in place.</p>
+                <h2 class="featurette-heading fw-normal lh-1 mx-5">Bisa belajar <span class="text-muted">gratis</span></h2>
+                <p class="lead mx-5">Bidji Course mendukung seluruh anak muda di Indonesia untuk tetap bisa belajar, tanpa harus terhalang biaya apapun</p>
             </div>
             <div class="col-md-5 order-md-1">
-                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
-                    height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%"
-                        fill="#aaa" dy=".3em">500x500</text>
-                </svg>
+                <div class="col-md-5">
+                    <img src="img/bakar.jpg" width="500" height="350">
+                </div>
             </div>
         </div>
 
@@ -323,20 +315,14 @@
 
         <div class="row featurette">
             <div class="col-md-7">
-                <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. <span
-                        class="text-muted">Checkmate.</span></h2>
-                <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really
-                    intended to be actually read, simply here to give you a better view of what this would look like with
-                    some actual content. Your content.</p>
+                <h2 class="featurette-heading fw-normal lh-1">Quiz untuk <span
+                        class="text-muted">mengasah kemampuan</span></h2>
+                <p class="lead">Kamu bisa mengasah sejauh mana pemahamanmu tentang materi yang kamu pelajari</p>
             </div>
             <div class="col-md-5">
-                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
-                    height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%"
-                        fill="#aaa" dy=".3em">500x500</text>
-                </svg>
+                <div class="col-md-5">
+                    <img src="img/quiz.jpg" width="500" height="350">
+                </div>
             </div>
         </div>
 

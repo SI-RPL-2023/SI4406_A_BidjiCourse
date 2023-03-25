@@ -3,15 +3,14 @@
         width: 350px;
     }
     
+
 </style>
 
 <nav class="navbar navbar-v3-2 bg-white default-layout-navbar navbar-expand-lg navbar-light d-flex flex-row fixed-top-sm fixed-top">
     <div class="container-xl">
-        <a class="navbar-brand" href="#">Bidji Course</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="#">
+            <img src="{{ ('img/Bidji Logo.svg ') }}" alt="Bootstrap" width="50" height="45">
+        </a>
         <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Apa yang ingin Anda pelajari" aria-label="Apa yang ingin Anda pelajari" >
               <!---  <button class="btn btn-dark" type="submit">Search</button> --->
@@ -45,4 +44,3 @@
         </div>
     </div>
 </nav>
-
