@@ -1,6 +1,9 @@
 @extends('layouts.main')
 @section('style')
     <style>
+
+        
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -51,28 +54,59 @@
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
-
+        body {overflow-x: hidden;}
         body {
-            padding-top: 3rem;
-            padding-bottom: 3rem;
+            padding-top: 0;
+            padding-bottom: 2rem;
             color: #5a5a5a;
         }
 
-        .carousel {
-            margin-bottom: 4rem;
+        .carousel-inner {
+            padding: 1em;
         }
-
-        .carousel-caption {
-            bottom: 3rem;
-            z-index: 10;
+        .card {
+            margin: 0 0.5em;
+            box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+            border: none;
         }
-
-        .carousel-item {
-            height: 32rem;
+        .carousel-control-prev,
+        .carousel-control-next {
+            background-color: #e1e1e1;
+            width: 6vh;
+            height: 6vh;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        @media (min-width: 768px) {
+            .carousel-item {
+                margin-right: 0;
+                flex: 0 0 33.333333%;
+                display: block;
+             }
+            .carousel-inner {
+                display: flex;
+            }
+        }
+        .card .img-wrapper {
+            max-width: 100%;
+            height: 13em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card img {
+            max-height: 100%;
+        }
+        @media (max-width: 767px) {
+        .card .img-wrapper {
+            height: 17em;
+        }
         }
 
         .marketing .col-lg-4 {
-            margin-bottom: 1.5rem;
+            margin-top: 5rem;
+            margin-bottom: 5rem;
             text-align: center;
         }
 
@@ -82,7 +116,7 @@
         }
 
         .featurette-divider {
-            margin: 5rem 0;
+            margin: 4rem 0;
         }
 
         .featurette-heading {
@@ -110,70 +144,26 @@
 @endsection
 
 @section('main')
-    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-                aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <rect width="100%" height="100%" fill="#777" />
-                </svg>
-                <div class="container">
-                    <div class="carousel-caption text-start">
-                        <h1>Example headline.</h1>
-                        <p>Some representative placeholder content for the first slide of the carousel.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
-                    </div>
-                </div>
+        <hr class="featurette-divider">
+
+        <div class="row featurette ">
+            <div class="col-md-7 ">
+                <h2 class="featurette-heading fw-normal lh-1 mx-5">Materi simple <span class="text-muted">
+                        dan lengkap.</span></h2>
+                <p class="lead mx-5">Materi yang ada di Bidji Course akan sesuai dengan kebutuhan belajar kamu.</p>
             </div>
-            <div class="carousel-item">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <rect width="100%" height="100%" fill="#777" />
+            <div class="col-md-5">
+                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
+                    height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
+                    preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%"
+                        fill="#aaa" dy=".3em">500x500</text>
                 </svg>
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h1>Another example headline.</h1>
-                        <p>Some representative placeholder content for the second slide of the carousel.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <rect width="100%" height="100%" fill="#777" />
-                </svg>
-                <div class="container">
-                    <div class="carousel-caption text-end">
-                        <h1>One more for good measure.</h1>
-                        <p>Some representative placeholder content for the third slide of this carousel.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
-                    </div>
-                </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
 
-
-    <!-- Marketing messaging and featurettes
-              ================================================== -->
-    <!-- Wrap the rest of the page in another container to center all the content. -->
-
-    <div class="container marketing">
+        <div class="container marketing">
 
         <!-- Three columns of text below the carousel -->
         <div class="row">
@@ -218,27 +208,96 @@
         </div><!-- /.row -->
 
 
-        <!-- START THE FEATURETTES -->
-
-        <hr class="featurette-divider">
-
-        <div class="row featurette">
-            <div class="col-md-7">
-                <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-muted">It’ll
-                        blow your mind.</span></h2>
-                <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose
-                    here.</p>
-            </div>
-            <div class="col-md-5">
-                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
-                    height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%"
-                        fill="#aaa" dy=".3em">500x500</text>
-                </svg>
+<div id="carouselExampleControls" class="carousel" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Card title 1</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
             </div>
         </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Card title 2</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Card title 3</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Card title 4</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Card title 5</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="img-wrapper"><img src="..." class="d-block w-100" alt="..."> </div>
+                <div class="card-body">
+                    <h5 class="card-title">Card title 6</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+
+    <!-- Marketing messaging and featurettes
+              ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    
+
+        <!-- START THE FEATURETTES -->
+
+
 
         <hr class="featurette-divider">
 
@@ -284,6 +343,13 @@
         <hr class="featurette-divider">
 
         <!-- /END THE FEATURETTES -->
+        <div class="container">
+            <div class="bg-secondary bold-shadow rounded-4 text-center text-white p-5">
+                <h2 class="font-weight-500 mb-3">Tunggu apa lagi?</h2>
+                <p>Belajar lebih terarah dengan Bidji Course</p>
+                <a href="" class="btn btn-light remove-style-link mt-3 gtm-reg-btn-a ">Buat Akun</a>
+            </div>
+        </div>
 
     </div><!-- /.container -->
 @endsection
