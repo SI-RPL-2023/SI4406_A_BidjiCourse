@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->boolean('is_admin')->default(false);
             $table->string('email')->unique();
-            $table->string('username');
+            $table->string('full_name');
             $table->string('avatar')->nullable();
+            $table->string('born_date')->nullable();
+            $table->string('number')->nullable();
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
-            $table->string('number');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

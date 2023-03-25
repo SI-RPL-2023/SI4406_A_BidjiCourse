@@ -3,7 +3,6 @@
         width: 350px;
     }
     
-
 </style>
 
 <nav class="navbar navbar-v3-2 bg-white default-layout-navbar navbar-expand-lg navbar-light d-flex flex-row fixed-top-sm fixed-top">
@@ -46,3 +45,4 @@
         </div>
     </div>
 </nav>
+

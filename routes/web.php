@@ -1,6 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardUsersController;
+use App\Http\Controllers\DashboardCoursesController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,20 +22,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('landing-page', [
-        'title' => 'Selamat Datang di Bidji Course'
-    ]);
-})->name('landing-page');
+//HomeController
+Route::resource('', HomeController::class)->except('show');
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index', [
-        'title' => 'Dashboard'
-    ]);
-})->name('dashboard');
+//LoginController
+Route::resource('login', LoginController::class)->except('show')->middleware('guest');
 
-Route::get('/dashboard/courses', function () {
-    return view('dashboard.courses', [
-        'title' => 'Dashboard: Courses'
-    ]);
-})->name('courses');
+//RegisterController
+Route::resource('register', RegisterController::class)->except('show')->middleware('guest');
+
+//LogoutController
+Route::get('logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth');
+
+//DashboardController
+Route::resource('dashboard', DashboardController::class)->except('show')->middleware('admin');
+
+//DashboardUsersController
+Route::resource('dashboard/users', DashboardUsersController::class)->except('show')->middleware('admin');
+
+//DashboardCoursesController
+Route::resource('dashboard/courses', DashboardCoursesController::class)->except('show')->middleware('admin');
