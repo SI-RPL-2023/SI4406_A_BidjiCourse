@@ -152,21 +152,17 @@
 @endsection
 
 @section('main')
-    <hr class="featurette-divider">
-
-    <div class="row featurette ">
-        <div class="col-md-7 ">
-            <h2 class="featurette-heading fw-normal lh-1 mx-5">Materi simple <span class="text-muted">
-                    dan lengkap.</span></h2>
-            <p class="lead mx-5">Materi yang ada di Bidji Course akan sesuai dengan kebutuhan belajar kamu.</p>
+    <div class="container marketing" style="margin-top: 100px">
+        <div class="row featurette">
+            <div class="col-md-7 ">
+                <h2 class="featurette-heading fw-normal lh-1 mx-5">Materi simple <span class="text-muted">
+                        dan lengkap.</span></h2>
+                <p class="lead mx-5">Materi yang ada di Bidji Course akan sesuai dengan kebutuhan belajar kamu.</p>
+            </div>
+            <div class="col-md-5">
+                <img src="img/foto 1.svg" width="500" height="500">
+            </div>
         </div>
-        <div class="col-md-5">
-            <img src="img/foto 1.svg" width="500" height="500">
-        </div>
-    </div>
-
-    <div class="container marketing">
-
         <!-- Three columns of text below the carousel -->
         <div class="row">
             <div class="col-lg-4">
