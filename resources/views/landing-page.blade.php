@@ -284,6 +284,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="carousel-item">
+                    <div class="card">
+                        <div class="img-wrapper"><img src="img/science.jpg" class="d-block w-100" alt="..."> </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Ilmu Pengetahuan Alam</h5>
+                            <p class="card-text">Disini bisa belajar perubahan fisika dan kimia, sistem reproduksi, sistem
+                                organ tubuh manusia, struktur pada tumbuhan, dan klasifikasi zat.</p>
+                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
                 data-bs-slide="prev">
