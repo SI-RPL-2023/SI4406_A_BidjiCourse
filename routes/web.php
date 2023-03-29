@@ -23,7 +23,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 //HomeController
-Route::resource('', HomeController::class)->except('show');
+Route::resource('', HomeController::class)->except('show')->middleware('not_admin');
 
 //LoginController
 Route::resource('login', LoginController::class)->except('show')->middleware('guest');
