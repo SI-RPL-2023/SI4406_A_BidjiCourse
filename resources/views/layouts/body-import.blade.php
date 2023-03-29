@@ -12,12 +12,6 @@
 <!-- Custom JS -->
 <script src="/js/main.js"></script>
 
-<!-- Font Awesome -->
-<script src="/js/font-awesome/fontawesome.min.js"></script>
-<script src="/js/font-awesome/regular.min.js"></script>
-<script src="/js/font-awesome/solid.min.js"></script>
-<script src="/js/font-awesome/light.min.js"></script>
-
 <!-- Feather Icons -->
 <script>
     feather.replace()

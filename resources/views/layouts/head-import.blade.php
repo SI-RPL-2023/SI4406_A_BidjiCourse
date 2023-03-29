@@ -11,12 +11,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" />
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="/css/font-awesome/fontawesome.min.css">
-<link rel="stylesheet" href="/css/font-awesome/regular.min.css">
-<link rel="stylesheet" href="/css/font-awesome/solid.min.css">
-<link rel="stylesheet" href="/css/font-awesome/light.min.css">
-
 <!-- Feather Icons -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 
