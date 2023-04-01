@@ -20,7 +20,7 @@ Repository ini dibuat bertujuan untuk memenuhi tugas besar mata kuliah Rekayasa 
 | 5   | [Alfatha Huga Anaku](https://www.instagram.com/alfathahuga_)    | 1202201281 | Programmer      |
 | 6   | [Fathan](https://www.instagram.com/fathan147)                   | 1202184140 | Programmer      |
 
-## Cara Menjalankan Aplikasi
+# Cara Menjalankan Aplikasi
 ***Salin perintah ini di terminal :***
 
 - Clone project dari github ini
