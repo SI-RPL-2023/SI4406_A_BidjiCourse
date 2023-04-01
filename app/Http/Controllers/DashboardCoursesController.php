@@ -12,7 +12,7 @@ class DashboardCoursesController extends Controller
      */
     public function index()
     {
-        return view('dashboard.courses', [
+        return view('dashboard.courses.index', [
             'title' => 'Courses Management'
         ]);
     }
@@ -22,7 +22,9 @@ class DashboardCoursesController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.courses.add', [
+            'title' => 'Add Course'
+        ]);
     }
 
     /**
