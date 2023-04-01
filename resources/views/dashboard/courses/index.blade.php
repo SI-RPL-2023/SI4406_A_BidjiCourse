@@ -1,3 +1,5 @@
+<!---UI Preview--->
+
 @extends('dashboard.layouts.main')
 @section('main')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -10,7 +12,7 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Materi</th>
+                <th>Title</th>
                 <th>Cover</th>
                 <th>Rating</th>
                 <th>Action</th>
