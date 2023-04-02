@@ -1,6 +1,14 @@
-<!---UI Preview--->
-
 @extends('dashboard.layouts.main')
+
+
+@section('head-script')
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+@endsection
+
+
 @section('main')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h3>Courses</h3>
@@ -19,40 +27,40 @@
             </tr>
         </thead>
         <tbody>
-            @for ($i = 1; $i <= 5; $i++)
+            @foreach ($courses as $course)
                 <tr>
-                    <td>{{ $i }}</td>
-                    <td>Title</td>
-                    <td>Cover</td>
-                    <td>Rating</td>
+                    <td>{{ $course->id }}</td>
+                    <td>{{ $course->title }}</td>
+                    <td>{{ $course->cover }}</td>
+                    <td>{{ $course->rating }}</td>
                     <td>
                         <div class="d-flex">
-                            <form action="" method="get">
-                                @csrf
-                                <button id="detail" type="submit" class="btn btn-sm btn-warning text-light">
-                                    <i class="ti ti-eye fs-5"></i>
-                                </button>
-                            </form>
-                            <form action="" method="get">
-                                @csrf
-                                <button id="edit" type="submit" class="btn btn-sm btn-primary mx-2">
-                                    <i class="ti ti-edit fs-5"></i>
-                                </button>
-                            </form>
+                            <a href="{{ route('courses.show', $course->slug) }}" id="detail"
+                                class="btn btn-sm btn-warning text-light">
+                                <i class="ti ti-eye fs-5"></i>
+                            </a>
+
+                            <a href="{{ route('courses.show', $course->slug) }}" id="edit"
+                                class="btn btn-sm btn-primary mx-2">
+                                <i class="ti ti-edit fs-5"></i>
+                            </a>
+
                             <form action="" method="post">
                                 @csrf
                                 @method('delete')
-                                <button id="delete" type="submit" class="btn btn-sm btn-danger">
+                                <button id="delete" class="btn btn-sm btn-danger">
                                     <i class="ti ti-trash fs-5"></i>
                                 </button>
                             </form>
                         </div>
                     </td>
                 </tr>
-            @endfor
+            @endforeach
         </tbody>
     </table>
 @endsection
+
+
 @section('script')
     <script>
         $(document).ready(function() {
