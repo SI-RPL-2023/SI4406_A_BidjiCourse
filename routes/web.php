@@ -40,3 +40,4 @@ Route::resource('dashboard/users', DashboardUsersController::class)->except('sho
 
 //DashboardCoursesController
 Route::resource('dashboard/courses', DashboardCoursesController::class)->except('show')->middleware('admin');
+Route::get('dashboard/courses/getSlug', [DashboardCoursesController::class, 'createSlug'])->middleware('admin');
