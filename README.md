@@ -54,12 +54,6 @@ composer install
 php artisan key:generate
 ```
 
-- Install library [Eloquent-Sluggable](https://github.com/cviebrock/eloquent-sluggable)
-
-```bash
-composer require cviebrock/eloquent-sluggable
-```
-
 - Lakukan migrasi database
 
 ```bash
