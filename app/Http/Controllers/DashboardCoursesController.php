@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class DashboardCoursesController extends Controller
@@ -13,7 +14,8 @@ class DashboardCoursesController extends Controller
     public function index()
     {
         return view('dashboard.courses.index', [
-            'title' => 'Courses Management'
+            'title' => 'Courses Management',
+            'courses' => Course::get()
         ]);
     }
 
@@ -32,7 +34,30 @@ class DashboardCoursesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $courseData = $request->validate(
+            [
+                'title' => ['required', 'unique:courses'],
+                'slug' => ['required', 'unique:courses'],
+                'cover' => ['image', 'file', 'max:5120', 'required'],
+                'desc' => 'required',
+                'body' => 'required',
+            ],
+            array(
+                'title.required' => 'Judul course harus di isi.',
+                'title.unique' => 'Course ini sudah ada.',
+                'slug.required' => 'Judul course belum diisi.',
+                'slug.unique' => 'Slug tidak tersedia, silahkan cari judul lain.',
+                'cover.required' => 'Cover harus dipilih.',
+                'cover.image' => 'File tidak didukung.',
+                'cover.max' => 'Ukuran file max 5mb.',
+                'desc.required' => 'Deskripsi harus diisi.',
+                'body.required' => 'Materi harus diisi.',
+            )
+        );
+        Course::create($courseData);
+        return redirect('/dashboard/courses')
+            ->with('alert', 'success')
+            ->with('text', 'Course ' . $request->title . ' berhasil ditambahkan!');
     }
 
     /**
@@ -40,7 +65,10 @@ class DashboardCoursesController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        return view('dashboard.courses.detail', [
+            'title' => $course->title,
+            'course' => $course
+        ]);
     }
 
     /**
@@ -65,5 +93,10 @@ class DashboardCoursesController extends Controller
     public function destroy(Course $course)
     {
         //
+    }
+
+    public function createSlug(Request $request)
+    {
+        return Str::slug($request->title, '-');
     }
 }

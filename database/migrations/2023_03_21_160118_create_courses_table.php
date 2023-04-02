@@ -17,11 +17,9 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('cover');
             $table->longText('desc');
-            $table->longText('html');
-            $table->string('video_link');
+            $table->longText('body');
             $table->tinyInteger('rating')->nullable()->check('rating >= 1 and rating <= 5');
             $table->tinyInteger('rating_total')->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
     }
