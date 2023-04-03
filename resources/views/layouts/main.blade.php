@@ -10,7 +10,7 @@
     @include('layouts.head-import')
 
     @yield('head-script')
-    
+
     @yield('style')
 
     {{-- <h3 class="loading-animation"></h3> --}}
@@ -37,7 +37,10 @@
         <script>
             Swal.fire({
                 icon: '{{ session('alert') }}',
-                text: '{{ session('text') }}'
+                title: '{{ session('title') }}',
+                text: '{{ session('text') }}',
+                html: '{!! session('html') !!}',
+                confirmButtonColor: '#0d6efd',
             });
         </script>
     @endif

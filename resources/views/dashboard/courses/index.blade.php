@@ -16,10 +16,11 @@
             <i class="ti ti-pencil-plus"></i> Add a course
         </a>
     </div>
-    <table id="dataTables" class="table table-striped table-bordered" style="width:100%">
+    <table id="dataTables" class="table table-striped table-bordered w-100">
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Status</th>
                 <th>Title</th>
                 <th>Cover</th>
                 <th>Rating</th>
@@ -28,28 +29,48 @@
         </thead>
         <tbody>
             @foreach ($courses as $course)
+                @php
+                    if ($course->draft) {
+                        $status = 'Draft';
+                        $bg = 'text-bg-warning';
+                    } else {
+                        $status = 'Published';
+                        $bg = 'text-bg-success';
+                    }
+                    if (!$course->rating) {
+                        $rating = 'Not rated';
+                    } else {
+                        $rating = 'Rated';
+                    }
+                @endphp
                 <tr>
                     <td>{{ $course->id }}</td>
-                    <td>{{ $course->title }}</td>
-                    <td>{{ $course->cover }}</td>
-                    <td>{{ $course->rating }}</td>
                     <td>
-                        <div class="d-flex">
-                            <a href="{{ route('courses.show', $course->slug) }}" id="detail"
-                                class="btn btn-sm btn-warning text-light">
-                                <i class="ti ti-eye fs-5"></i>
+                        <span id="{{ $status }}" class="badge {{ $bg }}">{{ $status }}</span>
+                    </td>
+                    <td>{{ $course->title }}</td>
+                    <td><img id="" class="img-fluid" src="{{ $course->cover }}"
+                        alt="cover preview" style="
+                        width: 150px;
+                        height: auto;
+                        object-fit: cover;
+                        aspect-ratio: 16 / 9;"></td>
+                    <td>{{ $rating }}</td>
+                    <td class="text-right">
+                        <div class="d-grid gap-2 d-flex">
+                            <a id="detail" href="{{ route('courses.show', $course->slug) }}"
+                                class="btn btn-sm btn-warning">
+                                <i class="ti ti-eye"></i> Preview
                             </a>
-
-                            <a href="{{ route('courses.show', $course->slug) }}" id="edit"
-                                class="btn btn-sm btn-primary mx-2">
-                                <i class="ti ti-edit fs-5"></i>
+                            <a id="edit" href="{{ route('courses.edit', $course->slug) }}"
+                                class="btn btn-sm btn-primary">
+                                <i class="ti ti-edit"></i> Edit
                             </a>
-
-                            <form action="" method="post">
+                            <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button id="delete" class="btn btn-sm btn-danger">
-                                    <i class="ti ti-trash fs-5"></i>
+                                <button id="delete" class="btn btn-sm btn-danger delete-course-btn">
+                                    <i class="ti ti-trash"></i> Delete
                                 </button>
                             </form>
                         </div>
@@ -84,6 +105,12 @@
             });
             tippy('#delete', {
                 content: 'Delete course',
+            });
+            tippy('#Draft', {
+                content: 'Course ini masih draft, publish course ini agar bisa diakses oleh user',
+            });
+            tippy('#Published', {
+                content: 'Course ini sudah bisa diakses oleh user',
             });
         })
     </script>

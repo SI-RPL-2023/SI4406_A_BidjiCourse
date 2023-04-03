@@ -8,12 +8,16 @@
             <a href="{{ route('courses.index') }}" class="btn btn-sm btn-warning">
                 <i class="ti ti-arrow-back-up"></i> Back
             </a>
-            <a href="{{ route('courses.index') }}" class="btn btn-sm btn-primary">
+            <a href="{{ route('courses.edit', $course->slug) }}" class="btn btn-sm btn-primary">
                 <i class="ti ti-edit"></i> Edit
             </a>
-            <a href="{{ route('courses.index') }}" class="btn btn-sm btn-danger">
-                <i class="ti ti-trash"></i> Delete
-            </a>
+            <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
+                @csrf
+                @method('delete')
+                <button id="delete" class="btn btn-sm btn-danger delete-course-btn">
+                    <i class="ti ti-trash"></i> Delete
+                </button>
+            </form>
         </div>
     </div>
     <div class="container">

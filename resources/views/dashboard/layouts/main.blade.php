@@ -67,11 +67,6 @@
             font-size: .875rem;
         }
 
-        .feather {
-            width: 16px;
-            height: 16px;
-        }
-
         .sidebar {
             position: fixed;
             top: 0;
@@ -99,18 +94,8 @@
             color: #333;
         }
 
-        .sidebar .nav-link .feather {
-            margin-right: 4px;
-            color: #727272;
-        }
-
         .sidebar .nav-link.active {
             color: #2470dc;
-        }
-
-        .sidebar .nav-link:hover .feather,
-        .sidebar .nav-link.active .feather {
-            color: inherit;
         }
 
         .sidebar-heading {
@@ -170,7 +155,10 @@
         <script>
             Swal.fire({
                 icon: '{{ session('alert') }}',
-                text: '{{ session('text') }}'
+                title: '{{ session('title') }}',
+                text: '{{ session('text') }}',
+                html: '{!! session('html') !!}',
+                confirmButtonColor: '#0d6efd',
             });
         </script>
     @endif
