@@ -76,7 +76,7 @@
             <label for="cover" class="form-label d-block">Cover</label>
             <img id="cover-preview" class="mb-2 img-thumbnail img-fluid" src="/img/assets/cover-placeholder.png"
                 alt="cover preview">
-            <Format> Ukuran file maksimal <span class="badge text-bg-dark">5Mb</span>
+            <p> Ukuran file maksimal <span class="badge text-bg-dark">5Mb</span>
                 dan format gambar yang didukung:
                 <span class="badge text-bg-primary">PNG</span>
                 <span class="badge text-bg-secondary">JPG</span>
@@ -84,9 +84,9 @@
                 <span class="badge text-bg-danger">GIF</span>
                 <span class="badge text-bg-warning">JFIF</span>
                 <span class="badge text-bg-info">WEBP</span>
-                </p>
-                <input id="cover-input" type="file" class="d-none form-control @error('cover') is-invalid @enderror"
-                    name="cover" id="cover" accept="image/*" required>
+            </p>
+            <input id="cover-input" type="file" class="d-none form-control @error('cover') is-invalid @enderror"
+                name="cover" id="cover" accept="image/*" required>
         </div>
         @error('cover')
             <div class="text-danger text-start" style="font-size: 14px">
