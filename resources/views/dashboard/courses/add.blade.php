@@ -89,7 +89,7 @@
                 <span class="badge text-bg-warning">JFIF</span>
                 <span class="badge text-bg-info">WEBP</span>
             </p>
-            <input id="cover-input" type="file" class="form-control @error('cover') is-invalid @enderror"
+            <input id="cover-input" type="file" class="d-none form-control @error('cover') is-invalid @enderror"
                 name="cover" id="cover" accept="image/*" required>
         </div>
         @error('cover')
