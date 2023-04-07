@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Course;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -75,6 +76,7 @@ class DashboardCoursesController extends Controller
         $cover_file_name = $request->slug . '.' . $request->cover->extension();
         $request->file('cover')->move(public_path('/img/courses'), $cover_file_name);
         $courseData['cover'] = '/img/courses/' . $cover_file_name;
+        $courseData['last_edited_by'] = auth()->user()->id;
         $courseData['draft'] = $draft;
         Course::create($courseData);
         return redirect('/dashboard/courses')
@@ -99,7 +101,7 @@ class DashboardCoursesController extends Controller
     public function edit(Course $course)
     {
         return view('dashboard.courses.edit', [
-            'title' => 'Edit Course',
+            'title' => 'Edit Course: ' . $course->title,
             'course' => $course,
         ]);
     }
@@ -111,7 +113,7 @@ class DashboardCoursesController extends Controller
     {
         // mencegah agar slug tidak diubah
         if ($request->slug != Str::slug($request->title, '-')) {
-            return redirect('/dashboard/courses/'.$course->slug.'/edit')
+            return redirect('/dashboard/courses/' . $course->slug . '/edit')
                 ->with('alert', 'error')
                 ->with('title', 'Submit error')
                 ->with('text', 'Error ini terjadi karena judul dan slug tidak selaras. Apakah anda mencoba menggantinya secara manual?');
@@ -151,7 +153,7 @@ class DashboardCoursesController extends Controller
             'body.required' => 'Materi harus diisi.',
         ));
         if ($request->cover) {
-            @unlink(public_path($course->cover));
+            unlink(public_path($course->cover));
             $cover_file_name = $request->slug . '.' . $request->cover->extension();
             $request->file('cover')->move(public_path('img/courses'), $cover_file_name);
             $courseData['cover'] = '/img/courses/' . $cover_file_name;
@@ -161,6 +163,7 @@ class DashboardCoursesController extends Controller
             File::move(public_path($course->cover), public_path($new_path));
             $courseData['cover'] = $new_path;
         };
+        $courseData['last_edited_by'] = auth()->user()->id;
         $courseData['draft'] = $draft;
         Course::find($course->id)->update($courseData);
         return redirect('/dashboard/courses')
@@ -173,13 +176,16 @@ class DashboardCoursesController extends Controller
      */
     public function destroy(Course $course)
     {
-        @unlink(public_path($course->cover));
         $course->delete();
+        unlink(public_path($course->cover));
         return redirect('/dashboard/courses')
             ->with('alert', 'success')
             ->with('html', 'Course <strong>' . $course->title . '</strong> berhasil dihapus!');
     }
 
+        /**
+     * Create a slug from resource's title.
+     */
     public function createSlug(Request $request)
     {
         return Str::slug($request->title, '-');

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('body');
             $table->tinyInteger('rating')->nullable()->check('rating >= 1 and rating <= 5');
             $table->tinyInteger('rating_total')->nullable();
+            $table->string('last_edited_by');
             $table->timestamps();
         });
     }
