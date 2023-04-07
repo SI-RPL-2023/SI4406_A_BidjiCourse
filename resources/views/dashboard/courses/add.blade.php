@@ -16,6 +16,11 @@
             height: auto;
             object-fit: cover;
             aspect-ratio: 16 / 9;
+            cursor: pointer;
+        }
+
+        #cover-preview.dragging {
+            background-color: #0c9ce9;
         }
 
         @media (max-width: 767.98px) {
@@ -74,8 +79,7 @@
 
         <div class="mt-4">
             <label for="cover" class="form-label d-block">Cover</label>
-            <img id="cover-preview" class="mb-2 img-thumbnail img-fluid" src="/img/assets/cover-placeholder.png"
-                alt="cover preview">
+            <img id="cover-preview" class="mb-2 img-thumbnail img-fluid" src="/img/assets/drag-drop-upload.png" alt="cover preview">
             <p> Ukuran file maksimal <span class="badge text-bg-dark">5Mb</span>
                 dan format gambar yang didukung:
                 <span class="badge text-bg-primary">PNG</span>
@@ -85,7 +89,7 @@
                 <span class="badge text-bg-warning">JFIF</span>
                 <span class="badge text-bg-info">WEBP</span>
             </p>
-            <input id="cover-input" type="file" class="d-none form-control @error('cover') is-invalid @enderror"
+            <input id="cover-input" type="file" class="form-control @error('cover') is-invalid @enderror"
                 name="cover" id="cover" accept="image/*" required>
         </div>
         @error('cover')
@@ -119,7 +123,7 @@
         $(document).ready(function() {
             tinymce.init({
                 selector: '#tinymce',
-                height: 500,
+                height: 700,
                 plugins: 'fullscreen anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tableofcontents footnotes autocorrect typography inlinecss preview insertdatetime',
                 toolbar: 'fullscreen preview undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
                 file_picker_types: 'image media',
@@ -146,7 +150,6 @@
                     input.trigger('click');
                 },
             });
-
             $('#title').on('change', function() {
                 const title = $(this).val();
                 $.ajax({

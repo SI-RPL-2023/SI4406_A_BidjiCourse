@@ -16,7 +16,7 @@
             <i class="ti ti-pencil-plus"></i> Add a course
         </a>
     </div>
-    <table id="dataTables" class="table table-striped table-bordered w-100">
+    <table id="courses-table" class="table table-striped table-bordered w-100">
         <thead>
             <tr>
                 <th>ID</th>
@@ -25,17 +25,24 @@
                 <th>Cover</th>
                 <th>Rating</th>
                 <th>Action</th>
+                <th>Last Edited by</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($courses as $course)
+                {{-- @for ($i = 0; $i < 10; $i++) --}}
                 @php
+                    if (!isset(\App\Models\User::find($course->last_edited_by)->full_name)) {
+                        $last_edited_by = 'deleted user';
+                    } else {
+                        $last_edited_by = \App\Models\User::find($course->last_edited_by)->full_name;
+                    }
                     if ($course->draft) {
                         $status = 'Draft';
-                        $bg = 'text-bg-warning';
+                        $bg = 'warning';
                     } else {
                         $status = 'Published';
-                        $bg = 'text-bg-success';
+                        $bg = 'success';
                     }
                     if (!$course->rating) {
                         $rating = 'Not rated';
@@ -46,15 +53,16 @@
                 <tr>
                     <td>{{ $course->id }}</td>
                     <td>
-                        <span id="{{ $status }}" class="badge {{ $bg }}">{{ $status }}</span>
+                        <span id="{{ $status }}" class="badge text-bg-{{ $bg }}">{{ $status }}</span>
                     </td>
                     <td>{{ $course->title }}</td>
-                    <td><img id="" class="img-fluid" src="{{ $course->cover }}"
-                        alt="cover preview" style="
+                    <td><img id="" class="img-fluid rounded" src="{{ $course->cover }}" alt="cover preview"
+                            style="
                         width: 150px;
                         height: auto;
                         object-fit: cover;
-                        aspect-ratio: 16 / 9;"></td>
+                        aspect-ratio: 16 / 9;">
+                    </td>
                     <td>{{ $rating }}</td>
                     <td class="text-right">
                         <div class="d-grid gap-2 d-flex">
@@ -75,7 +83,9 @@
                             </form>
                         </div>
                     </td>
+                    <td>{{ $last_edited_by }}<br>({{ $course->updated_at }})</td>
                 </tr>
+                {{-- @endfor --}}
             @endforeach
         </tbody>
     </table>
@@ -85,7 +95,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            $('#dataTables').DataTable({
+            $('#courses-table').DataTable({
                 pageLength: 5,
                 scrollX: true,
                 paging: true,
