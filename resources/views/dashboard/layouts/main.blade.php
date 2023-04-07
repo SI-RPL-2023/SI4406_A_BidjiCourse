@@ -132,7 +132,9 @@
 
     @yield('style')
 
-    {{-- <h3 class="loading-animation"></h3> --}}
+    <div class="loading-animation">
+        <x-loader.pencil></x-loader.pencil>
+    </div>
 </head>
 
 <body>
@@ -141,7 +143,7 @@
     <div class="container-fluid">
         <div class="row">
             @include('dashboard.layouts.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" data-aos="fade-up" data-aos-duration="1000">
                 @yield('main')
             </main>
         </div>

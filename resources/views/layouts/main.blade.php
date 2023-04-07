@@ -13,7 +13,9 @@
 
     @yield('style')
 
-    {{-- <h3 class="loading-animation"></h3> --}}
+    <div class="loading-animation">
+        <x-loader.pencil></x-loader.pencil>
+    </div>
 </head>
 
 <body>
@@ -21,7 +23,7 @@
         @include('layouts.navbar')
     </header>
 
-    <main>
+    <main data-aos="fade-up" data-aos-duration="1000">
         @yield('main')
     </main>
 
