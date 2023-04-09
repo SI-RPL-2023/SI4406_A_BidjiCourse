@@ -19,9 +19,6 @@ $(document).ready(function () {
             $('.loading-animation').remove();
             $('main').removeAttr('data-aos data-aos-duration');
         }, 1000);
-        // $('[title="Fullscreen"]').hover(function () {
-        //     $('main').removeAttr('data-aos data-aos-duration');
-        // });
     });
     $(document).on('submit', 'form', function () {
         loader();
