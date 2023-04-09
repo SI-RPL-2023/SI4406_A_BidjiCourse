@@ -13,11 +13,15 @@ $(document).ready(function () {
     };
     $(window).on('load', function () {
         $('.loading-animation').fadeOut('slow');
-        setTimeout(function () {
-            $('.loading-animation').remove();
-        }, 1000);
         $('.tox-statusbar__branding').remove();
         AOS.init();
+        setTimeout(function () {
+            $('.loading-animation').remove();
+            $('main').removeAttr('data-aos data-aos-duration');
+        }, 1000);
+        // $('[title="Fullscreen"]').hover(function () {
+        //     $('main').removeAttr('data-aos data-aos-duration');
+        // });
     });
     $(document).on('submit', 'form', function () {
         loader();
