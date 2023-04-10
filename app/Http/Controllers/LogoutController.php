@@ -15,6 +15,6 @@ class LogoutController extends Controller
         session()->flush();
         return redirect('/')
             ->with('alert', 'success')
-            ->with('text', 'Anda berhasil logout!');
+            ->with('text', 'Anda berhasil logout.');
     }
 }
