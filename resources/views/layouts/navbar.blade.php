@@ -11,7 +11,7 @@
         <form class="d-flex" role="search" action="">
             <div class="input-group">
                 <input required type="text" class="form-control" id="nav-search" name="nav-search"
-                    placeholder="Apa yang ingin Anda pelajari?" style="width: 350px">
+                    placeholder="Search" style="width: 350px">
                 <button class="input-group-text text-secondary" type="button">
                     <i class="bi bi-search"></i>
                 </button>
@@ -39,7 +39,7 @@
             <ul class="navbar-nav ms-auto">
                 @if(!auth()->user())
                     <li class="nav-item">
-                        <a href="{{ route('login.index') }}" class="btn btn-light btn-outline-secondary mx-1 ">Masuk</a>
+                        <a href="{{ route('login.index') }}" class="btn btn-outline-secondary mx-1 ">Masuk</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('register.index') }}" class="btn btn-dark mx-1 ">Daftar</a>

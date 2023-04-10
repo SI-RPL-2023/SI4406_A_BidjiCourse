@@ -9,6 +9,34 @@
             user-select: none;
         }
 
+        .btn-cust-color{
+            background-color: #0C1939;
+            color: #EFEFEF
+        }
+
+        .btn-cust-color-sec{
+            background-color: #EFEFEF;
+            color: #404040
+        }
+
+        .btn-cust-color-sec:hover{
+            background-color: #CECECE;
+            color: #404040
+        }
+
+        .btn-cust-color:hover{
+            background-color: #203978;
+            color: #EFEFEF
+        }
+
+        .bg-cust-color{
+            background-color: #0C1939;
+        }
+
+        .card-cust{
+            background-color: #D9D9D9;
+        }
+
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
@@ -56,6 +84,7 @@
             overflow-x: hidden;
         }
 
+
         body {
             padding-top: 0;
             padding-bottom: 2rem;
@@ -70,6 +99,7 @@
             margin: 0 0.5em;
             box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
             border: none;
+            background-color: #EFEFEF
         }
 
         .carousel-control-prev,
@@ -87,6 +117,7 @@
                 margin-right: 0;
                 flex: 0 0 33.333333%;
                 display: block;
+                color: #404040
             }
 
             .carousel-inner {
@@ -116,6 +147,8 @@
             margin-top: 5rem;
             margin-bottom: 5rem;
             text-align: center;
+            color: #404040;
+            
         }
 
         .marketing .col-lg-4 p {
@@ -155,57 +188,53 @@
     <div class="container marketing" style="margin-top: 100px">
         <div class="row featurette">
             <div class="col-md-7 ">
-                <h2 class="featurette-heading fw-normal lh-1 mx-5">Materi simple <span class="text-muted">
-                        dan lengkap.</span></h2>
-                <p class="lead mx-5">Materi yang ada di Bidji Course akan sesuai dengan kebutuhan belajar kamu.</p>
+                <h2 class="featurette-heading fw-normal lh-1 mx-5">Belajar disini bisa bikin makin pintar</h2>
+                <br>
+                <p class="lead mx-5">Karena materi di Bidji Course ini simpel dan lengkap. Pokoknya bakal sesuai dengan kebutuhanmu.</p>
+                <br>
+                <a href="#" class="btn btn-cust-color text-white mx-5">Mulai bergabung</a>
             </div>
             <div class="col-md-5">
-                <img src="img/foto 1.svg" width="500" height="500">
+                <img src="img/jumbo.svg" width="500" height="500">
             </div>
         </div>
         <!-- Three columns of text below the carousel -->
-        <div class="row">
-            <div class="col-lg-4">
-                <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
-                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                        dy=".3em">140x140</text>
-                </svg>
-                <h2 class="fw-normal">Heading</h2>
-                <p>Some representative placeholder content for the three columns of text below the carousel. This is the
-                    first column.</p>
-                <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
-                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                        dy=".3em">140x140</text>
-                </svg>
-                <h2 class="fw-normal">Heading</h2>
-                <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second
-                    column.</p>
-                <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
-                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
-                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                        dy=".3em">140x140</text>
-                </svg>
-                <h2 class="fw-normal">Heading</h2>
-                <p>And lastly this, the third column of representative placeholder content.</p>
-                <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
+        <div class="d-flex gap-4">
+            <div class="col-lg-4 card-cust py-5 rounded-1">
+                <img src="{{url('img/monitor.png')}}" alt="icon">
+                <h3 class="fw-semibold my-3">Belajar lewat video</h3>
+                <p>Meskipun belajar online, kamu bisa tetap dapat gambarannya</p>
+            </div>
+            <div class="col-lg-4 card-cust py-5 rounded-1">
+                <img src="{{url('img/icon flexible.png')}}" alt="icon">
+                <h3 class="fw-semibold my-3">Belajar lebih flexible</h3>
+                <p>Tetap bisa belajar kapanpun dan dimanapun kamu berada</p>
+            </div>
+            <div class="col-lg-4 card-cust py-5 rounded-1">
+                <img src="{{url('img/icon mobile.png')}}" alt="icon">
+                <h3 class="fw-semibold my-3">Akses yang mudah</h3>
+                <p>Gunakan intenet dan gadget sehari-harimu untuk belajar yang lebih efektif</p>
+            </div>
         </div><!-- /.row -->
 
+        <hr class="featurette-divider">
 
+        <div class="row featurette">
+            <div class="col-md-7 order-md-2">
+                <h2 class="featurette-heading fw-semibold lh-1 mx-5">Bisa belajar gratis</h2>
+                <p class="lead mx-5">Bidji Course mendukung seluruh anak muda di Indonesia untuk tetap bisa belajar, tanpa
+                    harus terhalang biaya apapun</p>
+            </div>
+            <div class="col-md-5 order-md-1">
+                <div class="col-md-5">
+                    <img src="img/bakar.jpg" width="500" height="350">
+                </div>
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <h1 class="mx-4">Materi di Bidji</h1>
         <div id="carouselExampleControls" class="carousel" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -215,7 +244,7 @@
                             <h5 class="card-title">Matematika</h5>
                             <p class="card-text">Disini bisa belajar aljabar, himpunan, linear, segitiga & segiempat, dan
                                 peluang.</p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -224,9 +253,8 @@
                         <div class="img-wrapper"><img src="img/science.jpg" class="d-block w-100" alt="..."> </div>
                         <div class="card-body">
                             <h5 class="card-title">Ilmu Pengetahuan Alam</h5>
-                            <p class="card-text">Disini bisa belajar perubahan fisika dan kimia, sistem reproduksi, sistem
-                                organ tubuh manusia, struktur pada tumbuhan, dan klasifikasi zat.</p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <p class="card-text">Disini bisa belajar ekologi, reproduksi, gerak dan gaya, kelistrikan, dan tata surya.</p>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -237,7 +265,7 @@
                             <h5 class="card-title">Bahasa Inggris</h5>
                             <p class="card-text">Disini bisa belajar grammar, descriptive text, narative text, report, dan
                                 advertisement</p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -248,7 +276,7 @@
                             <h5 class="card-title">Ilmu Pengetahuan Sosial</h5>
                             <p class="card-text">Disini bisa belajar letak geografis, sejarah, ekonomi, interaksi sosial,
                                 dan badan usaha</p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -259,7 +287,7 @@
                             <h5 class="card-title">Pendidikan Kewarganegaraan</h5>
                             <p class="card-text">Disini bisa belajar UUD 1945, pancasila, norma, hukum, dan sejarah
                                 indonesia </p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -270,7 +298,7 @@
                             <h5 class="card-title">Bahasa indonesia</h5>
                             <p class="card-text">Disini bisa belajar puisi, surat, literasi buku, fabel, dan teks deskripsi
                             </p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -280,7 +308,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Pendidikan Agama Islam</h5>
                             <p class="card-text">Disini bisa belajar sejarah islam, tajwid, zakat, haji, dan qurban</p>
-                            <a href="#" class="btn btn-secondary">Coba belajar</a>
+                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
                 </div>
@@ -300,7 +328,7 @@
 
 
         <!-- Marketing messaging and featurettes
-                      ================================================== -->
+                  ================================================== -->
         <!-- Wrap the rest of the page in another container to center all the content. -->
 
 
@@ -308,29 +336,11 @@
         <!-- START THE FEATURETTES -->
 
 
-
-        <hr class="featurette-divider">
-
-        <div class="row featurette">
-            <div class="col-md-7 order-md-2">
-                <h2 class="featurette-heading fw-normal lh-1 mx-5">Bisa belajar <span class="text-muted">gratis</span>
-                </h2>
-                <p class="lead mx-5">Bidji Course mendukung seluruh anak muda di Indonesia untuk tetap bisa belajar, tanpa
-                    harus terhalang biaya apapun</p>
-            </div>
-            <div class="col-md-5 order-md-1">
-                <div class="col-md-5">
-                    <img src="img/bakar.jpg" width="500" height="350">
-                </div>
-            </div>
-        </div>
-
         <hr class="featurette-divider">
 
         <div class="row featurette">
             <div class="col-md-7">
-                <h2 class="featurette-heading fw-normal lh-1">Quiz untuk <span class="text-muted">mengasah
-                        kemampuan</span></h2>
+                <h2 class="featurette-heading fw-semibold lh-1">Quiz untuk mengasah kemampuan</h2>
                 <p class="lead">Kamu bisa mengasah sejauh mana pemahamanmu tentang materi yang kamu pelajari</p>
             </div>
             <div class="col-md-5">
@@ -343,14 +353,14 @@
         <hr class="featurette-divider">
 
         <!-- /END THE FEATURETTES -->
-        <div class="container">
-            <div class="bg-secondary bold-shadow rounded-4 text-center text-white p-5">
-                <h2 class="font-weight-500 mb-3">Tunggu apa lagi?</h2>
-                <p>Belajar lebih terarah dengan Bidji Course</p>
-                <a href="" class="btn btn-light remove-style-link mt-3 gtm-reg-btn-a ">Buat Akun</a>
-            </div>
-        </div>
 
+  
+            <div class="bg bg-cust-color bold-shadow rounded-4 text-center text-white p-5">
+                <h2 class="font-weight-500 mb-3">Tunggu apa lagi?</h2>
+                <p>Yuk belajar bareng Bidji Course</p>
+                <a href="" class="btn btn-cust-color-sec remove-style-link mt-3 gtm-reg-btn-a ">Buat Akun</a>
+            </div>
+     
     </div><!-- /.container -->
 @endsection
 
