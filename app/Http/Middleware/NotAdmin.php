@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAdmin
+class NotAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,15 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guest()) {
-            return redirect('/login');
-        } elseif (!Auth::user()->is_admin) {
-            return redirect('/');
+        if (!Auth::guest()) {
+            if (Auth::user()->is_admin) {
+                return redirect('/dashboard');
+            }
+            else {
+                return $next($request); //not_admin
+            }
         } else {
-            return $next($request);
+            return $next($request); //guest
         }
     }
 }

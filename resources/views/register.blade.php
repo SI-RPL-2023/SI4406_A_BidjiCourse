@@ -67,7 +67,7 @@
                         <input required x-bind:type="show ? 'text' : 'password'" class="form-control @error('password') is-invalid @enderror" id="password" name="password"
                             placeholder="Password">
                         <button x-on:click="show = !show" class="input-group-text text-secondary" type="button">
-                            <i x-bind:class="show ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                            <i x-bind:class="show ? 'ti ti-eye-off fs-4' : 'ti ti-eye fs-4'"></i>
                         </button>
                     </div>
                     @error('password')
@@ -83,7 +83,7 @@
                         <input required x-bind:type="show ? 'text' : 'password'" class="form-control" id="password_confirm" name="password_confirm"
                             placeholder="Konfirmasi password">
                         <button x-on:click="show = !show" class="input-group-text text-secondary" type="button">
-                            <i x-bind:class="show ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                            <i x-bind:class="show ? 'ti ti-eye-off fs-4' : 'ti ti-eye fs-4'"></i>
                         </button>
                     </div>
                 </div>

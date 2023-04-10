@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->boolean('draft');
+            $table->string('title')->unique();
             $table->string('slug')->unique();
-            $table->string('cover')->nullable();
+            $table->string('cover');
             $table->longText('desc');
-            $table->string('video_link');
+            $table->longText('body');
             $table->tinyInteger('rating')->nullable()->check('rating >= 1 and rating <= 5');
-            $table->integer('rating_total')->nullable();
-            $table->rememberToken();
+            $table->tinyInteger('rating_total')->nullable();
+            $table->string('last_edited_by');
             $table->timestamps();
         });
     }

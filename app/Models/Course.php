@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

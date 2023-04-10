@@ -20,4 +20,50 @@ Repository ini dibuat bertujuan untuk memenuhi tugas besar mata kuliah Rekayasa 
 | 5   | [Alfatha Huga Anaku](https://www.instagram.com/alfathahuga_)    | 1202201281 | Programmer      |
 | 6   | [Fathan](https://www.instagram.com/fathan147)                   | 1202184140 | Programmer      |
 
+# Cara Menjalankan Aplikasi
+***Salin perintah ini di terminal :***
+
+- Clone project dari github ini
+
+```bash
+git clone https://github.com/SI-RPL-2023/SI-44-06_A_BidjiCourse.git 
+```
+
+- Copy file `.env.example` dan rename menjadi `.env`
+
+```bash
+cp .env.example .env
+```
+
+- Ubah database masing-masing di file `.env` yang sudah di copy tadi
+
+```bash
+DB_PORT=mysql_port
+DB_DATABASE=nama_database
+```
+
+- Install Composer
+
+```bash
+composer install
+```
+
+- Generate Key
+
+```bash
+php artisan key:generate
+```
+
+- Lakukan migrasi database
+
+```bash
+php artisan migrate
+```
+
+- Jalankan server
+
+```bash
+php artisan serve
+```
+
 # Beberapa preview tampilan website kami :
