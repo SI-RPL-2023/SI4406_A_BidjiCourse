@@ -5,8 +5,9 @@
             width: auto;
             height: auto;
             border: 1px;
-            /* box-shadow: 0px 3px 12px rgba(160, 159, 159, 0.8); */
+            background-color: white;
             border-radius: 5px;
+            padding: 50px;
         }
         .submit-btn:hover {
             background-color: rgb(0, 0, 0);
@@ -18,7 +19,7 @@
         <h3>Masuk yuk buat belajar!</h3>
     </div>
     <div class="d-flex justify-content-center container">
-        <div class="containt-box flex justify-content-center mt-4 mb-5">
+        <div class="containt-box flex justify-content-center mb-5">
             <form class="row g-3 w-90 flex flex-column align-items-center pt-4" action="{{ route('login.store') }}"
                 method="POST">
                 @csrf
