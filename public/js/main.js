@@ -1,9 +1,9 @@
 $(window).on('load', function () {
     $('.loading-animation').fadeOut('slow');
-    $('.tox-statusbar__branding').remove();
     AOS.init();
     setTimeout(function () {
         $('.loading-animation').remove();
+        $('.tox-statusbar__branding').remove();
         $('main').removeAttr('data-aos data-aos-duration');
     }, 1000);
 });
