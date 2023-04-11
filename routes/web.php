@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\MateriController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardUsersController;
 use App\Http\Controllers\DashboardCoursesController;
@@ -22,7 +23,7 @@ use App\Http\Controllers\DashboardCoursesController;
 
 //HomeController
 Route::resource('', HomeController::class)->except('show')->middleware('not_admin');
-
+Route::resource('materi', MateriController::class)->except('show')->middleware('not_admin');
 //LoginController
 Route::resource('login', LoginController::class)->except('show')->middleware('guest');
 
