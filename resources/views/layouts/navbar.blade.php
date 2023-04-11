@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ">
                 <li class="nav-item">
-                    <a class="nav-link active mx-1" aria-current="page" href="#">Materi</a>
+                    <a class="nav-link active mx-1" aria-current="page" href="{{ route('materi.index') }}">Materi</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link mx-1" href="#">Favorit</a>
