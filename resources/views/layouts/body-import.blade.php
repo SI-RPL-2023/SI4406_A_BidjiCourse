@@ -17,3 +17,4 @@
 <!-- Custom JS -->
 <script src="/js/main.js"></script>
 <script src="/js/alert.js"></script>
+<script src="/js/bootstrap.min.js"></script>
