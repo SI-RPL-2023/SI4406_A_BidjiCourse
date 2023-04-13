@@ -6,12 +6,47 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     @include('layouts.head-import')
 
     @yield('head-script')
 
     <style>
+        
+        
+        .dropdown-toggle::after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%); }
+        #sidebar {
+        min-width: 220px;
+        max-width: 220px;
+        color: #fff;
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        position: relative;
+        z-index: 0;
+        border-left: 2px solid rgba(0, 0, 0, 0.05); }
+        #sidebar ul li a {
+        padding: 10px 0;
+        display: block;
+        color: black;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.05); }
+        
+        h5,.h5 {
+        line-height: 1.5;
+        font-weight: 400;
+        font-family: "Poppins", Arial, sans-serif;
+        color: #000; }
+        
+        a[data-toggle="collapse"] {
+         position: relative; }
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -56,7 +91,7 @@
         }
 
         
-
+        
         .nav-scroller .nav {
             display: flex;
             flex-wrap: nowrap;
@@ -72,55 +107,25 @@
             font-size: .800rem;
         }
 
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 48px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        }
-
-        @media (max-width: 767.98px) {
-            .sidebar {
-                top: 5rem;
-            }
-        }
-
-        .sidebar-sticky {
-            height: calc(100vh - 48px);
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        .sidebar .nav-link {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .sidebar .nav-link.active {
-            color: #2470dc;
-        }
-
-        .sidebar-heading {
-            font-size: .75rem;
-        }
+        
+        
+        
 
         .navbar-brand {
             padding-top: .75rem;
             padding-bottom: .75rem;
             background-color: rgba(0, 0, 0, .25);
             box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+            text-align: left;
         }
 
         .navbar .navbar-toggler {
-            top: .25rem;
-            right: 1rem;
+            top: .20rem;
+            
         }
 
         .navbar .form-control {
-            padding: .75rem 1rem;
+            padding: .60rem 1rem;
         }
 
         .form-control-dark {
@@ -155,6 +160,7 @@
     </div>
 
     @include('layouts.body-import')
+    
 
     @yield('script')
 
