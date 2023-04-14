@@ -11,7 +11,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('landing-page', [
+        return view('pages.landing-page', [
             'title' => 'Selamat Datang di Bidji Course'
         ]);
     }
