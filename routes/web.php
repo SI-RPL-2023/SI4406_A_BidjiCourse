@@ -23,7 +23,10 @@ use App\Http\Controllers\DashboardCoursesController;
 
 //HomeController
 Route::resource('', HomeController::class)->except('show')->middleware('not_admin');
+
+//MateriController
 Route::resource('materi', MateriController::class)->except('show')->middleware('not_admin');
+
 //LoginController
 Route::resource('login', LoginController::class)->except('show')->middleware('guest');
 
@@ -40,5 +43,5 @@ Route::resource('dashboard', DashboardController::class)->except('show')->middle
 Route::resource('dashboard/users', DashboardUsersController::class)->except('show')->middleware('admin');
 
 //DashboardCoursesController
-Route::get('dashboard/courses/getSlug', [DashboardCoursesController::class, 'createSlug'])->middleware('admin');
+Route::get('dashboard/courses/getSlug', [DashboardCoursesController::class, 'createSlug'])->middleware('admin')->name('getSlug');
 Route::resource('dashboard/courses', DashboardCoursesController::class)->middleware('admin');

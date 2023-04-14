@@ -1,4 +1,10 @@
 @extends('layouts.main')
+@section('navbar')
+    @include('layouts.navbar')
+@endsection
+@section('footer')
+    @include('layouts.footer')
+@endsection
 @section('style')
     <style>
         .containt-box {

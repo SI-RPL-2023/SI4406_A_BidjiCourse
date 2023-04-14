@@ -11,7 +11,7 @@ class MateriController extends Controller
      */
     public function index()
     {
-        return view('materi.index', [
+        return view('pages.materi.index', [
             'title' => 'Bidji Course | Materi'
         ]);
     }

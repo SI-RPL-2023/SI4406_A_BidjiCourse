@@ -1,14 +1,10 @@
-@extends('dashboard.layouts.main')
-
-
+@extends('pages.dashboard.layouts.main')
 @section('head-script')
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 @endsection
-
-
 @section('main')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h3>Courses</h3>
@@ -90,8 +86,6 @@
         </tbody>
     </table>
 @endsection
-
-
 @section('script')
     <script>
         $(document).ready(function() {

@@ -1,4 +1,10 @@
 @extends('layouts.main')
+@section('navbar')
+    @include('layouts.navbar')
+@endsection
+@section('footer')
+    @include('layouts.footer')
+@endsection
 @section('style')
     <style>
         .bd-placeholder-img {
@@ -9,31 +15,31 @@
             user-select: none;
         }
 
-        .btn-cust-color{
+        .btn-cust-color {
             background-color: #0C1939;
             color: #EFEFEF
         }
 
-        .btn-cust-color-sec{
+        .btn-cust-color-sec {
             background-color: #EFEFEF;
             color: #404040
         }
 
-        .btn-cust-color-sec:hover{
+        .btn-cust-color-sec:hover {
             background-color: #CECECE;
             color: #404040
         }
 
-        .btn-cust-color:hover{
+        .btn-cust-color:hover {
             background-color: #203978;
             color: #EFEFEF
         }
 
-        .bg-cust-color{
+        .bg-cust-color {
             background-color: #0C1939;
         }
 
-        .card-cust{
+        .card-cust {
             background-color: #D9D9D9;
         }
 
@@ -148,7 +154,7 @@
             margin-bottom: 5rem;
             text-align: center;
             color: #404040;
-            
+
         }
 
         .marketing .col-lg-4 p {
@@ -183,14 +189,14 @@
         }
     </style>
 @endsection
-
 @section('main')
     <div class="container marketing" style="margin-top: 100px">
         <div class="row featurette">
             <div class="col-md-7 ">
                 <h2 class="featurette-heading fw-normal lh-1 mx-5">Belajar disini bisa bikin makin pintar</h2>
                 <br>
-                <p class="lead mx-5">Karena materi di Bidji Course ini simpel dan lengkap. Pokoknya bakal sesuai dengan kebutuhanmu.</p>
+                <p class="lead mx-5">Karena materi di Bidji Course ini simpel dan lengkap. Pokoknya bakal sesuai dengan
+                    kebutuhanmu.</p>
                 <br>
                 <a href="#" class="btn btn-cust-color text-white mx-5">Mulai bergabung</a>
             </div>
@@ -201,17 +207,17 @@
         <!-- Three columns of text below the carousel -->
         <div class="d-flex gap-4">
             <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="{{url('img/monitor.png')}}" alt="icon">
+                <img src="{{ url('img/monitor.png') }}" alt="icon">
                 <h3 class="fw-semibold my-3">Belajar lewat video</h3>
                 <p>Meskipun belajar online, kamu bisa tetap dapat gambarannya</p>
             </div>
             <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="{{url('img/icon flexible.png')}}" alt="icon">
+                <img src="{{ url('img/icon flexible.png') }}" alt="icon">
                 <h3 class="fw-semibold my-3">Belajar lebih flexible</h3>
                 <p>Tetap bisa belajar kapanpun dan dimanapun kamu berada</p>
             </div>
             <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="{{url('img/icon mobile.png')}}" alt="icon">
+                <img src="{{ url('img/icon mobile.png') }}" alt="icon">
                 <h3 class="fw-semibold my-3">Akses yang mudah</h3>
                 <p>Gunakan intenet dan gadget sehari-harimu untuk belajar yang lebih efektif</p>
             </div>
@@ -253,7 +259,8 @@
                         <div class="img-wrapper"><img src="img/science.jpg" class="d-block w-100" alt="..."> </div>
                         <div class="card-body">
                             <h5 class="card-title">Ilmu Pengetahuan Alam</h5>
-                            <p class="card-text">Disini bisa belajar ekologi, reproduksi, gerak dan gaya, kelistrikan, dan tata surya.</p>
+                            <p class="card-text">Disini bisa belajar ekologi, reproduksi, gerak dan gaya, kelistrikan, dan
+                                tata surya.</p>
                             <a href="#" class="btn btn-cust-color">Coba belajar</a>
                         </div>
                     </div>
@@ -328,7 +335,7 @@
 
 
         <!-- Marketing messaging and featurettes
-                  ================================================== -->
+                          ================================================== -->
         <!-- Wrap the rest of the page in another container to center all the content. -->
 
 
@@ -354,16 +361,15 @@
 
         <!-- /END THE FEATURETTES -->
 
-  
-            <div class="bg bg-cust-color bold-shadow rounded-4 text-center text-white p-5">
-                <h2 class="font-weight-500 mb-3">Tunggu apa lagi?</h2>
-                <p>Yuk belajar bareng Bidji Course</p>
-                <a href="" class="btn btn-cust-color-sec remove-style-link mt-3 gtm-reg-btn-a ">Buat Akun</a>
-            </div>
-     
+
+        <div class="bg bg-cust-color bold-shadow rounded-4 text-center text-white p-5">
+            <h2 class="font-weight-500 mb-3">Tunggu apa lagi?</h2>
+            <p>Yuk belajar bareng Bidji Course</p>
+            <a href="" class="btn btn-cust-color-sec remove-style-link mt-3 gtm-reg-btn-a ">Buat Akun</a>
+        </div>
+
     </div><!-- /.container -->
 @endsection
-
 @section('script')
     <script>
         var multipleCardCarousel = document.querySelector(

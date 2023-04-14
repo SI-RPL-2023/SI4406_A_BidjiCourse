@@ -20,7 +20,7 @@
 
 <body>
     <header>
-        @include('layouts.navbar')
+        @yield('navbar')
     </header>
 
     <main data-aos="fade-up" data-aos-duration="1000">
@@ -28,7 +28,7 @@
     </main>
 
     <footer class="container" style="margin-top: 20%">
-        @include('layouts.footer')
+        @yield('footer')
     </footer>
 
     @include('layouts.body-import')

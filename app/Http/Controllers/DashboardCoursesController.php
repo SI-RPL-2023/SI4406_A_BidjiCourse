@@ -15,7 +15,7 @@ class DashboardCoursesController extends Controller
      */
     public function index()
     {
-        return view('dashboard.courses.index', [
+        return view('pages.dashboard.courses.index', [
             'title' => 'Courses Management',
             'courses' => Course::get()
         ]);
@@ -26,7 +26,7 @@ class DashboardCoursesController extends Controller
      */
     public function create()
     {
-        return view('dashboard.courses.add', [
+        return view('pages.dashboard.courses.add', [
             'title' => 'Add New Course'
         ]);
     }
@@ -89,7 +89,7 @@ class DashboardCoursesController extends Controller
      */
     public function show(Course $course)
     {
-        return view('dashboard.courses.detail', [
+        return view('pages.dashboard.courses.detail', [
             'title' => $course->title,
             'course' => $course
         ]);
@@ -100,7 +100,7 @@ class DashboardCoursesController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('dashboard.courses.edit', [
+        return view('pages.dashboard.courses.edit', [
             'title' => 'Edit Course: ' . $course->title,
             'course' => $course,
         ]);

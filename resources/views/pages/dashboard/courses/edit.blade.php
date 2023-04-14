@@ -1,16 +1,12 @@
-@extends('dashboard.layouts.main')
-
-
+@extends('pages.dashboard.layouts.main')
 @section('head-script')
     <!-- Text Editor -->
     <script src="https://cdn.tiny.cloud/1/u5yv80sn31alf3o4asjhm5d8zpe5dgof1hastir594bi2xes/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
 @endsection
-
-
 @section('style')
     <style>
-        #cover-preview {
+        #cover-preview-update {
             max-width: 60%;
             width: 60%;
             height: auto;
@@ -19,34 +15,46 @@
             cursor: pointer;
         }
 
-        #cover-preview.dragging {
+        #cover-preview-update.dragging {
             background-color: #0c9ce9;
         }
 
         @media (max-width: 767.98px) {
-            #cover-preview {
+            #cover-preview-update {
                 max-width: 100%;
                 width: 100%;
             }
         }
     </style>
 @endsection
-
-
 @section('main')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h3>Add New Courses</h3>
-        <a href="{{ route('courses.index') }}" class="btn btn-sm btn-danger">
-            <i class="ti ti-arrow-back-up"></i> Back
-        </a>
+        <h3>Edit Courses</h3>
+        <div class="d-grid gap-2 d-flex">
+            <a href="{{ route('courses.index') }}" class="btn btn-sm btn-warning">
+                <i class="ti ti-arrow-back-up"></i> Back
+            </a>
+            <a href="{{ route('courses.show', $course->slug) }}" class="btn btn-sm btn-primary">
+                <i class="ti ti-eye"></i> Preview
+            </a>
+            <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
+                @csrf
+                @method('delete')
+                <button id="delete" class="btn btn-sm btn-danger delete-course-btn">
+                    <i class="ti ti-trash"></i> Delete
+                </button>
+            </form>
+        </div>
     </div>
-    <form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('courses.update', $course->slug) }}" method="POST" enctype="multipart/form-data">
+        @method('PUT')
         @csrf
 
         <div class="mt-2">
             <label for="title" class="form-label">Title</label>
-            <input value="{{ old('title') }}" type="text" class="form-control @error('title') is-invalid @enderror"
-                name="title" id="title" placeholder="Course apa yang ingin anda tambahkan?" required autofocus>
+            <input value="{{ old('title', $course->title) }}" type="text"
+                class="form-control @error('title') is-invalid @enderror" name="title" id="title"
+                placeholder="Course apa yang ingin anda tambahkan?" required autofocus>
         </div>
         @error('title')
             <div class="text-danger text-start" style="font-size: 14px">
@@ -56,9 +64,9 @@
 
         <div class="mt-4">
             <label class="form-label">Slug</label>
-            <input value="{{ old('slug') }}" type="text" class="form-control @error('slug') is-invalid @enderror"
-                name="slug" id="slug" placeholder="Slug akan terisi otomatis sesuai judul course yang anda masukan."
-                readonly>
+            <input value="{{ old('slug', $course->slug) }}" type="text"
+                class="form-control @error('slug') is-invalid @enderror" name="slug" id="slug"
+                placeholder="Slug akan terisi otomatis sesuai judul course yang anda masukan." readonly>
         </div>
         @error('slug')
             <div class="text-danger text-start" style="font-size: 14px">
@@ -69,7 +77,7 @@
         <div class="mt-4">
             <label for="desc" class="form-label">Description</label>
             <textarea rows="8" class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc"
-                placeholder="Apa yang akan dipelajari di course ini?" required>{{ old('desc') }}</textarea>
+                placeholder="Apa yang akan dipelajari di course ini?" required>{{ old('desc', $course->desc) }}</textarea>
         </div>
         @error('desc')
             <div class="text-danger text-start" style="font-size: 14px">
@@ -79,7 +87,8 @@
 
         <div class="mt-4">
             <label for="cover" class="form-label d-block">Cover</label>
-            <img id="cover-preview" class="mb-2 img-thumbnail img-fluid" src="/img/assets/drag-drop-upload.png" alt="cover preview">
+            <img id="cover-preview-update" class="mb-2 img-thumbnail img-fluid" src="{{ $course->cover }}"
+                old-src="{{ $course->cover }}" alt="cover preview">
             <p> Ukuran file maksimal <span class="badge text-bg-dark">5Mb</span>
                 dan format gambar yang didukung:
                 <span class="badge text-bg-primary">PNG</span>
@@ -89,18 +98,18 @@
                 <span class="badge text-bg-warning">JFIF</span>
                 <span class="badge text-bg-info">WEBP</span>
             </p>
+            @error('cover')
+                <div class="text-danger text-start" style="font-size: 14px">
+                    {{ $message }}
+                </div>
+            @enderror
             <input id="cover-input" type="file" class="d-none form-control @error('cover') is-invalid @enderror"
-                name="cover" id="cover" accept="image/*" required>
+                name="cover" id="cover" accept="image/*">
         </div>
-        @error('cover')
-            <div class="text-danger text-start" style="font-size: 14px">
-                {{ $message }}
-            </div>
-        @enderror
 
-        <div class="mt-5">
+        <div class="mt-4">
             <label for="body" class="form-label">Body</label>
-            <textarea name="body" id="tinymce">{{ old('body') }}</textarea>
+            <textarea name="body" id="tinymce">{{ old('body', $course->body) }}</textarea>
         </div>
         @error('body')
             <div class="text-danger text-start" style="font-size: 14px">
@@ -109,15 +118,15 @@
         @enderror
 
         <div class="d-grid gap-2 d-flex justify-content-end mt-3">
-            <button class="btn btn-primary" type="submit" name="submit" value="done">Tambah Course</button>
-            <button class="btn btn-warning" type="submit" name="submit" value="draft">Simpan Draft</button>
+            <button id="update-btn" class="btn btn-primary" type="submit" name="submit" value="done">Update
+                Course</button>
+            <button id="draft-btn" class="btn btn-warning" type="submit" name="submit" value="draft">Simpan
+                Draft</button>
             <a href="{{ route('courses.index') }}" class="btn btn-danger">Cancel</a>
         </div>
 
     </form>
 @endsection
-
-
 @section('script')
     <script>
         $(document).ready(function() {
@@ -154,7 +163,7 @@
                 const title = $(this).val();
                 $.ajax({
                     type: 'GET',
-                    url: '/dashboard/courses/getSlug?title=' + title,
+                    url: '{{ route('getSlug') }}?title=' + title,
                     success: function(response) {
                         $('#slug').val(response);
                     }

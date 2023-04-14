@@ -1,6 +1,4 @@
-@extends('dashboard.layouts.main')
-
-
+@extends('pages.dashboard.layouts.main')
 @section('style')
     <style>
         #course-cover {
@@ -19,8 +17,6 @@
         }
     </style>
 @endsection
-
-
 @section('main')
     <div class="pt-3 pb-2 mb-3 border-bottom">
         <h1>{{ $course->title }}</h1>

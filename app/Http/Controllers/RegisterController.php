@@ -12,7 +12,7 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        return view('register', [
+        return view('pages.auth.register', [
             'title' => 'Bidji Course | Daftar'
         ]);
     }

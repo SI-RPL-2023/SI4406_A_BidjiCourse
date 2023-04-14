@@ -12,7 +12,7 @@ class DashboardUsersController extends Controller
      */
     public function index()
     {
-        return view('dashboard.users.index', [
+        return view('pages.dashboard.users.index', [
             'title' => 'Users Management'
         ]);
     }
