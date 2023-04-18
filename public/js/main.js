@@ -3,11 +3,30 @@ $(window).on('load', function () {
     AOS.init();
     setTimeout(function () {
         $('.loading-animation').remove();
-        $('.tox-statusbar__branding').remove();
         $('main').removeAttr('data-aos data-aos-duration');
     }, 1000);
 });
+
 $(document).ready(function () {
+    // Wait for Element function
+    function waitForElm(selector) {
+        return new Promise(resolve => {
+            if (document.querySelector(selector)) {
+                return resolve(document.querySelector(selector));
+            }
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(selector)) {
+                    resolve(document.querySelector(selector));
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+    }
+
     // Loading animation
     function loader() {
         Swal.fire({
@@ -111,5 +130,10 @@ $(document).ready(function () {
     coverInput.change(function (e) {
         e.preventDefault();
         imagePreview(this.files[0]);
+    });
+
+    // TinyMCE watermark remover
+    waitForElm('.tox-statusbar__branding').then((elm) => {
+        $('.tox-statusbar__branding').remove();
     });
 });

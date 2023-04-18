@@ -11,24 +11,22 @@
         <form class="d-flex" role="search" action="">
             <div class="input-group">
                 <input required type="text" class="form-control" id="nav-search" name="nav-search"
-                    placeholder="Search" style="width: 350px">
+                    placeholder="Mau belajar apa hari ini?" style="width: 350px">
                 <button class="input-group-text text-secondary" type="button">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
-            {{-- <input class="form-control me-2" style="" type="search" placeholder="Apa yang ingin Anda pelajari?"> --}}
-            {{-- <button class="btn btn-dark" type="submit">Search</button> --}}
         </form>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ">
                 <li class="nav-item">
-                    <a class="nav-link active mx-1" aria-current="page" href="{{ route('materi.index') }}">Materi</a>
+                    <a class="nav-link mx-1 {{ Request::is('materi*') ? 'active' : ''}}" aria-current="page" href="{{ route('materi.index') }}">Materi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-1" href="#">Favorit</a>
+                    <a class="nav-link mx-1 {{ Request::is('favourite') ? 'active' : ''}}" href="#">Favorit</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-1" href="#">Aktivitas</a>
+                    <a class="nav-link mx-1 {{ Request::is('act') ? 'active' : ''}}" href="#">Aktivitas</a>
                 </li>
                 @can('admin')
                     <li class="nav-item">

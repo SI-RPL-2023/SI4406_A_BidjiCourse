@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 
-class MateriController extends Controller
+class QuizController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('pages.materi.index', [
-            'title' => 'Bidji Course | Materi',
-            'courses' => Course::get()
+        return view('pages.materi.quiz', [
+            'title' => 'Bidji Course | Quiz'
         ]);
     }
 
@@ -37,7 +36,7 @@ class MateriController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Quiz $quiz)
     {
         //
     }
@@ -45,7 +44,7 @@ class MateriController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Quiz $quiz)
     {
         //
     }
@@ -53,7 +52,7 @@ class MateriController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Quiz $quiz)
     {
         //
     }
@@ -61,7 +60,7 @@ class MateriController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Quiz $quiz)
     {
         //
     }

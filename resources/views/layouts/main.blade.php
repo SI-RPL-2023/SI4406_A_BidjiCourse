@@ -24,6 +24,7 @@
     </header>
 
     <main data-aos="fade-up" data-aos-duration="1000">
+        @yield('sidebar')
         @yield('main')
     </main>
 
