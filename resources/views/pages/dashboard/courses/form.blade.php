@@ -70,8 +70,8 @@
 
         <div class="mt-4">
             <label class="form-label">Slug</label>
-            <input class="form-control @error('slug') is-invalid @enderror" id="slug" type="text" value="{{ old('slug', isset($course) ? $course->slug : '') }}" placeholder="Slug akan terisi otomatis sesuai judul course yang anda masukan." disabled>
-            <input id="slug-hidden" name="slug" type="hidden" value="{{ old('slug', isset($course) ? $course->slug : '') }}">
+            <input class="form-control @error('slug') is-invalid @enderror" id="slug" type="text" value="{{ session('slug', isset($course) ? $course->slug : '') }}" placeholder="Slug akan terisi otomatis sesuai judul course yang anda masukan." disabled>
+            {{-- <input id="slug-hidden" name="slug" type="hidden" value="{{ old('slug', isset($course) ? $course->slug : '') }}"> --}}
         </div>
         @error('slug')
             <div class="text-danger text-start" style="font-size: 14px">
@@ -168,7 +168,7 @@
                     url: '{{ route('getSlug') }}?title=' + title,
                     success: function(response) {
                         $('#slug').val(response);
-                        $('#slug-hidden').val(response);
+                        // $('#slug-hidden').val(response);
                     }
                 });
             });
