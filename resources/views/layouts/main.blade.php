@@ -24,11 +24,12 @@
     </header>
 
     <main data-aos="fade-up" data-aos-duration="1000">
-        @yield('sidebar')
+        @yield('left-sidebar')
         @yield('main')
+        @yield('right-sidebar')
     </main>
 
-    <footer class="container" style="margin-top: 20%">
+    <footer style="margin-top: 20%">
         @yield('footer')
     </footer>
 
@@ -43,8 +44,18 @@
                 title: '{{ session('title') }}',
                 text: '{{ session('text') }}',
                 html: '{!! session('html') !!}',
-                confirmButtonColor: '#0d6efd',
+                confirmButtonColor: '#0d6efd'
             });
+        </script>
+    @endif
+
+    @if (session()->has('toast'))
+        <script>
+            Toast.fire({
+                icon: '{{ session('toast') }}',
+                text: '{{ session('text') }}',
+                html: '{!! session('html') !!}'
+            })
         </script>
     @endif
 

@@ -1,16 +1,21 @@
-<!doctype html>
-<html lang="en">
+@extends('layouts.main')
 
-<head>
-    <title>{{ $title ?? config('app.name') }}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@section('navbar')
+    @include('pages.dashboard.layouts.navbar')
+@endsection
 
-    @include('layouts.head-import')
+@section('main')
+    <div class="container-fluid">
+        <div class="row">
+            @include('pages.dashboard.layouts.sidebar')
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                @yield('main')
+            </div>
+        </div>
+    </div>
+@endsection
 
-    @yield('head-script')
-
+@section('style')
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -131,42 +136,8 @@
     </style>
 
     @yield('style')
+@endsection
 
-    <div class="loading-animation">
-        <x-loader.pencil></x-loader.pencil>
-    </div>
-</head>
-
-<body>
-    @include('pages.dashboard.layouts.navbar')
-
-    <div class="container-fluid">
-        <div class="row">
-            @include('pages.dashboard.layouts.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" data-aos="fade-up" data-aos-duration="1000">
-                @yield('main')
-            </main>
-        </div>
-    </div>
-
-    @include('layouts.body-import')
-
+@section('script')
     @yield('script')
-
-    @if (session()->has('alert'))
-        <script>
-            Swal.fire({
-                icon: '{{ session('alert') }}',
-                title: '{{ session('title') }}',
-                text: '{{ session('text') }}',
-                html: '{!! session('html') !!}',
-                confirmButtonColor: '#0d6efd',
-            });
-        </script>
-    @endif
-
-    <div style="margin-top: 300px"></div>
-
-</body>
-
-</html>
+@endsection
