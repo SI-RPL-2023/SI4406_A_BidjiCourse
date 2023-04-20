@@ -1,18 +1,18 @@
 @extends('pages.dashboard.layouts.main')
 @section('head-script')
     <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 @endsection
 @section('main')
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-md-nowrap align-items-center border-bottom mb-3 flex-wrap pt-3 pb-2">
         <h3>Courses</h3>
-        <a href="{{ route('courses.create') }}" class="btn btn-sm btn-primary">
+        <a class="btn btn-sm btn-primary" href="{{ route('courses.create') }}">
             <i class="ti ti-pencil-plus"></i> Add a course
         </a>
     </div>
-    <table id="courses-table" class="table table-striped table-bordered w-100">
+    <table class="table-striped table-bordered w-100 table" id="courses-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -49,11 +49,10 @@
                 <tr>
                     <td>{{ $course->id }}</td>
                     <td>
-                        <span id="{{ $status }}" class="badge text-bg-{{ $bg }}">{{ $status }}</span>
+                        <span class="badge text-bg-{{ $bg }}" data-bs-toggle="tooltip" data-bs-title="{{ $status == 'Draft' ? 'Course ini masih draft, publish course ini agar bisa diakses oleh user' : 'Course ini sudah bisa diakses oleh user' }}">{{ $status }}</span>
                     </td>
                     <td>{{ $course->title }}</td>
-                    <td><img id="" class="img-fluid rounded" src="{{ $course->cover }}" alt="cover preview"
-                            style="
+                    <td><img class="img-fluid rounded" id="" src="{{ $course->cover }}" alt="cover preview" style="
                         width: 150px;
                         height: auto;
                         object-fit: cover;
@@ -61,19 +60,17 @@
                     </td>
                     <td>{{ $rating }}</td>
                     <td class="text-right">
-                        <div class="d-grid gap-2 d-flex">
-                            <a id="detail" href="{{ route('courses.show', $course->slug) }}"
-                                class="btn btn-sm btn-warning">
+                        <div class="d-grid d-flex gap-2">
+                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View course detail" href="{{ route('courses.show', $course->slug) }}">
                                 <i class="ti ti-eye"></i> Preview
                             </a>
-                            <a id="edit" href="{{ route('courses.edit', $course->slug) }}"
-                                class="btn btn-sm btn-primary">
+                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit course" href="{{ route('courses.edit', $course->slug) }}">
                                 <i class="ti ti-edit"></i> Edit
                             </a>
                             <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button id="delete" class="btn btn-sm btn-danger delete-course-btn">
+                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete course">
                                     <i class="ti ti-trash"></i> Delete
                                 </button>
                             </form>
@@ -100,22 +97,6 @@
             });
             $('.dataTables_info, .dataTables_paginate').addClass('mt-4 mb-5');
             $('.dataTables_length').addClass('mb-4');
-
-            tippy('#detail', {
-                content: 'View course detail',
-            });
-            tippy('#edit', {
-                content: 'Edit course',
-            });
-            tippy('#delete', {
-                content: 'Delete course',
-            });
-            tippy('#Draft', {
-                content: 'Course ini masih draft, publish course ini agar bisa diakses oleh user',
-            });
-            tippy('#Published', {
-                content: 'Course ini sudah bisa diakses oleh user',
-            });
         })
     </script>
 @endsection
