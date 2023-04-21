@@ -15,27 +15,45 @@
         }
     }
 </style>
-
-<div class="dropdown">
-    <div class="dropdown-toggle d-flex align-items-center gap-1" data-bs-toggle="dropdown" data-bs-animation="fade-up" type="button">
+<div class="dropdown" x-data="{ open: false }" x-on:click="open = !open" x-on:click.away="open = false" x-on:mouseenter="open = true" x-on:mouseleave="open = false">
+    <div class="dropdown-toggle d-flex align-items-center gap-1" type="button">
         {{ auth()->user()->full_name }}
         <i class="ti ti-user-circle fs-2"></i>
     </div>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href=""><i class="ti ti-settings"></i> Pengaturan</a></li>
-        <li><a class="dropdown-item text-warning" href=""><i class="ti ti-star-filled"></i> Favorite</a></li>
+    <ul class="dropdown-menu" x-bind:style="open ? 'display: block' : 'display: none'">
         <li>
-            <form action="{{ route('logout') }}" method="get">
-                <button class="dropdown-item text-danger" type="submit"><i class="ti ti-logout"></i> Logout</button>
-            </form>
+            <a class="dropdown-item" href=""><i class="ti ti-settings"></i> Pengaturan</a>
+        </li>
+        <li>
+            <a class="dropdown-item text-warning" href=""><i class="ti ti-star-filled"></i> Favorite</a>
+        </li>
+        <li>
+            <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="ti ti-logout"></i> Logout</a>
         </li>
     </ul>
 </div>
 
+{{-- <div class="dropdown" id="profile-dropdown">
+    <div class="dropdown-toggle d-flex align-items-center gap-1" id="profile-toggle" data-bs-toggle="dropdown" type="button">
+        {{ auth()->user()->full_name }}
+        <i class="ti ti-user-circle fs-2"></i>
+    </div>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" href=""><i class="ti ti-settings"></i> Pengaturan</a>
+        </li>
+        <li>
+            <a class="dropdown-item text-warning" href=""><i class="ti ti-star-filled"></i> Favorite</a>
+        </li>
+        <li>
+            <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="ti ti-logout"></i> Logout</a>
+        </li>
+    </ul>
+</div>
 <script>
     $(document).ready(function() {
-        $('.dropdown').hover(function() {
-            $('.dropdown-toggle', this).trigger('click');
+        $('#profile-dropdown').hover(function() {
+            $('#profile-toggle', this).trigger('click');
         });
     });
-</script>
+</script> --}}
