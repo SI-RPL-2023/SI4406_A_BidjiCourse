@@ -13,7 +13,8 @@ class DashboardUsersController extends Controller
     public function index()
     {
         return view('pages.dashboard.users.index', [
-            'title' => 'Users Management'
+            'title' => 'Users Management',
+            'users' => User::get()
         ]);
     }
 
@@ -38,7 +39,10 @@ class DashboardUsersController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('pages.dashboard.users.detail', [
+            'title' => $user->full_name,
+            'user' => $user
+        ]);
     }
 
     /**
@@ -62,6 +66,16 @@ class DashboardUsersController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if ($user->id == auth()->user()->id) {
+            return redirect(route('users.index'))
+                ->with('alert', 'info')
+                ->with('text', 'Untuk alasan keamanan, anda tidak diperbolehkan menghapus akun anda sendiri.');
+        } 
+        $username = $user->full_name;
+        // $user->delete();
+        @unlink(public_path($user->avatar));
+        return redirect(route('users.index'))
+            ->with('alert', 'success')
+            ->with('html', 'Akun <strong>' . $username . '</strong> berhasil dihapus');
     }
 }
