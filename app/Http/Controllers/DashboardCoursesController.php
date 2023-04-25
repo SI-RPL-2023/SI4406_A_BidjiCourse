@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Course;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,7 +30,8 @@ class DashboardCoursesController extends Controller
     public function create()
     {
         return view('pages.dashboard.courses.form', [
-            'title' => 'Add New Course'
+            'title' => 'Add New Course',
+            'categories' => Category::get()
         ]);
     }
 
@@ -55,6 +58,7 @@ class DashboardCoursesController extends Controller
             'cover' => ['image', 'file', 'max:5120', 'required'],
             'desc' => 'required',
             'body' => 'required',
+            'category_id' => ['required', Rule::in(Category::pluck('id')->all())],
         ];
         $messages = [
             'title.required' => 'Judul course harus di isi.',
@@ -66,6 +70,8 @@ class DashboardCoursesController extends Controller
             'cover.max' => 'Ukuran file max 5mb.',
             'desc.required' => 'Deskripsi harus diisi.',
             'body.required' => 'Materi harus diisi.',
+            'category_id.required' => 'Mata pelajaran harus dipilih.',
+            'category_id.in' => 'Mata pelajaran tidak tersedia, silahkan tambahkan terlebih dahulu.',
         ];
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->passes()) {
@@ -101,6 +107,7 @@ class DashboardCoursesController extends Controller
         return view('pages.dashboard.courses.form', [
             'title' => 'Edit Course: ' . $course->title,
             'course' => $course,
+            'categories' => Category::get()
         ]);
     }
 
@@ -124,6 +131,7 @@ class DashboardCoursesController extends Controller
         $rules = [
             'desc' => 'required',
             'body' => 'required',
+            'category_id' => ['required', Rule::in(Category::pluck('id')->all())],
         ];
         if ($data['title'] != $course->title) {
             $rules['title'] = ['required', 'unique:courses'];
@@ -144,6 +152,8 @@ class DashboardCoursesController extends Controller
             'cover.max' => 'Ukuran file max 5mb.',
             'desc.required' => 'Deskripsi harus diisi.',
             'body.required' => 'Materi harus diisi.',
+            'category_id.required' => 'Mata pelajaran harus dipilih.',
+            'category_id.in' => 'Mata pelajaran tidak tersedia, silahkan tambahkan terlebih dahulu.',
         ];
         $validator = Validator::make($data, $rules, $messages);
         if ($validator->passes()) {
