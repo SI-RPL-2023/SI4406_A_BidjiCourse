@@ -10,6 +10,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardUsersController;
 use App\Http\Controllers\DashboardCoursesController;
+use App\Http\Controllers\DashboardQuizzesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,10 @@ use App\Http\Controllers\DashboardCoursesController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::fallback(function () {
+    return redirect(route('index'));
+});
 
 Route::middleware(['guest'])->group(function () {
     //LoginController
@@ -36,9 +41,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'not_admin'])->group(function () {
     //MateriController
-    Route::resource('materi', MateriController::class)->except('show');
+    Route::resource('materi', MateriController::class);
     //QuizController
-    Route::resource('quiz', QuizController::class)->except('show');
+    Route::resource('quiz', QuizController::class);
+    // Route::get('/quiz/{courseSlug}', [QuizController::class, 'showBySlug'])->name('quiz.showBySlug');
 });
 
 Route::middleware(['not_admin'])->group(function () {
@@ -51,7 +57,9 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('dashboard', DashboardController::class)->except('show');
     //DashboardUsersController
     Route::resource('dashboard/users', DashboardUsersController::class);
+    //DashboardQuizzesController
+    Route::resource('dashboard/quizzes', DashboardQuizzesController::class);
     //DashboardCoursesController
-    Route::get('dashboard/courses/getSlug', [DashboardCoursesController::class, 'createSlug'])->name('getSlug');
     Route::resource('dashboard/courses', DashboardCoursesController::class);
+    Route::get('dashboard/courses/getSlug', [DashboardCoursesController::class, 'createSlug'])->name('getSlug');
 });

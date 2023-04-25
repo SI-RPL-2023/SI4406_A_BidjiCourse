@@ -28,7 +28,7 @@
                 @endphp
                 <tr>
                     <td>{{ $user->id }}</td>
-                    <td><span class="badge text-bg-{{ $user->is_admin ? 'danger' : 'success' }}">{{ $user->is_admin ? 'Admin' : 'Student' }}</span></td>
+                    <td id="{{ $user->id }}"><span class="badge text-bg-{{ $user->is_admin ? 'danger' : 'success' }}">{{ $user->is_admin ? 'Admin' : 'Student' }}</span></td>
                     <td>{{ $user->full_name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at }}</td>
@@ -37,17 +37,15 @@
                             <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this user's detail" href="{{ route('users.show', $user->id) }}">
                                 <i class="ti ti-eye"></i> Detail
                             </a>
-
-                            <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-title="{{ $edit_tlp }}" tabindex="0">
-                                <a class="{{ auth()->user()->id == $user->id ? 'disabled' : '' }} btn btn-sm btn-primary" id="edit" href="{{ route('users.edit', $user->id) }}">
+                            <span data-bs-toggle="tooltip" data-bs-title="{{ $edit_tlp }}" tabindex="0">
+                                <button class="role-edit btn btn-sm btn-primary {{ auth()->user()->id == $user->id ? 'disabled' : '' }}" id="edit" data-id="{{ $user->id }}" data-role="{{ $user->is_admin }}" data-href="{{ route('users.update', $user->id) }}" data-user="{{ $user->full_name }}">
                                     <i class="ti ti-edit"></i> Edit Role
-                                </a>
+                                </button>
                             </span>
-
                             <form action="{{ route('users.destroy', $user->id) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-title="{{ $delete_tlp }}" tabindex="0">
+                                <span data-bs-toggle="tooltip" data-bs-title="{{ $delete_tlp }}" tabindex="0">
                                     <button class="btn btn-sm btn-danger delete-user-btn" id="delete" type="submit" {{ auth()->user()->id == $user->id ? 'disabled' : '' }}>
                                         <i class="ti ti-trash"></i> Delete
                                     </button>
@@ -74,6 +72,70 @@
             });
             $('.dataTables_info, .dataTables_paginate').addClass('mt-4 mb-5');
             $('.dataTables_length').addClass('mb-4');
-        })
+            $('.role-edit').on('click', function() {
+                const user = $(this).data('user');
+                const role = $(this).data('role');
+                const url = $(this).data('href');
+                let admin = '';
+                let student = '';
+                if (role == 1) {
+                    admin = 'selected'
+                } else {
+                    student = 'selected'
+                }
+                (async () => {
+                    const {
+                        value: inputValue
+                    } = await Swal.fire({
+                        title: 'Pilih role:',
+                        html: `<p class="mb-2">${user}</p>` +
+                            `<select id="role-select" class="form-select mb-2">` +
+                            `<option ${admin} value="1">Admin</option>` +
+                            `<option ${student} value="0">Student</option>` +
+                            `</select>`,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#0d6efd',
+                        cancelButtonColor: '#dc3545',
+                    })
+                    if (inputValue) {
+                        $.ajax({
+                            url: url,
+                            method: 'PATCH',
+                            headers: {
+                                'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                            },
+                            data: {
+                                role: $('#role-select').val(),
+                            },
+                            success: function(response) {
+                                // console.log(response['html']);
+                                $(`td#${response['id']}`).html(response['badge']);
+                                $(`button[data-id=${response['id']}]`).data("role", response['role']);
+                                Swal.fire({
+                                    icon: response['alert'],
+                                    html: response['html'],
+                                    confirmButtonColor: '#0d6efd'
+                                })
+                                // .then((result) => {
+                                //     if (result.value) {
+                                //         document.location.href = `{{ route('users.index') }}`;
+                                //     }
+                                // });
+                            },
+                            error: function(xhr, status, error) {
+                                // console.error(error);
+                                Swal.fire({
+                                    title: status,
+                                    icon: 'error',
+                                    html: error,
+                                    confirmButtonColor: '#0d6efd'
+                                });
+                            }
+                        });
+                    }
+                })();
+            });
+        });
     </script>
 @endsection
