@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -26,29 +25,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // For testing only
-        DB::table('users')->insert(
-            [
-                [
-                    'is_admin' => true,
-                    'full_name' => 'Putu Wisnu Wirayuda Putra',
-                    'email' => 'wisnuwirayuda15@gmail.com',
-                    'gender' => 'Laki-laki',
-                    'password' => bcrypt('12345678'),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'is_admin' => false,
-                    'full_name' => 'user',
-                    'email' => 'user@gmail.com',
-                    'gender' => 'Laki-laki',
-                    'password' => bcrypt('user1234'),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            ]
-        );
     }
 
     /**

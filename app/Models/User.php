@@ -38,8 +38,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function courses()
+    // public function courses()
+    // {
+    //     return $this->hasMany(Course::class);
+    // }
+
+    public function quizResults()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(QuizResult::class);
     }
+
+    // public function favourites()
+    // {
+    //     return $this->hasMany(Favourite::class);
+    // }
 }

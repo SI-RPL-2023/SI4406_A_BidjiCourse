@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -22,31 +20,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // For testing only
-        DB::table('categories')->insert(
-            [
-                [
-                    'name' => 'Ilmu Pengetahuan Alam',
-                    'code' => 'IPA',
-                    'slug' => Str::slug('Ilmu Pengetahuan Alam', '-')
-                ],
-                [
-                    'name' => 'Ilmu Pengetahuan Sosial',
-                    'code' => 'IPS',
-                    'slug' => Str::slug('Ilmu Pengetahuan Sosial', '-')
-                ],
-                [
-                    'name' => 'Matematika',
-                    'code' => 'MTK',
-                    'slug' => Str::slug('Matematika', '-')
-                ],
-                [
-                    'name' => 'Bahasa Inggris',
-                    'code' => 'BING',
-                    'slug' => Str::slug('Bahasa Inggris', '-')
-                ],
-            ]
-        );
+        Schema::table('courses', function (Blueprint $table) {
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        });
     }
 
     /**

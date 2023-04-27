@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('category_id');
             $table->boolean('draft');
-            // $table->unsignedBigInteger('category_id');
-            // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('category_id');
+            // $table->foreignId('category_id');
             $table->string('title')->unique();
             $table->string('slug')->unique();
             $table->string('cover');
@@ -30,18 +28,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::table('courses')->insert([
-            'draft' => false,
-            'category_id' => 1,
-            'title' => 'Contoh Judul Course',
-            'slug' => 'contoh-judul-course',
-            'cover' => 'contoh-cover.jpg',
-            'desc' => 'Ini adalah deskripsi course',
-            'body' => 'Ini adalah konten atau isi course',
-            'last_edited_by' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Schema::table('courses', function (Blueprint $table) {
+        //     $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        // });
     }
 
     /**
