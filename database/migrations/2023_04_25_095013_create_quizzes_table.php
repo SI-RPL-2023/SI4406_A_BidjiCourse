@@ -22,9 +22,71 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('quiz_questions', function (Blueprint $table) {
+            $table->id();
+            $table->integer('number');
+            $table->unsignedBigInteger('quiz_id');
+            $table->text('question');
+            $table->text('answer_explanation')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('quiz_answers', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('quiz_question_id');
+            $table->string('answer');
+            $table->boolean('is_correct');
+            $table->timestamps();
+        });
+
+        Schema::create('quiz_attempts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('quiz_id');
+            $table->unsignedBigInteger('quiz_question_id');
+            $table->unsignedBigInteger('quiz_answer_id')->nullable();
+            $table->boolean('flag')->default(false);
+            $table->timestamps();
+        });
+
+        Schema::create('quiz_results', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('quiz_id');
+            $table->integer('attempt');
+            $table->enum('state', ['Finished', 'Ongoing'])->default('Ongoing');
+            $table->string('time_taken')->nullable();
+            $table->integer('total_questions')->nullable();
+            $table->integer('unanswered_questions')->nullable();
+            $table->integer('correct_answer')->nullable();
+            $table->json('qna')->nullable();
+            $table->integer('score')->nullable();
+            $table->timestamps();
+        });
+
         Schema::table('quizzes', function (Blueprint $table) {
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        });
+
+        Schema::table('quiz_questions', function (Blueprint $table) {
+            $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
+        });
+
+        Schema::table('quiz_answers', function (Blueprint $table) {
+            $table->foreign('quiz_question_id')->references('id')->on('quiz_questions')->onDelete('cascade');
+        });
+
+        Schema::table('quiz_attempts', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
+            $table->foreign('quiz_question_id')->references('id')->on('quiz_questions')->onDelete('cascade');
+            $table->foreign('quiz_answer_id')->references('id')->on('quiz_answers')->onDelete('cascade');
+        });
+
+        Schema::table('quiz_results', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
         });
     }
 
@@ -34,5 +96,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('quizzes');
+        Schema::dropIfExists('quiz_questions');
+        Schema::dropIfExists('quiz_answers');
+        Schema::dropIfExists('quiz_attempts');
+        Schema::dropIfExists('quiz_results');
     }
 };
