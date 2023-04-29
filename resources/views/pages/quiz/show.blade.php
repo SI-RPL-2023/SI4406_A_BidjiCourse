@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('navbar')
-    @include('layouts.navbar-simple', ['route' => route('materi.show', $course->slug), 'title' => "Quiz - $course->title", 'category' => $course->category->name])
+    @include('layouts.navbar-simple', ['route' => route('materi.show', $course->slug), 'title' => $title, 'category' => $course->category->name])
 @endsection
 @section('head-script')
     <link href="/css/TimeCircles.css" rel="stylesheet">
@@ -20,7 +20,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
             gap: 7px;
-            margin-top: 5px;
+            margin-top: 20px;
             margin-bottom: 20px;
         }
 
@@ -136,19 +136,22 @@
     </style>
 @endsection
 @section('main')
+    @php
+        $userId = auth()->user()->id;
+    @endphp
     <div class="container-fluid bg-body-tertiary">
         <div class="row">
             <div class="col-md-8 mx-md-5 mb-4">
                 @foreach ($questions as $question)
                     @php
                         $quizAttempt = \App\Models\QuizAttempt::where('quiz_question_id', $question->id)
-                            ->where('user_id', auth()->user()->id)
+                            ->where('user_id', $userId)
                             ->first();
                         $selectedAnswerId = null;
                         if ($quizAttempt) {
                             $selectedAnswerId = $quizAttempt->quiz_answer_id;
                         }
-                        $flag = \App\Models\QuizAttempt::where('user_id', auth()->user()->id)
+                        $flag = \App\Models\QuizAttempt::where('user_id', $userId)
                             ->where('quiz_question_id', $question->id)
                             ->where('flag', true)
                             ->exists();
@@ -162,18 +165,18 @@
                         <div class="ml-5">
                             <form id="quiz_radio" action="{{ route('quiz.store') }}" method="POST">
                                 <input name="question_id" type="hidden" value="{{ $question->id }}">
-                                <input name="quiz_id" type="hidden" value="{{ $quiz->id }}">
+                                <input name="quiz_id" type="hidden" value="{{ $course->quiz->id }}">
                                 <div class="radio-container">
-                                    @foreach ($question->answers as $answer)
+                                    @foreach ($question->answers as $option)
                                         <label>
-                                            <input class="quiz-answer" name="answer_id" type="radio" value="{{ $answer->id }}" {{ $selectedAnswerId == $answer->id ? 'checked' : '' }}>
-                                            <span>{{ chr(64 + $loop->iteration) }}. {{ $answer->answer }}</span>
+                                            <input class="quiz-answer" name="answer_id" type="radio" value="{{ $option->id }}" {{ $selectedAnswerId == $option->id ? 'checked' : '' }}>
+                                            <span>{{ chr(64 + $loop->iteration) }}. {{ $option->answer }} {{ $option->is_correct ? 'o' : '' }}</span>
                                         </label>
                                     @endforeach
                                 </div>
                             </form>
                             <br>
-                            <span class="flag_toggle" data-bs-placement="right" data-bs-toggle="tooltip" data-bs-title="Tandai pertanyaan ini jika kamu ingin mengerjakannya nanti" data-quiz-id="{{ $quiz->id }}" data-question-id="{{ $question->id }}" data-url="{{ route('quiz.flag', [$quiz->id, $question->id]) }}
+                            <span class="flag_toggle" data-bs-placement="right" data-bs-toggle="tooltip" data-bs-title="Tandai pertanyaan ini jika kamu ingin mengerjakannya nanti" data-quiz-id="{{ $course->quiz->id }}" data-question-id="{{ $question->id }}" data-url="{{ route('quiz.flag', [$course->quiz->id, $question->id]) }}
                                 " style="cursor: pointer;">
                                 <i class="flag_icon ti ti-flag{{ $flag ? '-filled text-danger' : '' }}"></i>
                                 <span class="flag_text">{{ $flag ? 'Remove flag' : 'Flag question' }}</span>
@@ -181,16 +184,16 @@
                         </div>
                         <div class="container-fluid mt-5">
                             <div class="d-flex justify-content-between">
-                                <a class="btn btn-dark {{ $questions->currentPage() == 1 ? 'opacity-0 disabled' : '' }}" href="{{ $questions->previousPageUrl() }}"><i class="ti ti-chevron-left"></i>
+                                <a class="btn btn-dark {{ $questions->currentPage() == 1 ? 'opacity-0 disabled' : '' }}" id="prev" href="{{ $questions->previousPageUrl() }}"><i class="ti ti-chevron-left"></i>
                                     Previous</a>
-                                @if ($questions->currentPage() != $questions->total())
-                                    <a class="btn btn-dark" href="{{ $questions->nextPageUrl() }}">Next <i class="ti ti-chevron-right"></i></a>
-                                @else
-                                    <form action="{{ route('quiz.update', $quiz->id) }}" method="POST">
+                                @if ($questions->currentPage() == $questions->total())
+                                    <form id="finish" action="{{ route('quiz.update', $course->quiz->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <button class="finish-attempt btn btn-dark" type="submit"><i class="ti ti-circle-check"></i> Finish Attempt</button>
+                                        <button class="finish-attempt btn btn-dark" data-url="{{ route('quiz.check', $course->quiz->id) }}" type="submit"><i class="ti ti-circle-check"></i> Finish Attempt</button>
                                     </form>
+                                @else
+                                    <a class="btn btn-dark" id="next" href="{{ $questions->nextPageUrl() }}">Next <i class="ti ti-chevron-right"></i></a>
                                 @endif
                             </div>
                         </div>
@@ -200,44 +203,45 @@
             <div class="col-md-4">
                 <div class="sidebar">
                     <h3 class="quiz-nav">Quiz Navigation</h3>
-                    <div id="countdown" data-timer="{{ $quiz->time_limit }}"></div>
-                    <span class="finish-attempt" style="cursor: pointer;" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
-                        <i x-bind:class="hover ? 'ti ti-circle-check' : ''"></i> 
-                        Finish attempt...
-                    </span>
+                    @if ($course->quiz->time_limit > 0)
+                        <div id="countdown" data-timer="{{ $time_left }}"></div>
+                    @endif
+                    <form action="{{ route('quiz.update', $course->quiz->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <span class="finish-attempt" data-url="{{ route('quiz.check', $course->quiz->id) }}" style="cursor: pointer;" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
+                            <i x-bind:class="hover ? 'ti ti-circle-check' : ''"></i>
+                            Finish attempt...
+                        </span>
+                    </form>
+                    <div class="mt-3">
+                        <span class="badge text-bg-success">Answered</span>
+                        <span class="badge text-bg-warning">Flagged</span>
+                        <span class="badge text-bg-dark">Current Page</span>
+                    </div>
                     <div class="btn-container">
                         @foreach ($questions_all as $question)
                             @php
-                                $answered = \App\Models\QuizAttempt::where('user_id', auth()->user()->id)
+                                $quizAttempt = \App\Models\QuizAttempt::where('user_id', $userId)
                                     ->where('quiz_question_id', $question->id)
                                     ->whereNotNull('quiz_answer_id')
-                                    ->exists();
-                                $flag = \App\Models\QuizAttempt::where('user_id', auth()->user()->id)
+                                    ->first();
+                                $isAnswered = !is_null($quizAttempt);
+                                $isFlagged = \App\Models\QuizAttempt::where('user_id', $userId)
                                     ->where('quiz_question_id', $question->id)
                                     ->where('flag', true)
                                     ->exists();
-                                $bd = 'outline-';
-                                if ($answered) {
-                                    $bd = '';
-                                    $bg = 'success';
-                                } else {
-                                    $bg = 'dark';
-                                }
-                                if ($flag) {
-                                    $bd = '';
-                                    $bg = 'warning';
-                                }
+                                $border = $isAnswered || $isFlagged ? '' : 'outline-';
+                                $background = $isAnswered ? 'success' : ($isFlagged ? 'warning' : 'dark');
                                 if (Request::query('page') == $loop->iteration) {
-                                    $bg = 'dark';
-                                    $bd = '';
+                                    $background = 'dark';
+                                    $border = '';
                                 }
-                                if (!Request::has('page')) {
-                                    if ($loop->index == 0) {
-                                        $bd = '';
-                                    }
+                                if (!Request::has('page') && $loop->index == 0) {
+                                    $border = '';
                                 }
                             @endphp
-                            <a class="quiz-nav-button btn btn-{{ $bd }}{{ $bg }} btn-sm" href="{{ $course->slug }}?page={{ $loop->iteration }}">{{ $loop->iteration }}</a>
+                            <a class="quiz-nav-button btn btn-{{ $border }}{{ $background }} btn-sm" href="{{ $course->slug }}?page={{ $loop->iteration }}">{{ $loop->iteration }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -249,52 +253,56 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            @if ($course->quiz->time_limit > 0)
+                const countdown = $("#countdown");
+                countdown.TimeCircles({
+                    use_background: true,
+                    count_past_zero: false,
+                    text_size: 0.1,
+                    time: {
+                        Days: {
+                            show: false,
+                            text: "Hari"
+                        },
+                        Hours: {
+                            show: true,
+                            text: "Jam"
+                        },
+                        Minutes: {
+                            show: true,
+                            text: "Menit"
+                        },
+                        Seconds: {
+                            show: true,
+                            text: "Detik"
+                        }
+                    }
+                });
+                const timeout = setInterval(() => {
+                    if (countdown.TimeCircles().getTime() <= 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Waktu Habis',
+                            html: 'Waktu kamu sudah habis!',
+                            confirmButtonColor: '#0d6efd',
+                        }).then((result) => {
+                            $('.finish-attempt').closest('form').submit();
+                        });
+                        clearInterval(timeout)
+                    }
+                }, 500);
+            @endif
+            const quiz_id = "{{ $course->quiz->id }}";
             $.ajaxSetup({
                 headers: {
-                    'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
                 },
             })
-            const quiz_id = `{{ $quiz->id }}`;
-            const countdown = $("#countdown");
-            countdown.TimeCircles({
-                use_background: true,
-                count_past_zero: false,
-                text_size: 0.1,
-                time: {
-                    Days: {
-                        show: false,
-                        text: "Hari"
-                    },
-                    Hours: {
-                        show: true,
-                        text: "Jam"
-                    },
-                    Minutes: {
-                        show: true,
-                        text: "Menit"
-                    },
-                    Seconds: {
-                        show: true,
-                        text: "Detik"
-                    }
-                }
-            });
-            const timeout = setInterval(() => {
-                if (countdown.TimeCircles().getTime() < 0) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Waktu Habis',
-                        html: 'Waktu anda sudah habis!',
-                        confirmButtonColor: '#0d6efd',
-                    });
-                    clearInterval(timeout)
-                }
-            }, 1000);
             $('.quiz-answer').on('change', function() {
                 const formData = $('#quiz_radio').serialize();
                 console.log(formData);
                 $.ajax({
-                    url: `{{ route('quiz.store') }}`,
+                    url: "{{ route('quiz.store') }}",
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -336,12 +344,15 @@
                     }
                 });
             });
+            $('#prev, #next, .finish-attempt').on('click', function(e) {
+                loader();
+            });
             $('.finish-attempt').on('click', function(e) {
                 e.preventDefault();
                 const url = $(this).attr('data-url');
                 $.ajax({
                     url: url,
-                    type: 'GET',
+                    type: 'POST',
                     data: {
                         quiz_id: quiz_id
                     },
@@ -349,21 +360,21 @@
                         console.log(response);
                         Swal.fire({
                             title: 'Finish Attempt',
-                            html: 'Apakah anda yakin ingin menyelesaikan quiz ini?',
-                            icon: 'warning',
+                            html: response['html'],
+                            icon: 'question',
                             showCancelButton: true,
-                            confirmButtonColor: '#dc3545',
-                            cancelButtonColor: '#0d6efd',
+                            confirmButtonColor: '#0d6efd',
+                            cancelButtonColor: '#dc3545',
                             confirmButtonText: 'Submit',
                             cancelButtonText: 'Cancel',
                         }).then((result) => {
                             if (result.value) {
-                                $(this).closest('form').submit();
+                                $('.finish-attempt').closest('form').submit();
                             }
                         })
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.error(error);
                     }
                 });
             });

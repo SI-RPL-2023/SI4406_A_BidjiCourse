@@ -42,7 +42,7 @@ class QuizController extends Controller
             $attemptData
         );
         return response()->json([
-            'toast' =>'success',
+            'toast' => 'success',
             'message' => 'Answer saved'
         ]);
     }
@@ -50,24 +50,32 @@ class QuizController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($courseSlug) //* Quiz
+    public function show($courseSlug)
     {
-        $course = Course::where('slug', $courseSlug)->firstOrFail();
+        $course = Course::where('slug', $courseSlug)->first();
+        if (empty($course)) {
+            return abort(404); //jika user mencoba merubah request quiz id pada halaman html
+        }
         $title = "Quiz - $course->title";
-        $quiz = $course->quiz;
-        $questions = QuizQuestion::where('quiz_id', $quiz->id)->paginate(1); //? ->inRandomOrder()
-        $questions_all = QuizQuestion::where('quiz_id', $quiz->id)->get();
-        if (!QuizResult::where('quiz_id', $quiz->id)
-            ->where('user_id', auth()->user()->id)
-            ->where('state', 'Ongoing')
-            ->exists()) {
+        $user_id = auth()->user()->id;
+        if (!$course->quiz) {
+            return redirect()->back()->withErrors('Quiz not found');
+        }
+        $questions = $course->quiz->questions()->paginate(1);
+        $questions_all = $course->quiz->questions;
+        if (!$course->quiz->results()->where('user_id', $user_id)->where('state', 'Ongoing')->exists()) {
+            $attempt = $course->quiz->results()->where('user_id', $user_id)->count() + 1;
             QuizResult::create([
-                'attempt' => QuizResult::where('quiz_id', $quiz->id)->where('user_id', auth()->user()->id)->count() + 1,
-                'user_id' => auth()->user()->id,
-                'quiz_id' => $quiz->id,
+                'attempt' => $attempt,
+                'user_id' => $user_id,
+                'quiz_id' => $course->quiz->id,
+                'time_left' => $course->quiz->time_limit
             ]);
         }
-        return view('pages.quiz.show', compact('course', 'quiz', 'questions', 'questions_all', 'title'));
+        $quizResult = $course->quiz->results()->where('user_id', $user_id)->where('state', 'Ongoing')->first();
+        $time_left = $course->quiz->time_limit - ($quizResult->created_at->diffInSeconds(now()));
+        $quizResult->update(['time_left' => $time_left]);
+        return view('pages.quiz.show', compact('course', 'questions', 'questions_all', 'title', 'time_left'));
     }
 
     /**
@@ -83,78 +91,113 @@ class QuizController extends Controller
      */
     public function update(Request $request, Quiz $quiz)  //* QuizResult
     {
-        $quizResult = QuizResult::where('quiz_id', $quiz->id)->where('user_id', auth()->user()->id)->where('state', 'Ongoing')->firstOrFail();
-        // $quizResult = QuizResult::find();
-        if ($quizResult) {
-            function groupQuestionsAndAnswers(object $attempt)
-            {
-                foreach ($attempt as $att) {
-                    $questionAndAnswer[$att->quiz_question_id] = $att->quiz_answer_id;
-                }
-                return $questionAndAnswer;
-            }
-            function checkCorrectAnswers(object $attempt)
-            {
-                foreach ($attempt as $att) {
-                    $feedback = false;
-                    foreach ($att->quiz->questions as $qsn) {
-                        foreach ($qsn->answers as $ans) {
-                            if ($ans->id == $att->quiz_answer_id) {
-                                $feedback = $ans->is_correct;
-                            }
+        function checkCorrectAnswers(object $attempt): array
+        {
+            foreach ($attempt as $att) {
+                $feedback = 0;
+                foreach ($att->quiz->questions as $qsn) {
+                    foreach ($qsn->answers as $ans) {
+                        if ($ans->id == $att->quiz_answer_id) {
+                            $feedback = $ans->is_correct;
                         }
                     }
-                    $checkedAnswer[$att->quiz_question_id] = $feedback;
                 }
-                return $checkedAnswer;
+                $checkedAnswer[$att->quiz_question_id] = $feedback;
             }
-            function createQnaHistory(object $questions)
-            {
-                foreach ($questions as $qsn) {
-                    $qnaHistory[] = $qsn;
-                    foreach ($qsn->answers as $ans) {
-                    }
-                }
-                return $qnaHistory;
-            }
-            function calculateResult(array $answers, int $totalQuestions)
-            {
-                $correctAnswers = 0;
-                foreach ($answers as $answer) {
-                    if ($answer == 1) {
-                        $correctAnswers++;
-                    }
-                }
-                $score = ($correctAnswers / $totalQuestions) * 100;
-                return [
-                    'correct_answers' => $correctAnswers,
-                    'score' => number_format($score, 2)
-                ];
-            }
-            // $attempt = QuizAttempt::where('quiz_id', $quiz->id)->where('user_id', auth()->user()->id)->whereNotNull('quiz_answer_id')->get();
-            $attempt = QuizAttempt::where('quiz_id', $quiz->id)->where('user_id', auth()->user()->id)->get();
-            $questions = QuizQuestion::where('quiz_id', $quiz->id)->get(); //! or $quiz->questions
-            $checkedAnswer = checkCorrectAnswers($attempt);
-            $result = calculateResult($checkedAnswer, $questions->count());
-            $checkedAnswer = json_encode($checkedAnswer);
-            $time_taken = $quizResult->created_at->diff(now())->format('%h jam %i menit %s detik');
-            $quizResult->update(
-                [
-                    'user_id' => auth()->user()->id,
-                    'quiz_id' => $quiz->id,
-                    'total_questions' => $questions->count(),
-                    'correct_answer' => $result['correct_answers'],
-                    'score' => $result['score'],
-                    'state' => 'Finished',
-                    'answers' => $checkedAnswer,
-                    'time_taken' => $time_taken,
-                ]
-            );
-            QuizAttempt::where('quiz_id', $quiz->id)
-                ->where('user_id', auth()->user()->id)
-                ->delete();
-            return $result;
+            return $checkedAnswer;
         }
+        function calculateResult(array $checkedAnswer, int $totalQuestions): array
+        {
+            $correctAnswers = 0;
+            foreach ($checkedAnswer as $answer) {
+                if ($answer == 1) {
+                    $correctAnswers++;
+                }
+            }
+            $score = ($correctAnswers / $totalQuestions) * 100;
+            return [
+                'correct_answers' => $correctAnswers,
+                'score' => number_format($score, 2)
+            ];
+        }
+        function createQnaHistory(object $attempt): array
+        {
+            $qnaHistory = [];
+            $answersId = [];
+            foreach ($attempt as $att) {
+                if (is_null($att->quiz_answer_id)) {
+                    continue;
+                }
+                foreach ($att->quiz->questions as $qsn) {
+                    $answersArray = [];
+                    $isCorrect = true;
+                    foreach ($qsn->answers as $ans) {
+                        if (!in_array($att->quiz_answer_id, $answersId, true)) {
+                            $answersId[] = $att->quiz_answer_id;
+                        }
+                        $selected = (in_array($ans->id, $answersId, true)) ? 1 : 0;
+                        $isCorrectAnswer = ($ans->is_correct == 1) ? true : false;
+                        if ($selected != $isCorrectAnswer) {
+                            $isCorrect = false;
+                        }
+                        $answersArray[] = [
+                            'option' => $ans->answer,
+                            'is_correct' => $ans->is_correct,
+                            'selected' => $selected
+                        ];
+                    }
+                    $qnaHistory[$qsn->number] = [
+                        'question' => $qsn->question,
+                        'answer_explanation' => $qsn->answer_explanation,
+                        'answers' => $answersArray,
+                        'is_correct' => $isCorrect
+                    ];
+                }
+            }
+            return $qnaHistory;
+        }
+        $user_id = auth()->user()->id;
+        $quizResult = QuizResult::where('quiz_id', $quiz->id)
+            ->where('user_id', $user_id)
+            ->where('state', 'Ongoing')
+            ->first();
+        if (empty($quizResult)) {
+            return abort(404); //jika user mencoba merubah request quiz id pada halaman html
+        }
+        $attempt = QuizAttempt::where('quiz_id', $quiz->id)
+            ->where('user_id', $user_id)
+            ->whereNotNull('quiz_answer_id')
+            ->get();
+        if ($attempt->isEmpty()) {
+            QuizAttempt::where('quiz_id', $quiz->id)
+                ->where('user_id', $user_id)
+                ->delete();
+            $quizResult->delete();
+            return redirect((route('materi.show', $quiz->course->slug)))
+                ->with('alert-confirm', 'info')
+                ->with('text', 'Kamu belum menjawab soal sama sekali, ingin mengulangi quiz?')
+                ->with('action', 'document.location.href = ' . route('quiz.show', $quiz->course->slug));
+        }
+        $checkedAnswer = checkCorrectAnswers($attempt);
+        $result = calculateResult($checkedAnswer, $quiz->questions->count());
+        $qnaHistory = createQnaHistory($attempt); //TODO: ga ada datanya kalau ga ada attemptnya
+        $quizResult->update(
+            [
+                'user_id' => $user_id,
+                'quiz_id' => $quiz->id,
+                'course_name' => $quiz->course->title,
+                'total_questions' => $quiz->questions->count(),
+                'correct_answer' => $result['correct_answers'],
+                'score' => $result['score'],
+                'state' => 'Finished',
+                'qna' => json_encode($qnaHistory),
+                'time_left' => null,
+            ]
+        );
+        QuizAttempt::where('quiz_id', $quiz->id)
+            ->where('user_id', $user_id)
+            ->delete();
+        return redirect(route('quiz.result', $quizResult->id));
     }
 
     /**
@@ -165,7 +208,7 @@ class QuizController extends Controller
         //
     }
 
-    public function flag(int $quiz_id, int $question_id)
+    public function flag(int $quiz_id, int $question_id) //* Quiz Attempt
     {
         $flag = !QuizAttempt::where('user_id', auth()->user()->id)->where('quiz_id', $quiz_id)->where('quiz_question_id', $question_id)->where('flag', true)->exists();
         $attemptData = [
@@ -184,27 +227,53 @@ class QuizController extends Controller
         ]);
     }
 
-    public function preSubmitCheck(int $quiz_id, int $question_id)
+    public function preSubmitCheck(int $quiz_id) //* Quiz Attempt
     {
-        
+        $total = QuizQuestion::where('quiz_id', $quiz_id)->count();
+        $answered = QuizAttempt::where('quiz_id', $quiz_id)->where('user_id', auth()->user()->id)->whereNotNull('quiz_answer_id')->count();
+        $flagged = QuizAttempt::where('quiz_id', $quiz_id)->where('user_id', auth()->user()->id)->where('flag', true)->count();
+        $unAnswered = $total - $answered;
+        $message = '<p>Apakah kamu yakin ingin mengumpulkan quiz ini?</p>';
+        $unasweredMessage =  "<span>Pertanyaan belum terjawab: <strong><span class='badge text-bg-danger border'>$unAnswered</span></strong></span><br>";
+        $flaggedMessage =  "<span>Pertanyaan ditandai: <strong><span class='badge text-bg-warning border'>$flagged</span></strong></span><br>";
+        if ($unAnswered > 0 && $flagged > 0) {
+            $message = $message . $unasweredMessage . $flaggedMessage;
+        } else if ($flagged > 0) {
+            $message = $message . $flaggedMessage;
+        } else if ($unAnswered > 0) {
+            $message = $message . $unasweredMessage;
+        }
+        return response()->json([
+            'html' => $message
+        ]);
+    }
+
+    public function result($uuid) //* Quiz
+    {
+        $result = QuizResult::where('id', $uuid)
+            ->where('user_id', auth()->user()->id)
+            ->where('state', 'Finished')
+            ->first();
+        if (empty($result)) {
+            return abort(404);
+        }
+        $qna = json_decode($result->qna);
+        $title = "Quiz Review - {$result->quiz->course->title}";
+        return view('pages.quiz.result', compact('result', 'title', 'qna'));
     }
 }
 
-//? $questions = $course->quiz->questions;
-//? $questions = $course->quiz->questions;
-//? foreach ($course->quiz->questions as $q){
-//?     return $q->answers;
-//? }
-//? $answers = QuizAnswer::where('quiz_question_id', 1)->whereNotNull('quiz_question_id')->get();
-//? return $course->quiz->questions->pluck('id');
-//? $quiz = Quiz::where('course_id', $course->id)->firstOrFail();
-//? $question = QuizQuestion::where('quiz_id', $quiz->id)->first();
-//? foreach ($questions as $q) {
-//?     return $q->answers;
-//?     foreach ($q->answers as $a) {
-//?         return $a->answer;
-//?     };
-//? }
-//? return $questions;
-//? $answers = QuizAnswer::where('quiz_question_id', $question->id)->get();
-//? return [$quiz, $quiz->questions, $question->answers];
+
+// if (!QuizAttempt::where('quiz_id', $quiz->id)
+//     ->where('user_id', $user_id)
+//     ->exists()) {
+//     foreach ($questions_all as $qsn) {
+//         QuizAttempt::updateOrInsert(
+//             [
+//                 'user_id' => auth()->user()->id,
+//                 'quiz_id' => $quiz->id,
+//                 'quiz_question_id' => $qsn->id
+//             ]
+//         );
+//     }
+// }

@@ -23,8 +23,8 @@
         <tbody>
             @foreach ($users as $user)
                 @php
-                    $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, anda tidak diperbolehkan menghapus akun anda sendiri' : 'Delete this user (' . $user->full_name . ')';
-                    $edit_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, anda tidak diperbolehkan mengubah role anda sendiri' : "Edit this user's role";
+                    $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akun kamu sendiri' : 'Delete this user (' . $user->full_name . ')';
+                    $edit_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan mengubah role kamu sendiri' : "Edit this user's role";
                 @endphp
                 <tr>
                     <td>{{ $user->id }}</td>

@@ -18,7 +18,7 @@
                 <th>ID</th>
                 <th>Status</th>
                 <th>Materi</th>
-                <th>Cover</th>
+                {{-- <th>Cover</th> --}}
                 <th>Mata Pelajaran</th>
                 <th>Rating</th>
                 <th>Action</th>
@@ -27,6 +27,7 @@
         </thead>
         <tbody>
             @foreach ($courses as $course)
+                {{-- @for ($i = 0; $i < 10; $i++) --}}
                 @php
                     if (!isset(\App\Models\User::find($course->last_edited_by)->full_name)) {
                         $last_edited_by = 'deleted user';
@@ -53,32 +54,33 @@
                     </td>
                     <td>{{ $course->title }}</td>
                     <td>{{ $course->category->name }}</td>
-                    <td><img class="img-fluid rounded" id="" src="{{ $course->cover }}" alt="cover preview" style="
+                    {{-- <td><img class="img-fluid rounded" id="" src="{{ $course->cover }}" alt="cover preview" style="
                         width: 150px;
                         height: auto;
                         object-fit: cover;
                         aspect-ratio: 16 / 9;">
-                    </td>
-                    <td>{{ $course->rating }} ({{ $course->rating_total }})</td>
+                    </td> --}}
+                    <td>{{ $rating }}</td>
                     <td class="text-right">
                         <div class="d-grid d-flex gap-2">
-                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this course's detail" href="{{ route('courses.show', $course->slug) }}">
+                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View course detail" href="{{ route('courses.show', $course->slug) }}">
                                 <i class="ti ti-eye"></i> Preview
                             </a>
-                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit this course" href="{{ route('courses.edit', $course->slug) }}">
+                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit course" href="{{ route('courses.edit', $course->slug) }}">
                                 <i class="ti ti-edit"></i> Edit
                             </a>
                             <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete this course" type="submit">
+                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete course">
                                     <i class="ti ti-trash"></i> Delete
                                 </button>
                             </form>
                         </div>
                     </td>
-                    <td>{{ $course->last_edited_by }}<br>({{ $course->updated_at }})</td>
+                    <td>{{ $last_edited_by }}<br>({{ $course->updated_at }})</td>
                 </tr>
+                {{-- @endfor --}}
             @endforeach
         </tbody>
     </table>

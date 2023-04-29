@@ -1,18 +1,13 @@
 <!doctype html>
-<html lang="en" data-bs-theme="light">
+<html data-bs-theme="light" lang="en">
 
 <head>
     <title>{{ $title ?? config('app.name') }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
     @include('layouts.head-import')
-
     @yield('head-script')
-
     @yield('style')
-
     <div class="loading-animation">
         <x-loader.pencil></x-loader.pencil>
     </div>
@@ -22,43 +17,17 @@
     <header>
         @yield('navbar')
     </header>
-
-    <main data-aos="fade-up" data-aos-duration="1000">
+    <main data-aos="fade-up" data-aos-duration="500">
         @yield('left-sidebar')
         @yield('main')
         @yield('right-sidebar')
     </main>
-
     <footer style="margin-top: 20%">
         @yield('footer')
     </footer>
-
     @include('layouts.body-import')
-
     @yield('script')
-
-    @if (session()->has('alert'))
-        <script>
-            Swal.fire({
-                icon: '{{ session('alert') }}',
-                title: '{{ session('title') }}',
-                text: '{{ session('text') }}',
-                html: '{!! session('html') !!}',
-                confirmButtonColor: '#0d6efd'
-            });
-        </script>
-    @endif
-
-    @if (session()->has('toast'))
-        <script>
-            Toast.fire({
-                icon: '{{ session('toast') }}',
-                text: '{{ session('text') }}',
-                html: '{!! session('html') !!}'
-            })
-        </script>
-    @endif
-
+    @include('layouts.alert')
 </body>
 
 </html>

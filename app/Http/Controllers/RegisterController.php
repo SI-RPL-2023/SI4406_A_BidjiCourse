@@ -44,7 +44,7 @@ class RegisterController extends Controller
                 'full_name.max' => 'Nama maksimal 50 karakter.',
                 'email.unique' => 'Email sudah digunakan.',
                 'email.email' => 'Masukan email yang benar.',
-                'gender.required' => 'Silahkan pilih gender anda.'
+                'gender.required' => 'Silahkan pilih gender kamu.'
             )
         );
         $data['password'] = bcrypt($data['password']);
@@ -62,7 +62,7 @@ class RegisterController extends Controller
         User::create($data);
         return redirect('/login')
             ->with('alert', 'success')
-            ->with('text', 'Registrasi berhasil, sekarang anda bisa login!');
+            ->with('text', 'Registrasi berhasil, sekarang kamu bisa login!');
     }
 
     /**

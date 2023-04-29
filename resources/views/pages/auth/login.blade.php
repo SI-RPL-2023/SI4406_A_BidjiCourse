@@ -62,7 +62,7 @@
                         style="color: black;">Daftar Sekarang</a></p>
             </div>
             <p class="text-secondary text-center">
-                Dengan melakukan Login, Anda setuju dengan
+                Dengan melakukan Login, Kamu setuju dengan
                 <a href="">syarat & ketentuan Bidji Course.</a>
             </p>
         </div>

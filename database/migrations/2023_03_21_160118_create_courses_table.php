@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->boolean('draft');
+            // $table->enum('status', ['Published', 'Draft'])->default('Published');
             // $table->foreignId('category_id');
             $table->string('title')->unique();
             $table->string('slug')->unique();
@@ -27,10 +28,6 @@ return new class extends Migration
             $table->string('last_edited_by');
             $table->timestamps();
         });
-
-        // Schema::table('courses', function (Blueprint $table) {
-        //     $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-        // });
     }
 
     /**

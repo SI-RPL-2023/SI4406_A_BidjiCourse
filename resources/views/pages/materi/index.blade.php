@@ -16,7 +16,6 @@
             <div class="container">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                     @foreach ($courses as $course)
-                        {{-- @for ($i = 0; $i < 40; $i++) --}}
                         <div class="col">
                             <div class="card shadow-sm h-100">
                                 {{-- <img src="https://picsum.photos/640/360?random={{ $loop->iteration }}"
@@ -30,14 +29,13 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="badge" style="font-size: 13px; background-color: rgb(234, 234, 234)">
                                             <span class="text-muted"><i class="ti ti-star-filled text-warning"></i>
-                                                4.9</span>
+                                                {{ $course->rating }}</span>
                                         </div>
                                         <a class="btn btn-sm btn-dark" href="{{ route('materi.show', $course->slug) }}">Belajar Sekarang</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- @endfor --}}
                     @endforeach
                 </div>
             </div>

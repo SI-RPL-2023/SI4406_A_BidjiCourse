@@ -3,7 +3,7 @@
 @endsection
 @section('main')
     @php
-        $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, anda tidak diperbolehkan menghapus akun anda sendiri' : 'Delete this user';
+        $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akun kamu sendiri' : 'Delete this user';
         if (is_null($user->avatar)){
             $avatar_src = '/img/assets/' . ($user->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg';
         } else {
@@ -69,11 +69,11 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="labels">Created At</label>
-                            <input class="form-control text-secondary" type="text" value="{{ \Carbon\Carbon::parse($user->created_at)->format('d F Y') }}" readonly>
+                            <input class="form-control text-secondary" type="text" value="{{ \Carbon\Carbon::parse($user->created_at)->format('l, j F Y, g:i A') }}" readonly>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="labels">Updated At</label>
-                            <input class="form-control text-secondary" type="text" value="{{ \Carbon\Carbon::parse($user->updated_at)->format('d F Y') }}" readonly>
+                            <input class="form-control text-secondary" type="text" value="{{ \Carbon\Carbon::parse($user->updated_at)->format('l, j F Y, g:i A') }}" readonly>
                         </div>
                     </div>
                 </div>

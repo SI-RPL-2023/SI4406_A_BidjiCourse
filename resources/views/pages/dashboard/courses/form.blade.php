@@ -53,14 +53,14 @@
     </div>
     <form action="{{ route(isset($course) ? 'courses.update' : 'courses.store', isset($course) ? $course->slug : '') }}" method="POST" enctype="multipart/form-data">
         @if (isset($course))
-            @method('PUT')
+            @method('PATCH')
         @endif
 
         @csrf
 
         <div class="mt-2">
             <label class="form-label" for="title">Title</label>
-            <input class="form-control @error('title') is-invalid @enderror" id="title" name="title" type="text" value="{{ old('title', isset($course) ? $course->title : '') }}" placeholder="Course apa yang ingin anda tambahkan?" required autofocus>
+            <input class="form-control @error('title') is-invalid @enderror" id="title" name="title" type="text" value="{{ old('title', isset($course) ? $course->title : '') }}" placeholder="Course apa yang ingin kamu tambahkan?" required autofocus>
         </div>
         @error('title')
             <div class="text-danger text-start" style="font-size: 14px">
@@ -70,10 +70,25 @@
 
         <div class="mt-4">
             <label class="form-label">Slug</label>
-            <input class="form-control @error('slug') is-invalid @enderror" id="slug" type="text" value="{{ session('slug', isset($course) ? $course->slug : '') }}" placeholder="Slug akan terisi otomatis sesuai judul course yang anda masukan." disabled>
+            <input class="form-control @error('slug') is-invalid @enderror" id="slug" type="text" value="{{ session('slug', isset($course) ? $course->slug : '') }}" placeholder="Slug akan terisi otomatis sesuai judul course yang kamu masukan." disabled>
             {{-- <input id="slug-hidden" name="slug" type="hidden" value="{{ old('slug', isset($course) ? $course->slug : '') }}"> --}}
         </div>
         @error('slug')
+            <div class="text-danger text-start" style="font-size: 14px">
+                {{ $message }}
+            </div>
+        @enderror
+
+        <div class="mt-4">
+            <label class="form-label">Mata Pelajaran</label>
+            <select class="form-select @error('slug') is-invalid @enderror" id="category" name="category_id" required>
+                <option selected>Pilih mata pelajaran...</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ isset($course) && $category->id === $course->category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        @error('category_id')
             <div class="text-danger text-start" style="font-size: 14px">
                 {{ $message }}
             </div>

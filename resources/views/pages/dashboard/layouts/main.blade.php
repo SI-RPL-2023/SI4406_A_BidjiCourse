@@ -1,21 +1,12 @@
-@extends('layouts.main')
+<!doctype html>
+<html lang="en">
 
-@section('navbar')
-    @include('pages.dashboard.layouts.navbar')
-@endsection
-
-@section('main')
-    <div class="container-fluid">
-        <div class="row">
-            @include('pages.dashboard.layouts.sidebar')
-            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                @yield('main')
-            </div>
-        </div>
-    </div>
-@endsection
-
-@section('style')
+<head>
+    <title>{{ $title ?? config('app.name') }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @include('layouts.head-import')
+    @yield('head-script')
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -134,10 +125,26 @@
             box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
         }
     </style>
-
     @yield('style')
-@endsection
+    <div class="loading-animation">
+        <x-loader.pencil></x-loader.pencil>
+    </div>
+</head>
 
-@section('script')
+<body>
+    @include('pages.dashboard.layouts.navbar')
+    <div class="container-fluid">
+        <div class="row">
+            @include('pages.dashboard.layouts.sidebar')
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" data-aos="fade-up" data-aos-duration="500">
+                @yield('main')
+            </main>
+        </div>
+    </div>
+    @include('layouts.body-import')
     @yield('script')
-@endsection
+    @include('layouts.alert')
+    <div style="margin-top: 300px"></div>
+</body>
+
+</html>

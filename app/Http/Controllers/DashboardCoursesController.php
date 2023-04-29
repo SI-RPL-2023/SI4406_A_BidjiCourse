@@ -50,7 +50,7 @@ class DashboardCoursesController extends Controller
             return redirect(route('courses.index'))
                 ->with('alert', 'error')
                 ->with('title', 'Submit error')
-                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah anda mencoba menggantinya secara manual?');
+                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah kamu mencoba menggantinya secara manual?');
         };
         $rules = [
             'title' => ['required', 'unique:courses'],
@@ -93,7 +93,7 @@ class DashboardCoursesController extends Controller
      */
     public function show(Course $course)
     {
-        return view('pages.dashboard.courses.detail', [
+        return view('pages.dashboard.courses.show', [
             'title' => $course->title,
             'course' => $course
         ]);
@@ -126,7 +126,7 @@ class DashboardCoursesController extends Controller
             return redirect(route('courses.index'))
                 ->with('alert', 'error')
                 ->with('title', 'Submit error')
-                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah anda mencoba menggantinya secara manual?');
+                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah kamu mencoba menggantinya secara manual?');
         };
         $rules = [
             'desc' => 'required',

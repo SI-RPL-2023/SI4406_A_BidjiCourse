@@ -41,7 +41,7 @@ return new class extends Migration
 
         Schema::create('quiz_attempts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            // $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('quiz_id');
             $table->unsignedBigInteger('quiz_question_id');
             $table->unsignedBigInteger('quiz_answer_id')->nullable();
@@ -50,17 +50,17 @@ return new class extends Migration
         });
 
         Schema::create('quiz_results', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->ulid('id')->primary();
+            $table->enum('state', ['Finished', 'Ongoing'])->default('Ongoing');
+            // $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('quiz_id');
             $table->integer('attempt');
-            $table->enum('state', ['Finished', 'Ongoing'])->default('Ongoing');
-            $table->string('time_taken')->nullable();
+            $table->json('qna')->nullable();
             $table->integer('total_questions')->nullable();
             $table->integer('unanswered_questions')->nullable();
             $table->integer('correct_answer')->nullable();
-            $table->json('qna')->nullable();
             $table->integer('score')->nullable();
+            $table->integer('time_left')->nullable();
             $table->timestamps();
         });
 
@@ -78,14 +78,14 @@ return new class extends Migration
         });
 
         Schema::table('quiz_attempts', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUlid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
             $table->foreign('quiz_question_id')->references('id')->on('quiz_questions')->onDelete('cascade');
             $table->foreign('quiz_answer_id')->references('id')->on('quiz_answers')->onDelete('cascade');
         });
 
         Schema::table('quiz_results', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUlid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
         });
     }

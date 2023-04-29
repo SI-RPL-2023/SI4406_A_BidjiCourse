@@ -15,7 +15,7 @@ $(document).ready(function () {
         e.preventDefault();
         Swal.fire({
             title: 'Hapus Course',
-            html: 'Apakah anda yakin ingin menghapus course ini?',
+            html: 'Apakah kamu yakin ingin menghapus course ini?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc3545',
@@ -32,7 +32,7 @@ $(document).ready(function () {
         e.preventDefault();
         Swal.fire({
             title: 'Hapus User',
-            html: 'Apakah anda yakin ingin menghapus user ini?',
+            html: 'Apakah kamu yakin ingin menghapus user ini?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc3545',

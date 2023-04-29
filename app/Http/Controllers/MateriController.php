@@ -43,12 +43,10 @@ class MateriController extends Controller
         if (empty($course) || $course->draft) {
             return redirect(route('materi.index'));
         }
-        return view('pages.materi.detail', [
+        return view('pages.materi.show', [
             'title' => $course->title,
             'course' => $course
         ]);
-        return view('pages.materi.detail', ['course' => $course]);
-        return view('pages.materi.detail', compact($course));
     }
 
     /**

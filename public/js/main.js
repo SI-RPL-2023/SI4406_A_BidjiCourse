@@ -17,28 +17,29 @@ function waitForElm(selector) {
     });
 }
 
+// Loading animation
+function loader() {
+    Swal.fire({
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        heightAuto: false,
+        width: 100,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+}
+
 $(window).on("load", function () {
     $(".loading-animation").fadeOut("slow");
     AOS.init();
     setTimeout(function () {
         $(".loading-animation").remove();
         $("main").removeAttr("data-aos data-aos-duration");
-    }, 1000);
+    }, 500);
 });
 
 $(document).ready(function () {
-    // Loading animation
-    function loader() {
-        Swal.fire({
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            heightAuto: false,
-            width: 100,
-            didOpen: () => {
-                Swal.showLoading();
-            },
-        });
-    }
     $(document).on("submit", "form", function () {
         loader();
     });

@@ -39,7 +39,7 @@ class DashboardUsersController extends Controller
      */
     public function show(User $user)
     {
-        return view('pages.dashboard.users.detail', [
+        return view('pages.dashboard.users.show', [
             'title' => $user->full_name,
             'user' => $user
         ]);
@@ -61,7 +61,7 @@ class DashboardUsersController extends Controller
         if ($user->id == auth()->user()->id) {
             return response()->json([
                 'alert' => 'warning',
-                'html' => 'Untuk alasan keamanan, anda tidak diperbolehkan mengubah role anda sendiri.',
+                'html' => 'Untuk alasan keamanan, kamu tidak diperbolehkan mengubah role kamu sendiri.',
             ]);
         }
         $role = $request->role == 1 ? 'Admin' : 'Student';
@@ -87,7 +87,7 @@ class DashboardUsersController extends Controller
         if ($user->id == auth()->user()->id) {
             return redirect(route('users.index'))
                 ->with('alert', 'info')
-                ->with('text', 'Untuk alasan keamanan, anda tidak diperbolehkan menghapus akun anda sendiri.');
+                ->with('text', 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akun kamu sendiri.');
         }
         $full_name = $user->full_name;
         $user->delete();
