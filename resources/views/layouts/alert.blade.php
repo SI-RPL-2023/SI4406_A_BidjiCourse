@@ -23,7 +23,7 @@
             cancelButtonText: 'Tidak',
         }).then((result) => {
             if (result.value) {
-                '{!! session('action') !!}';
+                {!! session('action') !!};
                 loader();
             }
         })

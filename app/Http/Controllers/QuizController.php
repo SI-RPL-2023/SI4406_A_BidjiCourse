@@ -176,11 +176,11 @@ class QuizController extends Controller
             return redirect((route('materi.show', $quiz->course->slug)))
                 ->with('alert-confirm', 'info')
                 ->with('text', 'Kamu belum menjawab soal sama sekali, ingin mengulangi quiz?')
-                ->with('action', 'document.location.href = ' . route('quiz.show', $quiz->course->slug));
+                ->with('action', 'document.location.href = "' . route('quiz.show', $quiz->course->slug) . '"');
         }
         $checkedAnswer = checkCorrectAnswers($attempt);
         $result = calculateResult($checkedAnswer, $quiz->questions->count());
-        $qnaHistory = createQnaHistory($attempt); //TODO: ga ada datanya kalau ga ada attemptnya
+        $qnaHistory = createQnaHistory($attempt);
         $quizResult->update(
             [
                 'user_id' => $user_id,

@@ -170,7 +170,7 @@
                                     @foreach ($question->answers as $option)
                                         <label>
                                             <input class="quiz-answer" name="answer_id" type="radio" value="{{ $option->id }}" {{ $selectedAnswerId == $option->id ? 'checked' : '' }}>
-                                            <span>{{ chr(64 + $loop->iteration) }}. {{ $option->answer }} {{ $option->is_correct ? 'o' : '' }}</span>
+                                            <span>{{ chr(64 + $loop->iteration) }}. {{ $option->answer }}</span>
                                         </label>
                                     @endforeach
                                 </div>

@@ -210,11 +210,11 @@
                             <div class="alert alert-light mb-3">
                                 <p>{{ $question->question }}</p>
                             </div>
-                                @if ($question->is_correct)
-                                    <p>Jawabanmu benar <i class="ti ti-check fs-4 text-success"></i></p>
-                                @else
-                                    <p>Jawabanmu kurang tepat <i class="ti ti-x fs-4 text-danger"></i></p>
-                                @endif
+                            @if ($question->is_correct)
+                                <p>Jawabanmu benar <i class="ti ti-check fs-4 text-success"></i></p>
+                            @else
+                                <p>Jawabanmu kurang tepat <i class="ti ti-x fs-4 text-danger"></i></p>
+                            @endif
                             <div class="ml-5">
                                 <div class="radio-container">
                                     @foreach ($question->answers as $answer)
@@ -252,7 +252,7 @@
             <div class="col-md-4">
                 <div class="sidebar">
                     <h3 class="quiz-nav">Quiz Navigation</h3>
-                    <span class="finish-review" style="cursor: pointer;" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
+                    <span class="finish-review" style="cursor: pointer;" x-on:click="document.location.href = `{{ route('materi.show', $result->quiz->course->slug) }}`" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
                         <i x-bind:class="hover ? 'ti ti-circle-check' : ''"></i>
                         Finish review...
                     </span>
@@ -260,6 +260,9 @@
                         @foreach ($qna as $question)
                             <a class="quiz-nav-button btn btn-{{ $question->is_correct ? 'success' : 'danger' }} btn-sm" href="#no-{{ $loop->iteration }}">{{ $loop->iteration }}</a>
                         @endforeach
+                    </div>
+                    <div class="d-flex justify-content-center mt-5">
+                        <a class="btn btn-dark shadow" href="{{ route('quiz.show', $result->quiz->course->slug) }}" x-data x-on:click="loader()"><i class="ti ti-rotate"></i> Kerjakan ulang</a>
                     </div>
                 </div>
             </div>

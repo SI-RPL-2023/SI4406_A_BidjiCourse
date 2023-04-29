@@ -72,7 +72,7 @@
                     cancelButtonText: 'Nanti saja',
                 }).then((result) => {
                     if (result.value) {
-                        document.location.href = $(this).attr('href');
+                        document.location.href = url;
                         loader();
                     }
                 })
