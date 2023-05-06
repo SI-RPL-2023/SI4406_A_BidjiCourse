@@ -16,12 +16,9 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('code')->unique();
             $table->string('slug')->unique();
-            $table->string('cover')->nullable();
+            $table->string('added_by');
+            $table->string('last_edited_by');
             $table->timestamps();
-        });
-
-        Schema::table('courses', function (Blueprint $table) {
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

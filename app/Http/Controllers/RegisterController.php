@@ -48,18 +48,18 @@ class RegisterController extends Controller
             )
         );
         $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
         try {
-            $seed = str_pad(random_int(0, 9999999999), 10, '0', STR_PAD_LEFT);
+            $seed = $user->id;
             $avatar_url = "https://api.dicebear.com/6.x/avataaars/png?seed=$seed&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=gradientLinear&accessoriesProbability=25";
             $avatar = file_get_contents($avatar_url);
             $avatar_file_name = "$seed.png";
             $avatar_file_path = public_path('img/avatars/' . $avatar_file_name);
             file_put_contents($avatar_file_path, $avatar);
-            $data['avatar'] = '/img/avatars/' . $avatar_file_name;
+            $user->update(['avatar' => '/img/avatars/' . $avatar_file_name]);
         } catch (\Exception $e) {
             //do nothing...
         };
-        User::create($data);
         return redirect('/login')
             ->with('alert', 'success')
             ->with('text', 'Registrasi berhasil, sekarang kamu bisa login!');

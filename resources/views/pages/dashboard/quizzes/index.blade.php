@@ -7,80 +7,56 @@
 @endsection
 @section('main')
     <div class="d-flex justify-content-between flex-md-nowrap align-items-center border-bottom mb-3 flex-wrap pt-3 pb-2">
-        <h3>Courses</h3>
-        <a class="btn btn-sm btn-primary" href="{{ route('courses.create') }}">
-            <i class="ti ti-pencil-plus"></i> Add a course
+        <h3>Quizzes</h3>
+        <a class="btn btn-sm btn-primary" href="{{ route('quizzes.create') }}">
+            <i class="ti ti-pencil-plus"></i> Add a quiz
         </a>
     </div>
-    <table class="table-striped table-bordered w-100 table" id="courses-table">
+    <table class="table-striped table-bordered w-100 table" id="quizzes-table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Status</th>
-                <th>Materi</th>
-                {{-- <th>Cover</th> --}}
-                <th>Mata Pelajaran</th>
-                <th>Rating</th>
-                <th>Action</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Category</th>
+                <th>Total Question(s)</th>
+                <th>Time Limit</th>
+                <th>Added by</th>
                 <th>Last Edited by</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($courses as $course)
-                {{-- @for ($i = 0; $i < 10; $i++) --}}
-                @php
-                    if (!isset(\App\Models\User::find($course->last_edited_by)->full_name)) {
-                        $last_edited_by = 'deleted user';
-                    } else {
-                        $last_edited_by = \App\Models\User::find($course->last_edited_by)->full_name;
-                    }
-                    if ($course->draft) {
-                        $status = 'Draft';
-                        $bg = 'warning';
-                    } else {
-                        $status = 'Published';
-                        $bg = 'success';
-                    }
-                    if (!$course->rating) {
-                        $rating = 'Not rated';
-                    } else {
-                        $rating = 'Rated';
-                    }
-                @endphp
+            @foreach ($quizzes as $quiz)
                 <tr>
-                    <td>{{ $course->id }}</td>
+                    <td>{{ $quiz->id }}</td>
                     <td>
-                        <span class="badge text-bg-{{ $bg }}" data-bs-toggle="tooltip" data-bs-title="{{ $status == 'Draft' ? 'Course ini masih draft, publish course ini agar bisa diakses oleh user' : 'Course ini sudah bisa diakses oleh user' }}">{{ $status }}</span>
+                        <span class="badge text-bg-{{ $quiz->status == 'Published' ? 'success' : 'warning' }}" data-bs-toggle="tooltip" data-bs-title="{{ $quiz->status == 'Draft' ? 'Quiz ini masih draft, publish quiz ini agar bisa diakses oleh user' : 'Quiz ini sudah bisa diakses oleh user' }}">{{ $quiz->status }}</span>
                     </td>
-                    <td>{{ $course->title }}</td>
-                    <td>{{ $course->category->name }}</td>
-                    {{-- <td><img class="img-fluid rounded" id="" src="{{ $course->cover }}" alt="cover preview" style="
-                        width: 150px;
-                        height: auto;
-                        object-fit: cover;
-                        aspect-ratio: 16 / 9;">
-                    </td> --}}
-                    <td>{{ $rating }}</td>
+                    <td>{{ $quiz->name }}</td>
+                    <td>
+                        <a class="text-decoration-none" href="{{ route('courses.show', $quiz->course->slug) }}">
+                            {{ $quiz->course->title }}
+                        </a>
+                    </td>
+                    <td>{{ $quiz->course->category->name }}</td>
+                    <td>{{ $quiz->questions_count }}</td>
+                    <td>{{ $quiz->time_limit ? floor($quiz->time_limit / 60) . ' Menit' : 'No Time' }}</td>
+                    <td>{{ $quiz->added_by }}<br>({{ $quiz->created_at }})</td>
+                    <td>{{ $quiz->last_edited_by }}<br>({{ $quiz->updated_at }})</td>
                     <td class="text-right">
                         <div class="d-grid d-flex gap-2">
-                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View course detail" href="{{ route('courses.show', $course->slug) }}">
-                                <i class="ti ti-eye"></i> Preview
-                            </a>
-                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit course" href="{{ route('courses.edit', $course->slug) }}">
-                                <i class="ti ti-edit"></i> Edit
-                            </a>
-                            <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
+                            <a class="btn btn-sm btn-warning" id="add_question" data-bs-toggle="tooltip" data-bs-title="Manage questions for this quiz" href="{{ route('quizzes.showQuestions', $quiz->id) }}"><i class="ti ti-list-numbers"></i></a>
+                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit this quiz" href="{{ route('quizzes.edit', $quiz->id) }}"><i class="ti ti-edit"></i></a>
+                            <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete course">
-                                    <i class="ti ti-trash"></i> Delete
-                                </button>
+                                <button class="delete-quiz-btn btn btn-sm btn-danger" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete this quiz" type="submit"><i class="ti ti-trash"></i></button>
                             </form>
                         </div>
                     </td>
-                    <td>{{ $last_edited_by }}<br>({{ $course->updated_at }})</td>
                 </tr>
-                {{-- @endfor --}}
             @endforeach
         </tbody>
     </table>
@@ -88,7 +64,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            $('#courses-table').DataTable({
+            $('#quizzes-table').DataTable({
                 pageLength: 5,
                 scrollX: true,
                 paging: true,

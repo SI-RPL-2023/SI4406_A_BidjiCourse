@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="card-footer" style="background-color: #6d21be">
-                        <a class="text-decoration-none text-light d-flex align-items-center justify-content-center" href="{{ route('courses.index') }}">More info <i class="ti ti-circle-arrow-right-filled fs-5 mx-2"></i></a>
+                        <a class="text-decoration-none text-light d-flex align-items-center justify-content-center" href="{{ route('quizzes.index') }}">More info <i class="ti ti-circle-arrow-right-filled fs-5 mx-2"></i></a>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="card-footer" style="background-color: #228e3b">
-                        <a class="text-decoration-none text-light d-flex align-items-center justify-content-center" href="{{ route('users.index') }}">More info <i class="ti ti-circle-arrow-right-filled fs-5 mx-2"></i></a>
+                        <a class="text-decoration-none text-light d-flex align-items-center justify-content-center" href="{{ route('categories.index') }}">More info <i class="ti ti-circle-arrow-right-filled fs-5 mx-2"></i></a>
                     </div>
                 </div>
             </div>

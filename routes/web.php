@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Quiz;
-use App\Models\QuizAnswer;
-use App\Models\QuizQuestion;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuizController;
@@ -14,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardUsersController;
 use App\Http\Controllers\DashboardCoursesController;
 use App\Http\Controllers\DashboardQuizzesController;
+use App\Http\Controllers\DashboardCategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +24,9 @@ use App\Http\Controllers\DashboardQuizzesController;
 |
 */
 
-Route::fallback(function () {
-    return redirect(route('index'));
-});
+// Route::fallback(function () {
+//     return redirect(route('index'));
+// });
 
 Route::middleware(['guest'])->group(function () {
     //LoginController
@@ -60,11 +58,17 @@ Route::middleware(['not_admin'])->group(function () {
 Route::middleware(['admin'])->group(function () {
     //DashboardController
     Route::resource('dashboard', DashboardController::class)->except('show');
+    Route::post('getSlug', [DashboardController::class, 'createSlug'])->name('getSlug');
     //DashboardUsersController
     Route::resource('dashboard/users', DashboardUsersController::class);
     //DashboardQuizzesController
     Route::resource('dashboard/quizzes', DashboardQuizzesController::class);
+    Route::get('dashboard/quizzes/{quiz}/questions', [DashboardQuizzesController::class, 'showQuestions'])->name('quizzes.showQuestions');
+    Route::post('dashboard/quizzes/question', [DashboardQuizzesController::class, 'storeQuestions'])->name('quizzes.storeQuestions');
+    Route::patch('dashboard/quizzes/question/{quizQuestion}', [DashboardQuizzesController::class, 'updateQuestions'])->name('quizzes.updateQuestions');
+    Route::delete('dashboard/quizzes/question/{quizQuestion}', [DashboardQuizzesController::class, 'destroyQuestions'])->name('quizzes.destroyQuestions');
     //DashboardCoursesController
     Route::resource('dashboard/courses', DashboardCoursesController::class);
-    Route::get('dashboard/courses/getSlug', [DashboardCoursesController::class, 'createSlug'])->name('getSlug');
+    //DashboardCategoriesController
+    Route::resource('dashboard/categories', DashboardCategoriesController::class);
 });

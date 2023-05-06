@@ -14,7 +14,7 @@ class MateriController extends Controller
     {
         return view('pages.materi.index', [
             'title' => 'Bidji Course | Materi',
-            'courses' => Course::where('draft', false)->paginate(10)
+            'courses' => Course::where('draft', false)->with('category')->get() //->paginate(9)
         ]);
     }
 
@@ -39,7 +39,7 @@ class MateriController extends Controller
      */
     public function show($slug)
     {
-        $course = Course::where('slug', $slug)->first();
+        $course = Course::where('slug', $slug)->with('quiz')->first();
         if (empty($course) || $course->draft) {
             return redirect(route('materi.index'));
         }

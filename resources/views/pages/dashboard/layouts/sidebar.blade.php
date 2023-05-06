@@ -7,12 +7,17 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link d-flex {{ Request::is('dashboard/categories*') ? 'active' : '' }} gap-2" href="{{ route('categories.index') }}">
+                    <i class="ti ti-category fs-5"></i>Categories
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link d-flex {{ Request::is('dashboard/courses*') ? 'active' : '' }} gap-2" href="{{ route('courses.index') }}">
                     <i class="ti ti-book fs-5"></i>Courses
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link d-flex {{ Request::is('dashboard/quizzez*') ? 'active' : '' }} gap-2" href="{{ route('quizzes.index') }}">
+                <a class="nav-link d-flex {{ Request::is('dashboard/quizzes*') ? 'active' : '' }} gap-2" href="{{ route('quizzes.index') }}">
                     <i class="ti ti-checklist fs-5"></i>Quizzez
                 </a>
             </li>

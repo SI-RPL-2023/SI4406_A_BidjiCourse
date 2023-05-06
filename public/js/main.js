@@ -1,3 +1,20 @@
+AOS.init();
+
+// Loading animation
+function loader() {
+    Swal.fire({
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        heightAuto: false,
+        width: 150,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        text: "Loading...",
+    });
+}
+// loader();
+
 // Wait for Element function
 function waitForElm(selector) {
     return new Promise((resolve) => {
@@ -17,29 +34,10 @@ function waitForElm(selector) {
     });
 }
 
-// Loading animation
-function loader() {
-    Swal.fire({
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        heightAuto: false,
-        width: 100,
-        didOpen: () => {
-            Swal.showLoading();
-        },
-    });
-}
-
-$(window).on("load", function () {
-    $(".loading-animation").fadeOut("slow");
-    AOS.init();
+$(document).ready(function () {
     setTimeout(function () {
-        $(".loading-animation").remove();
         $("main").removeAttr("data-aos data-aos-duration");
     }, 500);
-});
-
-$(document).ready(function () {
     $(document).on("submit", "form", function () {
         loader();
     });
@@ -50,3 +48,12 @@ $(document).ready(function () {
         (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
     );
 });
+
+// $(window).on("load", function () {
+//     $(".loading-animation").fadeOut("slow");
+//     Swal.close();
+//     setTimeout(function () {
+//         $(".loading-animation").remove();
+//         $("main").removeAttr("data-aos data-aos-duration");
+//     }, 500);
+// });

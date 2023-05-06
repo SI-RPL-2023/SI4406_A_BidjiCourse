@@ -54,28 +54,31 @@ class QuizController extends Controller
     {
         $course = Course::where('slug', $courseSlug)->first();
         if (empty($course)) {
-            return abort(404); //jika user mencoba merubah request quiz id pada halaman html
+            return abort(404); //jika user mencoba merubah slug
         }
-        $title = "Quiz - $course->title";
         $user_id = auth()->user()->id;
+        $title = "Quiz - $course->title";
         if (!$course->quiz) {
             return redirect()->back()->withErrors('Quiz not found');
         }
         $questions = $course->quiz->questions()->paginate(1);
-        $questions_all = $course->quiz->questions;
-        if (!$course->quiz->results()->where('user_id', $user_id)->where('state', 'Ongoing')->exists()) {
-            $attempt = $course->quiz->results()->where('user_id', $user_id)->count() + 1;
+        $allQuestions = $course->quiz->questions;
+        $result = $course->quiz->results()->where('user_id', $user_id);
+        if (!$result->where('state', 'Ongoing')->exists()) {
             QuizResult::create([
-                'attempt' => $attempt,
+                'attempt' => $course->quiz->results()->where('user_id', $user_id)->count() + 1,
                 'user_id' => $user_id,
                 'quiz_id' => $course->quiz->id,
-                'time_left' => $course->quiz->time_limit
+                'time_left' => $course->quiz->time_limit ? $course->quiz->time_limit : null
             ]);
         }
-        $quizResult = $course->quiz->results()->where('user_id', $user_id)->where('state', 'Ongoing')->first();
-        $time_left = $course->quiz->time_limit - ($quizResult->created_at->diffInSeconds(now()));
-        $quizResult->update(['time_left' => $time_left]);
-        return view('pages.quiz.show', compact('course', 'questions', 'questions_all', 'title', 'time_left'));
+        $time_left = null;
+        if ($course->quiz->time_limit) {
+            $quizResult = $result->where('state', 'Ongoing')->first();
+            $time_left = $course->quiz->time_limit - ($quizResult->created_at->diffInSeconds(now()));
+            $quizResult->update(['time_left' => $time_left]);
+        }
+        return view('pages.quiz.show', compact('course', 'questions', 'allQuestions', 'title', 'time_left'));
     }
 
     /**
@@ -146,7 +149,7 @@ class QuizController extends Controller
                             'selected' => $selected
                         ];
                     }
-                    $qnaHistory[$qsn->number] = [
+                    $qnaHistory[$qsn->id] = [
                         'question' => $qsn->question,
                         'answer_explanation' => $qsn->answer_explanation,
                         'answers' => $answersArray,
@@ -181,6 +184,8 @@ class QuizController extends Controller
         $checkedAnswer = checkCorrectAnswers($attempt);
         $result = calculateResult($checkedAnswer, $quiz->questions->count());
         $qnaHistory = createQnaHistory($attempt);
+        $total = QuizQuestion::where('quiz_id', $quiz->id)->count();
+        $answered = QuizAttempt::where('quiz_id', $quiz->id)->where('user_id', auth()->user()->id)->whereNotNull('quiz_answer_id')->count();
         $quizResult->update(
             [
                 'user_id' => $user_id,
@@ -189,6 +194,7 @@ class QuizController extends Controller
                 'total_questions' => $quiz->questions->count(),
                 'correct_answer' => $result['correct_answers'],
                 'score' => $result['score'],
+                'unanswered_questions' => $total - $answered,
                 'state' => 'Finished',
                 'qna' => json_encode($qnaHistory),
                 'time_left' => null,
@@ -262,18 +268,3 @@ class QuizController extends Controller
         return view('pages.quiz.result', compact('result', 'title', 'qna'));
     }
 }
-
-
-// if (!QuizAttempt::where('quiz_id', $quiz->id)
-//     ->where('user_id', $user_id)
-//     ->exists()) {
-//     foreach ($questions_all as $qsn) {
-//         QuizAttempt::updateOrInsert(
-//             [
-//                 'user_id' => auth()->user()->id,
-//                 'quiz_id' => $quiz->id,
-//                 'quiz_question_id' => $qsn->id
-//             ]
-//         );
-//     }
-// }

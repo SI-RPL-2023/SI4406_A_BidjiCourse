@@ -199,9 +199,7 @@
                     </table>
                 </div>
             </div>
-            @php
-                $radioNumber = 1;
-            @endphp
+            <?php $radioNumber = 1; ?>
             @foreach ($qna as $question)
                 <section id="no-{{ $loop->iteration }}">
                     <div class="col-md-8 mx-md-5 mb-4">

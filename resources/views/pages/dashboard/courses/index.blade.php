@@ -16,68 +16,50 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Status</th>
-                <th>Materi</th>
                 <th>Cover</th>
+                <th>Status</th>
+                <th>Name</th>
                 <th>Mata Pelajaran</th>
                 <th>Rating</th>
-                <th>Action</th>
+                <th>Added by</th>
                 <th>Last Edited by</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($courses as $course)
                 @php
-                    if (!isset(\App\Models\User::find($course->last_edited_by)->full_name)) {
-                        $last_edited_by = 'deleted user';
-                    } else {
-                        $last_edited_by = \App\Models\User::find($course->last_edited_by)->full_name;
-                    }
-                    if ($course->draft) {
-                        $status = 'Draft';
-                        $bg = 'warning';
-                    } else {
-                        $status = 'Published';
-                        $bg = 'success';
-                    }
-                    if (!$course->rating) {
-                        $rating = 'Not rated';
-                    } else {
-                        $rating = 'Rated';
-                    }
+                    $status = $course->draft ? 'Draft' : 'Published';
+                    $background = $course->draft ? 'warning' : 'success';
+                    $rating = $course->rating ? "$course->rating ($course->rating_total)" : 'Not rated';
                 @endphp
                 <tr>
                     <td>{{ $course->id }}</td>
-                    <td>
-                        <span class="badge text-bg-{{ $bg }}" data-bs-toggle="tooltip" data-bs-title="{{ $status == 'Draft' ? 'Course ini masih draft, publish course ini agar bisa diakses oleh user' : 'Course ini sudah bisa diakses oleh user' }}">{{ $status }}</span>
-                    </td>
-                    <td>{{ $course->title }}</td>
-                    <td>{{ $course->category->name }}</td>
                     <td><img class="img-fluid rounded" id="" src="{{ $course->cover }}" alt="cover preview" style="
                         width: 150px;
                         height: auto;
                         object-fit: cover;
                         aspect-ratio: 16 / 9;">
                     </td>
-                    <td>{{ $course->rating }} ({{ $course->rating_total }})</td>
+                    <td>
+                        <span class="badge text-bg-{{ $background }}" data-bs-toggle="tooltip" data-bs-title="{{ $status == 'Draft' ? 'Course ini masih draft, publish course ini agar bisa diakses oleh user' : 'Course ini sudah bisa diakses oleh user' }}">{{ $status }}</span>
+                    </td>
+                    <td>{{ $course->title }}</td>
+                    <td>{{ $course->category->name }}</td>
+                    <td>{{ $rating }}</td>
+                    <td>{{ $course->added_by }}<br>({{ $course->created_at }})</td>
+                    <td>{{ $course->last_edited_by }}<br>({{ $course->updated_at }})</td>
                     <td class="text-right">
                         <div class="d-grid d-flex gap-2">
-                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this course's detail" href="{{ route('courses.show', $course->slug) }}">
-                                <i class="ti ti-eye"></i> Preview
-                            </a>
-                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit this course" href="{{ route('courses.edit', $course->slug) }}">
-                                <i class="ti ti-edit"></i> Edit
-                            </a>
+                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this course's detail" href="{{ route('courses.show', $course->slug) }}"><i class="ti ti-eye"></i></a>
+                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit this course" href="{{ route('courses.edit', $course->slug) }}"><i class="ti ti-edit"></i></a>
                             <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete this course" type="submit">
-                                    <i class="ti ti-trash"></i> Delete
-                                </button>
+                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete this course" type="submit"><i class="ti ti-trash"></i></button>
                             </form>
                         </div>
                     </td>
-                    <td>{{ $course->last_edited_by }}<br>({{ $course->updated_at }})</td>
                 </tr>
             @endforeach
         </tbody>
@@ -93,7 +75,7 @@
                 searching: true,
                 info: true,
                 stateSave: true,
-                lengthMenu: [5, 10, 25, 50, 100]
+                lengthMenu: [5, 10, 25, 50, 100],
             });
             $('.dataTables_info, .dataTables_paginate').addClass('mt-4 mb-5');
             $('.dataTables_length').addClass('mb-4');

@@ -5,10 +5,6 @@
 @section('footer')
     @include('layouts.footer')
 @endsection
-@section('style')
-    <style>
-    </style>
-@endsection
 @section('main')
     <div class="container" style="padding-top: 100px">
         <h1 class="text-center">Materi</h1>
@@ -18,8 +14,6 @@
                     @foreach ($courses as $course)
                         <div class="col">
                             <div class="card shadow-sm h-100">
-                                {{-- <img src="https://picsum.photos/640/360?random={{ $loop->iteration }}"
-                                    alt=""> --}}
                                 <img src="{{ $course->cover }}" alt="" style="object-fit: cover;
                                 aspect-ratio: 16 / 9;">
                                 <div class="card-body">

@@ -40,10 +40,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public $incrementing = false;
-    // protected $keyType = 'string';
-    // protected $primaryKey = 'id';
-
     // public function courses()
     // {
     //     return $this->hasMany(Course::class);

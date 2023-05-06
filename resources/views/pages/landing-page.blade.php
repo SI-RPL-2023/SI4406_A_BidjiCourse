@@ -207,17 +207,17 @@
         <!-- Three columns of text below the carousel -->
         <div class="d-flex gap-4">
             <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="{{ url('img/monitor.png') }}" alt="icon">
+                <img src="img/monitor.png" width="150" height="150" alt="icon">
                 <h3 class="fw-semibold my-3">Belajar lewat video</h3>
                 <p>Meskipun belajar online, kamu bisa tetap dapat gambarannya</p>
             </div>
             <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="{{ url('img/icon flexible.png') }}" alt="icon">
+                <img src="img/icon flexible.png" width="150" height="150" alt="icon">
                 <h3 class="fw-semibold my-3">Belajar lebih flexible</h3>
                 <p>Tetap bisa belajar kapanpun dan dimanapun kamu berada</p>
             </div>
             <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="{{ url('img/icon mobile.png') }}" alt="icon">
+                <img src="img/icon mobile.png" width="150" height="150" alt="icon">
                 <h3 class="fw-semibold my-3">Akses yang mudah</h3>
                 <p>Gunakan intenet dan gadget sehari-harimu untuk belajar yang lebih efektif</p>
             </div>

@@ -35,7 +35,7 @@
                 <br>
                 {!! $course->body !!}
             </div>
-            @if ($course->quiz)
+            @if ($course->quiz && $course->quiz->status == 'Published')
                 @php
                     $ongoing = $course->quiz
                         ->results()
@@ -56,11 +56,10 @@
             $('.attempt-quiz').on('click', function(e) {
                 e.preventDefault();
                 const html = '<p>Ukur sampai mana pemahamanmu tentang course ini dengan mengerjakan quiz</p>' +
-                    '<span>Jumlah soal: <strong><span class="badge text-bg-warning border">{{ count($course->quiz->questions) }}</span></strong></span><br>'
-                @if ($course->quiz->time_limit > 0)
+                    `<span>Jumlah soal: <strong><span class="badge text-bg-warning border">{{ isset($course->quiz) ? count($course->quiz->questions) : '' }}</span></strong></span><br>`
+                @if ($course->quiz && $course->quiz->time_limit)
                     +'<span>Waktu pengerjaan: <strong><span class="badge text-bg-success border">{{ floor($course->quiz->time_limit / 60) }} Menit</span></strong></span><br>'
                 @endif
-                const url = "{{ route('quiz.show', $course->slug) }}";
                 Swal.fire({
                     title: 'Quiz',
                     html: html,
@@ -72,7 +71,7 @@
                     cancelButtonText: 'Nanti saja',
                 }).then((result) => {
                     if (result.value) {
-                        document.location.href = url;
+                        document.location.href = $(this).attr('href');
                         loader();
                     }
                 })

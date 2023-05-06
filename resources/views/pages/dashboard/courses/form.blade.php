@@ -5,6 +5,10 @@
 @endsection
 @section('style')
     <style>
+        .error-message {
+            font-size: 14px;
+        }
+
         #cover-preview,
         #cover-preview-update {
             max-width: 60%;
@@ -55,59 +59,55 @@
         @if (isset($course))
             @method('PATCH')
         @endif
-
         @csrf
-
         <div class="mt-2">
             <label class="form-label" for="title">Title</label>
             <input class="form-control @error('title') is-invalid @enderror" id="title" name="title" type="text" value="{{ old('title', isset($course) ? $course->title : '') }}" placeholder="Course apa yang ingin kamu tambahkan?" required autofocus>
         </div>
         @error('title')
-            <div class="text-danger text-start" style="font-size: 14px">
+            <div class="text-danger error-message text-start">
                 {{ $message }}
             </div>
         @enderror
-
         <div class="mt-4">
             <label class="form-label">Slug</label>
-            <input class="form-control @error('slug') is-invalid @enderror" id="slug" type="text" value="{{ session('slug', isset($course) ? $course->slug : '') }}" placeholder="Slug akan terisi otomatis sesuai judul course yang kamu masukan." disabled>
-            {{-- <input id="slug-hidden" name="slug" type="hidden" value="{{ old('slug', isset($course) ? $course->slug : '') }}"> --}}
+            <input class="form-control @error('slug') is-invalid @enderror" id="slug" type="text" value="{{ Illuminate\Support\Str::slug(old('title', isset($course) ? $course->title : '')) }}" placeholder="Slug akan terisi otomatis sesuai judul course yang kamu masukan." disabled>
         </div>
         @error('slug')
-            <div class="text-danger text-start" style="font-size: 14px">
+            <div class="text-danger error-message text-start">
                 {{ $message }}
             </div>
         @enderror
-
         <div class="mt-4">
             <label class="form-label">Mata Pelajaran</label>
-            <select class="form-select @error('slug') is-invalid @enderror" id="category" name="category_id" required>
+            <select class="form-select @error('category_id') is-invalid @enderror" id="category" name="category_id" required>
                 <option selected>Pilih mata pelajaran...</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ isset($course) && $category->id === $course->category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                @endforeach
+                @forelse ($categories as $category)
+                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : (isset($course) && $category->id == $course->category->id ? 'selected' : '') }}>{{ $category->name }}</option>
+                @empty
+                    <option>Mata pelajaran tidak ditemukan, silahkan tambahkan terlebih dahulu</option>
+                @endforelse
             </select>
         </div>
         @error('category_id')
-            <div class="text-danger text-start" style="font-size: 14px">
+            <div class="text-danger error-message text-start">
                 {{ $message }}
             </div>
         @enderror
-
         <div class="mt-4">
             <label class="form-label" for="desc">Description</label>
             <textarea class="form-control @error('desc') is-invalid @enderror" id="desc" name="desc" rows="8" placeholder="Apa yang akan dipelajari di course ini?" required>{{ old('desc', isset($course) ? $course->desc : '') }}</textarea>
         </div>
         @error('desc')
-            <div class="text-danger text-start" style="font-size: 14px">
+            <div class="text-danger error-message text-start">
                 {{ $message }}
             </div>
         @enderror
-
         <div class="mt-4">
             <label class="form-label d-block" for="cover">Cover</label>
             <img class="img-thumbnail img-fluid mb-2" id="cover-preview{{ isset($course) ? '-update' : '' }}" src="{{ isset($course) ? $course->cover : '/img/assets/drag-drop-upload.png' }}" alt="cover {{ isset($course) ? 'preview' : '' }}" old-src="{{ isset($course) ? $course->cover : '' }}">
-            <p> Ukuran file maksimal <span class="badge text-bg-dark">5Mb</span>
+            <br>
+            <span> Ukuran file maksimal <span class="badge text-bg-dark">5MB</span>
                 dan format gambar yang didukung:
                 <span class="badge text-bg-primary">PNG</span>
                 <span class="badge text-bg-secondary">JPG</span>
@@ -115,25 +115,23 @@
                 <span class="badge text-bg-danger">GIF</span>
                 <span class="badge text-bg-warning">JFIF</span>
                 <span class="badge text-bg-info">WEBP</span>
-            </p>
+            </span>
             @error('cover')
-                <div class="text-danger text-start" style="font-size: 14px">
+                <div class="text-danger error-message text-start">
                     {{ $message }}
                 </div>
             @enderror
-            <input class="d-none form-control @error('cover') is-invalid @enderror" id="cover-input" id="cover" name="cover" type="file" accept="image/*">
+            <input class="d-none form-control" id="cover-input" id="cover" name="cover" type="file" accept="image/*">
         </div>
-
         <div class="mt-4">
             <label class="form-label" for="body">Body</label>
             <textarea id="tinymce" name="body">{{ old('body', isset($course) ? $course->body : '') }}</textarea>
         </div>
         @error('body')
-            <div class="text-danger text-start" style="font-size: 14px">
+            <div class="text-danger error-message text-start">
                 {{ $message }}
             </div>
         @enderror
-
         <div class="d-grid d-flex justify-content-end mt-3 gap-2">
             <button class="btn btn-primary" id="update-btn" name="submit" type="submit" value="done">{{ isset($course) ? 'Update' : 'Tambah' }}
                 Course</button>
@@ -141,7 +139,6 @@
                 Draft</button>
             <a class="btn btn-danger" href="{{ route('courses.index') }}">Cancel</a>
         </div>
-
     </form>
 @endsection
 @section('script')
@@ -176,16 +173,25 @@
                     input.trigger('click');
                 },
             });
-            $('#title').on('change', function() {
-                const title = $(this).val();
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ route('getSlug') }}?title=' + title,
-                    success: function(response) {
-                        $('#slug').val(response);
-                        // $('#slug-hidden').val(response);
-                    }
-                });
+
+            let delayTimer;
+            $('#title').on('keyup', function() {
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(() => {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                        },
+                        type: 'POST',
+                        data: {
+                            string: $(this).val()
+                        },
+                        url: `{{ route('getSlug') }}`,
+                        success: function(response) {
+                            $('#slug').val(response);
+                        }
+                    });
+                }, 500);
             });
 
             // Image preview and drag n' drop
@@ -211,7 +217,7 @@
                     '<span class="badge text-bg-warning">JFIF</span>' +
                     '<span class="badge text-bg-info">WEBP</span>' +
                     '</div>'
-                const invalidSizeText = '<span class="badge text-bg-dark">5Mb</span>'
+                const invalidSizeText = '<span class="badge text-bg-dark">5MB</span>'
                 if ($.inArray(fileType, validImageTypes) < 0) {
                     coverPreview.attr('src', placeholder_src);
                     coverPreviewUpdate.attr('src', old_src);

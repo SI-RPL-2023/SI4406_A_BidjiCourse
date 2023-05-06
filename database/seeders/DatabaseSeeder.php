@@ -46,60 +46,40 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        DB::table('categories')->insert([
-            [
-                'name' => 'Ilmu Pengetahuan Alam',
-                'code' => 'IPA',
-                'slug' => Str::slug('Ilmu Pengetahuan Alam')
-            ],
-            [
-                'name' => 'Ilmu Pengetahuan Sosial',
-                'code' => 'IPS',
-                'slug' => Str::slug('Ilmu Pengetahuan Sosial')
-            ],
-            [
-                'name' => 'Matematika',
-                'code' => 'MTK',
-                'slug' => Str::slug('Matematika')
-            ],
-            [
-                'name' => 'Bahasa Inggris',
-                'code' => 'BING',
-                'slug' => Str::slug('Bahasa Inggris')
-            ],
-            [
-                'name' => 'Bahasa Indonesia',
-                'code' => 'BIND',
-                'slug' => Str::slug('Bahasa Indonesia')
-            ],
-            [
-                'name' => 'Sejarah',
-                'code' => 'SEJ',
-                'slug' => Str::slug('Sejarah')
-            ],
-            [
-                'name' => 'Seni Budaya',
-                'code' => 'SNB',
-                'slug' => Str::slug('Seni Budaya')
-            ],
-            [
-                'name' => 'Pendidikan Agama',
-                'code' => 'PAI',
-                'slug' => Str::slug('Pendidikan Agama')
-            ],
-            [
-                'name' => 'Pendidikan Jasmani',
-                'code' => 'PJOK',
-                'slug' => Str::slug('Pendidikan Jasmani')
-            ],
-            [
-                'name' => 'Kewarganegaraan',
-                'code' => 'KWU',
-                'slug' => Str::slug('Kewarganegaraan')
-            ],
-        ]);
+        for ($x = 1; $x <= 10; $x++) {
+            $user = User::create(
+                [
+                    'is_admin' => false,
+                    'full_name' => $faker->name(),
+                    'email' => $faker->freeEmail(),
+                    'gender' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+                    'password' => bcrypt('123'),
+                ]
+            );
+            // $seed = $user->id;
+            // $avatar_url = "https://api.dicebear.com/6.x/avataaars/png?seed=$seed&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=gradientLinear&accessoriesProbability=25";
+            // $avatar = file_get_contents($avatar_url);
+            // $avatar_file_name = "$seed.png";
+            // $avatar_file_path = public_path('img/avatars/' . $avatar_file_name);
+            // file_put_contents($avatar_file_path, $avatar);
+            // $user->update(['avatar' => '/img/avatars/' . $avatar_file_name]);
+        }
 
-        for ($x = 1; $x <= 5; $x++) {
+        for ($x = 1; $x <= 10; $x++) {
+            DB::table('categories')->insert([
+                [
+                    'name' => "Mata Pelajaran $x",
+                    'code' => strtoupper($faker->lexify()),
+                    'slug' => Str::slug("Mata Pelajaran $x"),
+                    'added_by' => $faker->name(),
+                    'last_edited_by' => $faker->name(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        }
+
+        for ($x = 1; $x <= 10; $x++) {
             $category = $faker->numberBetween(1, 10);
             DB::table('courses')->insert([
                 [
@@ -112,6 +92,7 @@ class DatabaseSeeder extends Seeder
                     'body' => $faker->text($faker->numberBetween(1000, 3000)),
                     'rating' => $faker->numberBetween(1, 5),
                     'rating_total' => $faker->numberBetween(50, 100),
+                    'added_by' => $faker->name(),
                     'last_edited_by' => $faker->name(),
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -121,13 +102,15 @@ class DatabaseSeeder extends Seeder
 
             $quiz = Quiz::create([
                 'name' => "Quiz $x",
+                'status' => 'Published',//$faker->randomElement(['Published', 'Draft']),
                 'course_id' => $x,
-                'category_id' => $category,
-                'time_limit' => $faker->numberBetween(1000, 2000)
+                'time_limit' => $x % 2 ? $faker->numberBetween(1000, 2000) : null,
+                'added_by' => $faker->name(),
+                'last_edited_by' => $faker->name(),
             ]);
             for ($i = 1; $i <= 10; $i++) {
                 $question = QuizQuestion::create([
-                    'number' => $i,
+                    // 'number' => $i,
                     'quiz_id' => $quiz->id,
                     'question' => $faker->text(100),
                     'answer_explanation' => $faker->text(200),

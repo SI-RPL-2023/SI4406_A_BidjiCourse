@@ -16,39 +16,31 @@
                 <th>Role</th>
                 <th>Full Name</th>
                 <th>Email</th>
-                <th>Created At</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($users as $user)
                 @php
-                    $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akun kamu sendiri' : 'Delete this user (' . $user->full_name . ')';
-                    $edit_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan mengubah role kamu sendiri' : "Edit this user's role";
+                    $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akunmu sendiri' : 'Delete this user';
+                    $edit_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan mengubah rolemu sendiri' : "Edit this user's role";
                 @endphp
                 <tr>
                     <td>{{ $user->id }}</td>
                     <td id="{{ $user->id }}"><span class="badge text-bg-{{ $user->is_admin ? 'danger' : 'success' }}">{{ $user->is_admin ? 'Admin' : 'Student' }}</span></td>
                     <td>{{ $user->full_name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ $user->created_at }}</td>
                     <td class="text-right">
                         <div class="d-grid d-flex gap-2">
-                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this user's detail" href="{{ route('users.show', $user->id) }}">
-                                <i class="ti ti-eye"></i> Detail
-                            </a>
+                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this user's detail" href="{{ route('users.show', $user->id) }}"><i class="ti ti-eye"></i></a>
                             <span data-bs-toggle="tooltip" data-bs-title="{{ $edit_tlp }}" tabindex="0">
-                                <button class="role-edit btn btn-sm btn-primary {{ auth()->user()->id == $user->id ? 'disabled' : '' }}" id="edit" data-id="{{ $user->id }}" data-role="{{ $user->is_admin }}" data-href="{{ route('users.update', $user->id) }}" data-user="{{ $user->full_name }}">
-                                    <i class="ti ti-edit"></i> Edit Role
-                                </button>
+                                <button class="role-edit btn btn-sm btn-primary {{ auth()->user()->id == $user->id ? 'disabled' : '' }}" id="edit" data-id="{{ $user->id }}" data-role="{{ $user->is_admin }}" data-href="{{ route('users.update', $user->id) }}" data-user="{{ $user->full_name }}"><i class="ti ti-edit"></i></button>
                             </span>
                             <form action="{{ route('users.destroy', $user->id) }}" method="post">
                                 @csrf
                                 @method('delete')
                                 <span data-bs-toggle="tooltip" data-bs-title="{{ $delete_tlp }}" tabindex="0">
-                                    <button class="btn btn-sm btn-danger delete-user-btn" id="delete" type="submit" {{ auth()->user()->id == $user->id ? 'disabled' : '' }}>
-                                        <i class="ti ti-trash"></i> Delete
-                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-user-btn" id="delete" type="submit" {{ auth()->user()->id == $user->id ? 'disabled' : '' }}><i class="ti ti-trash"></i></button>
                                 </span>
                             </form>
                         </div>
@@ -76,13 +68,8 @@
                 const user = $(this).data('user');
                 const role = $(this).data('role');
                 const url = $(this).data('href');
-                let admin = '';
-                let student = '';
-                if (role == 1) {
-                    admin = 'selected'
-                } else {
-                    student = 'selected'
-                }
+                let admin = role == 1 ? 'selected' : '';
+                let student = role == 0 ? 'selected' : '';
                 (async () => {
                     const {
                         value: inputValue
@@ -109,7 +96,7 @@
                                 role: $('#role-select').val(),
                             },
                             success: function(response) {
-                                // console.log(response['html']);
+                                console.log(response);
                                 $(`td#${response['id']}`).html(response['badge']);
                                 $(`button[data-id=${response['id']}]`).data("role", response['role']);
                                 Swal.fire({
@@ -119,12 +106,13 @@
                                 })
                                 // .then((result) => {
                                 //     if (result.value) {
+                                //         loader();
                                 //         document.location.href = `{{ route('users.index') }}`;
                                 //     }
                                 // });
                             },
                             error: function(xhr, status, error) {
-                                // console.error(error);
+                                console.error(error);
                                 Swal.fire({
                                     title: status,
                                     icon: 'error',

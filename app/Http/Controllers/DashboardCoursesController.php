@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Course;
 use App\Models\Category;
 use Illuminate\Support\Str;
@@ -10,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\DashboardCoursesRequest;
 
 class DashboardCoursesController extends Controller
 {
@@ -20,7 +20,7 @@ class DashboardCoursesController extends Controller
     {
         return view('pages.dashboard.courses.index', [
             'title' => 'Courses Management',
-            'courses' => Course::get()
+            'courses' => Course::with('category')->get()
         ]);
     }
 
@@ -38,10 +38,10 @@ class DashboardCoursesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeBACKUP(Request $request)
     {
         $data = $request->all();
-        $data['slug'] = Str::slug($data['title'], '-');
+        $data['slug'] = Str::slug($data['title']);
         if ($data['submit'] === 'draft') {
             $draft = true;
         } elseif ($data['submit'] === 'done') {
@@ -78,7 +78,8 @@ class DashboardCoursesController extends Controller
             $cover = $data['slug'] . '.' . $data['cover']->extension();
             $request->file('cover')->move(public_path('/img/courses'), $cover);
             $data['cover'] = '/img/courses/' . $cover;
-            $data['last_edited_by'] = auth()->user()->id;
+            $data['added_by'] = auth()->user()->full_name;
+            $data['last_edited_by'] = auth()->user()->full_name;
             $data['draft'] = $draft;
             Course::create($data);
             return redirect('/dashboard/courses')
@@ -87,6 +88,21 @@ class DashboardCoursesController extends Controller
         }
         return redirect()->back()->withErrors($validator)->withInput()->with('slug', $data['slug']);
     }
+    public function store(DashboardCoursesRequest $request)
+    {
+        $data = $request->validated();
+        $cover = "{$data['slug']}.{$data['cover']->extension()}";
+        $request->file('cover')->move(public_path('/img/courses'), $cover);
+        $data['cover'] = "/img/courses/$cover";
+        $data['added_by'] = auth()->user()->full_name;
+        $data['last_edited_by'] = auth()->user()->full_name;
+        $data['draft'] = $data['submit'] == 'draft' ? 1 : ($data['submit'] == 'done' ? 0 : 1);
+        Course::create($data);
+        return redirect(route('courses.show', $data['slug']))
+            ->with('alert', 'success')
+            ->with('html', "Course <strong>{$data['title']}</strong> berhasil ditambahkan!");
+    }
+
 
     /**
      * Display the specified resource.
@@ -114,10 +130,10 @@ class DashboardCoursesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Course $course)
+    public function updateBACKUP(Request $request, Course $course)
     {
         $data = $request->all();
-        $data['slug'] = Str::slug($data['title'], '-');
+        $data['slug'] = Str::slug($data['title']);
         if ($request->submit === 'draft') {
             $draft = true;
         } elseif ($request->submit === 'done') {
@@ -168,7 +184,7 @@ class DashboardCoursesController extends Controller
                 File::move(public_path($course->cover), public_path($new_path));
                 $data['cover'] = $new_path;
             };
-            $data['last_edited_by'] = auth()->user()->id;
+            $data['last_edited_by'] = auth()->user()->full_name;
             $data['draft'] = $draft;
             $course->update($data);
             return redirect(route('courses.index'))
@@ -178,6 +194,37 @@ class DashboardCoursesController extends Controller
                 ->with('html', 'Course <strong>' . $course->title . '</strong> berhasil diupdate!');
         }
         return redirect()->back()->withErrors($validator)->withInput()->with('slug', $data['slug']);
+    }
+    public function update(DashboardCoursesRequest $request, Course $course)
+    {
+        $data = $request->validated();
+        if (isset($data['cover'])) {
+            try {
+                unlink(public_path($course->cover));
+            } catch (\Exception $e) {
+                // Do nothing
+            }
+            $cover = $data['slug'] . '.' . $data['cover']->extension();
+            $request->file('cover')->move(public_path('img/courses'), $cover);
+            $data['cover'] = "/img/courses/$cover";
+        } elseif (!isset($data['cover']) && $data['slug'] != $course->slug) {
+            try {
+                $file_extension = pathinfo($course->cover, PATHINFO_EXTENSION);
+                $new_path = "/img/courses/{$data['slug']}.$file_extension";
+                File::move(public_path($course->cover), public_path($new_path));
+                $data['cover'] = $new_path;
+            } catch (\Exception $e) {
+                // Do nothing
+            }
+        };
+        $data['last_edited_by'] = auth()->user()->full_name;
+        $data['draft'] = $data['submit'] == 'draft' ? 1 : ($data['submit'] == 'done' ? 0 : 1);
+        $course->update($data);
+        return redirect(route('courses.show', $data['slug']))
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->with('alert', 'success')
+            ->with('html', "Course <strong>{$data['title']}</strong> berhasil diupdate!");
     }
 
     /**
@@ -190,13 +237,5 @@ class DashboardCoursesController extends Controller
         return redirect(route('courses.index'))
             ->with('alert', 'success')
             ->with('html', 'Course <strong>' . $course->title . '</strong> berhasil dihapus!');
-    }
-
-    /**
-     * Create a slug from resource's title.
-     */
-    public function createSlug(Request $request)
-    {
-        return Str::slug($request->title, '-');
     }
 }

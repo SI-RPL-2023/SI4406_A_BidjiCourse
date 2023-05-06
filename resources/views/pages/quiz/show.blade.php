@@ -2,10 +2,12 @@
 @section('navbar')
     @include('layouts.navbar-simple', ['route' => route('materi.show', $course->slug), 'title' => $title, 'category' => $course->category->name])
 @endsection
-@section('head-script')
-    <link href="/css/TimeCircles.css" rel="stylesheet">
-    <script type="text/javascript" src="/js/TimeCircles.js"></script>
-@endsection
+@if ($course->quiz->time_limit)
+    @section('head-script')
+        <link href="/css/TimeCircles.css" rel="stylesheet">
+        <script type="text/javascript" src="/js/TimeCircles.js"></script>
+    @endsection
+@endif
 @section('style')
     <style>
         main {
@@ -203,7 +205,7 @@
             <div class="col-md-4">
                 <div class="sidebar">
                     <h3 class="quiz-nav">Quiz Navigation</h3>
-                    @if ($course->quiz->time_limit > 0)
+                    @if ($course->quiz->time_limit)
                         <div id="countdown" data-timer="{{ $time_left }}"></div>
                     @endif
                     <form action="{{ route('quiz.update', $course->quiz->id) }}" method="POST">
@@ -220,7 +222,7 @@
                         <span class="badge text-bg-dark">Current Page</span>
                     </div>
                     <div class="btn-container">
-                        @foreach ($questions_all as $question)
+                        @foreach ($allQuestions as $question)
                             @php
                                 $quizAttempt = \App\Models\QuizAttempt::where('user_id', $userId)
                                     ->where('quiz_question_id', $question->id)
@@ -232,7 +234,7 @@
                                     ->where('flag', true)
                                     ->exists();
                                 $border = $isAnswered || $isFlagged ? '' : 'outline-';
-                                $background = $isAnswered ? 'success' : ($isFlagged ? 'warning' : 'dark');
+                                $background = $isFlagged ? 'warning' : ($isAnswered ? 'success' : 'dark');
                                 if (Request::query('page') == $loop->iteration) {
                                     $background = 'dark';
                                     $border = '';
@@ -241,7 +243,7 @@
                                     $border = '';
                                 }
                             @endphp
-                            <a class="quiz-nav-button btn btn-{{ $border }}{{ $background }} btn-sm" href="{{ $course->slug }}?page={{ $loop->iteration }}">{{ $loop->iteration }}</a>
+                            <a class="quiz-nav-button btn btn-{{ $border }}{{ $background }} btn-sm" href="?page={{ $loop->iteration }}">{{ $loop->iteration }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -253,7 +255,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            @if ($course->quiz->time_limit > 0)
+            @if ($course->quiz->time_limit)
                 const countdown = $("#countdown");
                 countdown.TimeCircles({
                     use_background: true,
@@ -292,17 +294,27 @@
                     }
                 }, 500);
             @endif
-            const quiz_id = "{{ $course->quiz->id }}";
+            const quiz_id = `{{ $course->quiz->id }}`;
             $.ajaxSetup({
                 headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    'X-CSRF-TOKEN': `{{ csrf_token() }}`
                 },
             })
+            $('#prev, #next, .finish-attempt, .quiz-nav-button').on('click', function() {
+                loader();
+            });
             $('.quiz-answer').on('change', function() {
+                Toast.fire({
+                    didOpen: () => {
+                        Swal.stopTimer();
+                        Swal.showLoading();
+                    },
+                    text: 'Saving answer...',
+                })
                 const formData = $('#quiz_radio').serialize();
                 console.log(formData);
                 $.ajax({
-                    url: "{{ route('quiz.store') }}",
+                    url: `{{ route('quiz.store') }}`,
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -313,11 +325,22 @@
                         });
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.error(error);
+                        Toast.fire({
+                            icon: 'error',
+                            text: "Failed to save answer, please refresh the page and try again",
+                        })
                     }
                 });
             });
             $('.flag_toggle').click(function() {
+                Toast.fire({
+                    didOpen: () => {
+                        Swal.stopTimer();
+                        Swal.showLoading();
+                    },
+                    text: 'Flagging question...',
+                })
                 const flag_icon = $('.flag_icon');
                 const flag_text = $('.flag_text');
                 const flag_url = $(this).attr('data-url');
@@ -340,12 +363,13 @@
                         });
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.error(error);
+                        Toast.fire({
+                            icon: 'error',
+                            text: "Failed to flag question, please refresh the page and try again",
+                        })
                     }
                 });
-            });
-            $('#prev, #next, .finish-attempt').on('click', function(e) {
-                loader();
             });
             $('.finish-attempt').on('click', function(e) {
                 e.preventDefault();
@@ -375,6 +399,10 @@
                     },
                     error: function(error) {
                         console.error(error);
+                        Toast.fire({
+                            icon: 'error',
+                            text: "Request failed, please refresh the page and try again",
+                        })
                     }
                 });
             });

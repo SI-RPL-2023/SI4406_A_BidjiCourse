@@ -1,21 +1,21 @@
 @if (session()->has('alert'))
     <script>
         Swal.fire({
-            icon: '{{ session('alert') }}',
-            title: '{{ session('title') }}',
-            text: '{{ session('text') }}',
-            html: '{!! session('html') !!}',
-            confirmButtonColor: '#0d6efd'
+            icon: `{{ session('alert') }}`,
+            title: `{{ session('title') }}`,
+            text: `{{ session('text') }}`,
+            html: `{!! session('html') !!}`,
+            confirmButtonColor: '#2d6efd',
         });
     </script>
 @endif
 @if (session()->has('alert-confirm'))
     <script>
         Swal.fire({
-            icon: '{{ session('alert-confirm') }}',
-            title: '{{ session('title') }}',
-            text: '{{ session('text') }}',
-            html: '{!! session('html') !!}',
+            icon: `{{ session('alert-confirm') }}`,
+            title: `{{ session('title') }}`,
+            text: `{{ session('text') }}`,
+            html: `{!! session('html') !!}`,
             showCancelButton: true,
             cancelButtonColor: '#dc3545',
             confirmButtonColor: '#0d6efd',
@@ -32,9 +32,9 @@
 @if (session()->has('toast'))
     <script>
         Toast.fire({
-            icon: '{{ session('toast') }}',
-            text: '{{ session('text') }}',
-            html: '{!! session('html') !!}'
+            icon: `{{ session('toast') }}`,
+            text: `{{ session('text') }}`,
+            html: `{!! session('html') !!}`,
         })
     </script>
 @endif

@@ -5,12 +5,13 @@
     <title>{{ $title ?? config('app.name') }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
     @include('layouts.head-import')
     @yield('head-script')
     @yield('style')
-    <div class="loading-animation">
+    {{-- <div class="loading-animation">
         <x-loader.pencil></x-loader.pencil>
-    </div>
+    </div> --}}
 </head>
 
 <body>
