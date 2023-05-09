@@ -1,5 +1,5 @@
 <nav
-    class="navbar navbar-v3-2 bg-white default-layout-navbar navbar-expand navbar-light d-flex flex-row  fixed-top shadow">
+    class="navbar navbar-expand navbar-light bg-white d-flex flex-row fixed-top shadow-sm">
     <div class="container-xl">
         <a class="navbar-brand" href="{{ $route }}">
             <i class="ti ti-arrow-narrow-left fs-2"></i>

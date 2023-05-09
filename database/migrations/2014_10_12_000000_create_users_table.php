@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            // $table->id();
             $table->ulid('id')->primary();
             $table->boolean('is_admin')->default(false);
             $table->string('email')->unique();
@@ -21,11 +20,27 @@ return new class extends Migration
             $table->string('born_date')->nullable();
             $table->string('number')->nullable();
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
+            $table->enum('theme', [
+                'default',
+                'cerulean',
+                'cosmo',
+                'flatly',
+                'journal',
+                'lumen',
+                'materia',
+                'minty',
+                'sandstone',
+                'simplex',
+                'sketchy',
+                'spacelab',
+                'united',
+                'yeti',
+                'zephyr'
+            ])->default('default');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
-
     }
 
     /**

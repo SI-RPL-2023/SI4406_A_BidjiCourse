@@ -60,13 +60,11 @@
                 @if ($course->quiz && $course->quiz->time_limit)
                     +'<span>Waktu pengerjaan: <strong><span class="badge text-bg-success border">{{ floor($course->quiz->time_limit / 60) }} Menit</span></strong></span><br>'
                 @endif
-                Swal.fire({
+                swalCustom.fire({
                     title: 'Quiz',
                     html: html,
                     icon: 'info',
                     showCancelButton: true,
-                    confirmButtonColor: '#0d6efd',
-                    cancelButtonColor: '#dc3545',
                     confirmButtonText: 'Kerjakan',
                     cancelButtonText: 'Nanti saja',
                 }).then((result) => {

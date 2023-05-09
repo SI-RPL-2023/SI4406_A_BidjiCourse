@@ -40,7 +40,7 @@
         <div class="row">
             <div class="col-md-8">
                 <img id="course-cover" class="mb-4 mt-2 rounded img-fluid" src="{{ $course->cover }}"
-                alt="{{ $course->title }}">
+                alt="{{ $course->title }}"><br>
                 {!! $course->body !!}
             </div>
         </div>

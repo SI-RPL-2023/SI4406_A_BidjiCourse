@@ -1,4 +1,4 @@
-<nav class="navbar navbar-v3-2 default-layout-navbar navbar-expand-lg navbar-light d-flex fixed-top-sm fixed-top flex-row bg-white shadow">
+<nav class="navbar navbar-expand-lg navbar-light bg-white d-flex fixed-top-sm fixed-top flex-row shadow-sm">
     <div class="container-xl">
         <a class="navbar-brand" href="{{ route('index') }}">
             <img src="{{ 'img/Bidji Logo.svg' }}" width="70" height="auto">
@@ -29,7 +29,7 @@
             <ul class="navbar-nav ms-auto">
                 @if (!auth()->user())
                     <li class="nav-item">
-                        <a class="btn btn-outline-secondary mx-1" href="{{ route('login.index') }}">Masuk</a>
+                        <a class="btn btn-secondary mx-1" href="{{ route('login.index') }}">Masuk</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-dark mx-1" href="{{ route('register.index') }}">Daftar</a>

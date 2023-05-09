@@ -1,6 +1,6 @@
 @if (session()->has('alert'))
     <script>
-        Swal.fire({
+        swalCustom.fire({
             icon: `{{ session('alert') }}`,
             title: `{{ session('title') }}`,
             text: `{{ session('text') }}`,
@@ -11,14 +11,12 @@
 @endif
 @if (session()->has('alert-confirm'))
     <script>
-        Swal.fire({
+        swalCustom.fire({
             icon: `{{ session('alert-confirm') }}`,
             title: `{{ session('title') }}`,
             text: `{{ session('text') }}`,
             html: `{!! session('html') !!}`,
             showCancelButton: true,
-            cancelButtonColor: '#dc3545',
-            confirmButtonColor: '#0d6efd',
             confirmButtonText: 'Ya',
             cancelButtonText: 'Tidak',
         }).then((result) => {

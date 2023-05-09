@@ -222,19 +222,17 @@
                     coverPreview.attr('src', placeholder_src);
                     coverPreviewUpdate.attr('src', old_src);
                     coverInput.val('')
-                    Swal.fire({
+                    swalCustom.fire({
                         icon: 'warning',
                         html: 'Ekstensi file yang didukung: ' + invalidTypeText,
-                        confirmButtonColor: '#0d6efd',
                     })
                 } else if (file.size > 5242880) {
                     coverPreview.attr('src', placeholder_src);
                     coverPreviewUpdate.attr('src', old_src);
                     coverInput.val('')
-                    Swal.fire({
+                    swalCustom.fire({
                         icon: 'warning',
                         html: 'Ukuran file maksimal ' + invalidSizeText,
-                        confirmButtonColor: '#0d6efd',
                     })
                 } else {
                     const reader = new FileReader();

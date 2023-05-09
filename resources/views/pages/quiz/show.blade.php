@@ -141,7 +141,7 @@
     @php
         $userId = auth()->user()->id;
     @endphp
-    <div class="container-fluid bg-body-tertiary">
+    <div class="container-fluid" style="background: #f8f9fa">
         <div class="row">
             <div class="col-md-8 mx-md-5 mb-4">
                 @foreach ($questions as $question)
@@ -161,7 +161,7 @@
                     <div class="container rounded bg-white" style="padding: 50px">
                         <h5 class="mb-4">Pertanyaan ke <strong class="fs-3">{{ $questions->currentPage() }}</strong> dari <strong class="fs-5">{{ $questions->total() }}</strong></h5>
                         <div class="alert alert-light mb-3">
-                            <p>{{ $question->question }}</p>
+                            <p>{!! $question->question !!}</p>
                         </div>
                         <p>Pilih jawabanmu:</p>
                         <div class="ml-5">
@@ -178,7 +178,7 @@
                                 </div>
                             </form>
                             <br>
-                            <span class="flag_toggle" data-bs-placement="right" data-bs-toggle="tooltip" data-bs-title="Tandai pertanyaan ini jika kamu ingin mengerjakannya nanti" data-quiz-id="{{ $course->quiz->id }}" data-question-id="{{ $question->id }}" data-url="{{ route('quiz.flag', [$course->quiz->id, $question->id]) }}
+                            <span class="flag_toggle" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bs-title="Tandai pertanyaan ini jika kamu ingin mengerjakannya nanti" data-quiz-id="{{ $course->quiz->id }}" data-question-id="{{ $question->id }}" data-url="{{ route('quiz.flag', [$course->quiz->id, $question->id]) }}
                                 " style="cursor: pointer;">
                                 <i class="flag_icon ti ti-flag{{ $flag ? '-filled text-danger' : '' }}"></i>
                                 <span class="flag_text">{{ $flag ? 'Remove flag' : 'Flag question' }}</span>
@@ -263,7 +263,7 @@
                     text_size: 0.1,
                     time: {
                         Days: {
-                            show: false,
+                            show: {{ $course->quiz->time_limit > 1440 ? 'true' : 'false' }},
                             text: "Hari"
                         },
                         Hours: {
@@ -282,11 +282,12 @@
                 });
                 const timeout = setInterval(() => {
                     if (countdown.TimeCircles().getTime() <= 0) {
-                        Swal.fire({
+                        swalCustom.fire({
                             icon: 'info',
                             title: 'Waktu Habis',
                             html: 'Waktu kamu sudah habis!',
-                            confirmButtonColor: '#0d6efd',
+                            timer: 3000,
+                            timerProgressBar: true,
                         }).then((result) => {
                             $('.finish-attempt').closest('form').submit();
                         });
@@ -340,11 +341,10 @@
                         Swal.showLoading();
                     },
                     text: 'Flagging question...',
-                })
+                });
                 const flag_icon = $('.flag_icon');
                 const flag_text = $('.flag_text');
                 const flag_url = $(this).attr('data-url');
-                const flag_flag = $(this).attr('data-flag');
                 $.ajax({
                     url: flag_url,
                     type: 'POST',
@@ -382,13 +382,11 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        Swal.fire({
+                        swalCustom.fire({
                             title: 'Finish Attempt',
                             html: response['html'],
                             icon: 'question',
                             showCancelButton: true,
-                            confirmButtonColor: '#0d6efd',
-                            cancelButtonColor: '#dc3545',
                             confirmButtonText: 'Submit',
                             cancelButtonText: 'Cancel',
                         }).then((result) => {

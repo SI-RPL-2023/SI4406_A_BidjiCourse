@@ -6,6 +6,11 @@
         }
     </style>
 @endsection
+@section('head-script')
+    <!-- Text Editor -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+@endsection
 @section('main')
     <div class="d-flex justify-content-between flex-md-nowrap align-items-center border-bottom mb-3 flex-wrap pt-3 pb-2">
         <h3>Questions and Answers: {{ $quiz->name }}</h3>
@@ -36,24 +41,20 @@
                     <div class="card-header h6 d-flex justify-content-between align-items-center">
                         <span class="d-flex align-items-center gap-2" style="cursor: pointer;" x-on:click="show = !show">
                             <i class="ti ti-chevron-down fs-5" x-bind:class="{ 'ti-chevron-up': show }"></i>
-                            <span class="fw-bold text-success">Pertanyaan {{ $loop->iteration }}: </span>
-                            {{ mb_strimwidth($question->question, 0, 50, '...') }}
+                            <span>Pertanyaan {{ $loop->iteration }}</span>
                         </span>
                         <div class="d-flex gap-2">
                             <template x-if="!editMode">
-                                <button class="edit-question-btn btn btn-sm btn-primary" x-transition.duration.500ms x-show="show" x-on:click="editMode = !editMode">
+                                <button class="edit-question-btn btn btn-sm btn-primary" x-transition.duration.500ms x-show="show" x-on:click="editMode = !editMode; 
+                                $('#oldQuestion{{ $loop->iteration }}').summernote('enable'); 
+                                $('#oldExplanation{{ $loop->iteration }}').summernote('enable')">
                                     <i class="ti ti-edit"></i> Edit
                                 </button>
                             </template>
-                            <template x-if="editMode && show">
-                                <div class="d-flex gap-2">
-                                    <button class="save-question-btn btn btn-sm btn-primary" x-on:click.prevent="$refs.editForm.submit(); loader()">
-                                        <i class="ti ti-device-floppy"></i> Save
-                                    </button>
-                                    <a class="btn btn-sm btn-warning" x-on:click="editMode = !editMode">
-                                        <i class="ti ti-x"></i> Cancel
-                                    </a>
-                                </div>
+                            <template x-if="editMode">
+                                <button class="save-question-btn btn btn-sm btn-warning" x-transition.duration.500ms x-show="show" x-on:click.prevent="$refs.editForm.submit(); loader()">
+                                    <i class="ti ti-device-floppy"></i> Save
+                                </button>
                             </template>
                             <form action="{{ route('quizzes.destroyQuestions', $question->id) }}" method="POST">
                                 @csrf
@@ -69,10 +70,13 @@
                             @csrf
                             @method('PATCH')
                             <input name="number" type="hidden" value="{{ $loop->iteration }}">
-                            <label class="form-label" for="oldQuestion">Soal</label>
-                            <textarea class="form-control" id="oldQuestion" name="oldQuestion" x-bind:disabled="!editMode" placeholder="Tulisakan pertanyaan disini...">{{ $question->question }}</textarea>
-                            <label class="form-label mt-4" for="oldExplanation">Pembahasan</label>
-                            <textarea class="form-control" id="oldExplanation" name="oldExplanation" x-bind:disabled="!editMode" placeholder="Berikan pembahasan dari pertanyaan di atas...">{{ $question->answer_explanation }}</textarea>
+
+                            <label class="form-label" for="oldQuestion{{ $loop->iteration }}">Soal</label>
+                            <textarea id="oldQuestion{{ $loop->iteration }}" name="oldQuestion" placeholder="Tulis pertanyaan disini...">{{ $question->question }}</textarea>
+
+                            <label class="form-label mt-4" for="oldExplanation{{ $loop->iteration }}">Pembahasan</label>
+                            <textarea id="oldExplanation{{ $loop->iteration }}" name="oldExplanation" placeholder="Tulis pembahasan disini..." required>{{ $question->answer_explanation }}</textarea>
+
                             <label class="form-label mt-4">Opsi Jawaban</label>
                             <div x-data="{ selectedAnswer: null }">
                                 @foreach ($question->answers as $answer)
@@ -87,6 +91,18 @@
                         </form>
                     </div>
                 </div>
+                <script>
+                    $(document).ready(function() {
+                        $('#oldQuestion{{ $loop->iteration }}').summernote('disable', {
+                            spellCheck: false,
+                            inheritPlaceholder: true
+                        });
+                        $('#oldExplanation{{ $loop->iteration }}').summernote('disable', {
+                            spellCheck: false,
+                            inheritPlaceholder: true
+                        });
+                    });
+                </script>
             </section>
         @endforeach
     @else
@@ -98,7 +114,7 @@
         <form action="{{ route('quizzes.storeQuestions') }}" method="POST">
             @csrf
             <input name="quiz_id" type="hidden" value="{{ $quiz->id }}">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header" style="background: #f8f9fa">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Pertanyaan</h1>
@@ -106,9 +122,9 @@
                     </div>
                     <div class="modal-body">
                         <label class="form-label" for="question">Soal</label>
-                        <textarea class="form-control" id="question" name="question" placeholder="Tulisakan pertanyaan disini..." required>{{ old('question') }}</textarea>
+                        <textarea class="summernote" id="question" name="question" placeholder="Tulis pertanyaan disini..." required>{{ old('question') }}</textarea>
                         <label class="form-label mt-4" for="explanation">Pembahasan</label>
-                        <textarea class="form-control" id="explanation" name="explanation" placeholder="Berikan pembahasan dari pertanyaan di atas..." required>{{ old('explanation') }}</textarea>
+                        <textarea class="summernote" id="explanation" name="explanation" placeholder="Tulis pembahasan disini..." required>{{ old('explanation') }}</textarea>
                         <label class="form-label mt-4">Opsi Jawaban</label>
                         <div x-data="{ selectedAnswer: null }">
                             @if (old('answers'))
@@ -124,14 +140,14 @@
                                     </div>
                                 @endforeach
                             @else
-                                @for ($x = 1; $x <= 4; $x++)
+                                @for ($answers = 1; $answers <= 4; $answers++)
                                     <div class="input-group mb-3">
                                         <div class="input-group-text" id="answer_option">
-                                            <input class="form-check-input is-valid" name="is_correct" type="radio" value="{{ $x }}" x-on:click="selectedAnswer = {{ $x }}" required>
+                                            <input class="form-check-input is-valid" name="is_correct" type="radio" value="{{ $answers }}" x-on:click="selectedAnswer = {{ $answers }}" required>
                                         </div>
-                                        <input class="answer-form form-control" name="answers[{{ $x }}]" type="text" x-bind:class="{ 'is-valid': selectedAnswer == {{ $x }} }" required>
-                                        @if ($x > 2)
-                                            <a class="delete-option btn btn-sm btn-danger d-flex align-items-center" id="delete_answer_{{ $x }}"><i class="ti ti-trash"></i></a>
+                                        <input class="answer-form form-control" name="answers[{{ $answers }}]" type="text" x-bind:class="{ 'is-valid': selectedAnswer == {{ $answers }} }" required>
+                                        @if ($answers > 2)
+                                            <a class="delete-option btn btn-sm btn-danger d-flex align-items-center" id="delete_answer_{{ $answers }}"><i class="ti ti-trash"></i></a>
                                         @endif
                                     </div>
                                 @endfor
@@ -154,6 +170,13 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $('.summernote').summernote({
+                spellCheck: false,
+                inheritPlaceholder: true,
+            });
+            $('div .note-editor.note-frame').addClass('bg-white'); // fix transparent background in fullscreen mode
+            $('.note-editor .dropdown-toggle').removeClass('dropdown-toggle'); // remove unwanted additional dropdown caret icon from bootstrap
+            $('.note-editor .note-dropdown-menu').addClass('rounded shadow');
             let answerCount = 4;
             $('#add_option').click(function() {
                 answerCount++;

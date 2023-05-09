@@ -13,17 +13,24 @@ const Toast = Swal.mixin({
     },
 });
 
-$(document).ready(function () {
+const swalCustom = Swal.mixin({
+    customClass: {
+        confirmButton: "btn btn-primary mx-1",
+        cancelButton: "btn btn-danger mx-1",
+    },
+    buttonsStyling: false,
+});
 
+$(document).ready(function () {
     $(".delete-user-btn").on("click", function (e) {
         e.preventDefault();
-        Swal.fire({
+        swalCustom.fire({
             title: "Hapus User",
             html: "Apakah kamu yakin ingin menghapus user ini?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#dc3545",
-            cancelButtonColor: "#0d6efd",
+            
+            
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
@@ -35,13 +42,13 @@ $(document).ready(function () {
 
     $(".delete-question-btn").on("click", function (e) {
         e.preventDefault();
-        Swal.fire({
+        swalCustom.fire({
             title: "Hapus Pertanyaan",
             html: "Apakah kamu yakin ingin menghapus pertanyaan ini?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#dc3545",
-            cancelButtonColor: "#0d6efd",
+            
+            
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
@@ -53,24 +60,24 @@ $(document).ready(function () {
 
     $(".delete-course-btn").on("click", function (e) {
         e.preventDefault();
-        Swal.fire({
+        swalCustom.fire({
             title: "Hapus Course",
             html: "Apakah kamu yakin ingin menghapus course ini? Semua <strong>quiz</strong> yang berhubungan dengan course ini juga akan <strong>terhapus</strong>.",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#dc3545",
-            cancelButtonColor: "#0d6efd",
+            
+            
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
             if (result.value) {
-                Swal.fire({
+                swalCustom.fire({
                     title: "Last Confirmation",
                     html: "Apakah kamu benar-benar yakin? Semua yang terhapus <strong>tidak akan bisa dikembalikan lagi</strong>.",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#dc3545",
-                    cancelButtonColor: "#0d6efd",
+                    
+                    
                     confirmButtonText: "Ya, Saya Yakin",
                     cancelButtonText: "Cancel",
                 }).then((result) => {
@@ -84,24 +91,20 @@ $(document).ready(function () {
 
     $(".delete-category-btn").on("click", function (e) {
         e.preventDefault();
-        Swal.fire({
+        swalCustom.fire({
             title: "Hapus Category",
             html: "Apakah kamu yakin ingin menghapus category ini? Semua <strong>course</strong> yang berhubungan dengan category ini juga akan <strong>terhapus</strong>.",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#dc3545",
-            cancelButtonColor: "#0d6efd",
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
             if (result.value) {
-                Swal.fire({
+                swalCustom.fire({
                     title: "Last Confirmation",
                     html: "Apakah kamu benar-benar yakin? Semua yang terhapus <strong>tidak akan bisa dikembalikan lagi</strong>.",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#dc3545",
-                    cancelButtonColor: "#0d6efd",
                     confirmButtonText: "Ya, Saya Yakin",
                     cancelButtonText: "Cancel",
                 }).then((result) => {
@@ -112,27 +115,23 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(".delete-quiz-btn").on("click", function (e) {
         e.preventDefault();
-        Swal.fire({
+        swalCustom.fire({
             title: "Hapus Quiz",
             html: "Apakah kamu yakin ingin menghapus quiz ini? Semua <strong>pertanyaan dan jawaban</strong> yang berhubungan dengan quiz ini juga akan <strong>terhapus</strong>.",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#dc3545",
-            cancelButtonColor: "#0d6efd",
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
             if (result.value) {
-                Swal.fire({
+                swalCustom.fire({
                     title: "Last Confirmation",
                     html: "Apakah kamu benar-benar yakin? Semua yang terhapus <strong>tidak akan bisa dikembalikan lagi</strong>.",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#dc3545",
-                    cancelButtonColor: "#0d6efd",
                     confirmButtonText: "Ya, Saya Yakin",
                     cancelButtonText: "Cancel",
                 }).then((result) => {

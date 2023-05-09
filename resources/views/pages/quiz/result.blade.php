@@ -206,7 +206,7 @@
                         <div class="container rounded bg-white" style="padding: 50px">
                             <h5 class="mb-4">Pertanyaan ke <strong class="fs-3">{{ $loop->iteration }}</strong> dari <strong class="fs-5">{{ $result->total_questions }}</strong></h5>
                             <div class="alert alert-light mb-3">
-                                <p>{{ $question->question }}</p>
+                                <p>{!! $question->question !!}</p>
                             </div>
                             @if ($question->is_correct)
                                 <p>Jawabanmu benar <i class="ti ti-check fs-4 text-success"></i></p>
@@ -241,7 +241,7 @@
                                 @endforeach
                             @endif
                             <div class="alert alert-success mt-3">
-                                <p>Penjelasan: <br><strong>{{ $question->answer_explanation }}</strong></p>
+                                <p>Penjelasan: <br><strong>{!! $question->answer_explanation !!}</strong></p>
                             </div>
                         </div>
                     </div>

@@ -73,7 +73,7 @@
                 (async () => {
                     const {
                         value: inputValue
-                    } = await Swal.fire({
+                    } = await swalCustom.fire({
                         title: 'Pilih role:',
                         html: `<p class="mb-2">${user}</p>` +
                             `<select id="role-select" class="form-select mb-2">` +
@@ -82,8 +82,6 @@
                             `</select>`,
                         focusConfirm: false,
                         showCancelButton: true,
-                        confirmButtonColor: '#0d6efd',
-                        cancelButtonColor: '#dc3545',
                     })
                     if (inputValue) {
                         $.ajax({
@@ -99,10 +97,9 @@
                                 console.log(response);
                                 $(`td#${response['id']}`).html(response['badge']);
                                 $(`button[data-id=${response['id']}]`).data("role", response['role']);
-                                Swal.fire({
+                                swalCustom.fire({
                                     icon: response['alert'],
                                     html: response['html'],
-                                    confirmButtonColor: '#0d6efd'
                                 })
                                 // .then((result) => {
                                 //     if (result.value) {
@@ -113,11 +110,10 @@
                             },
                             error: function(xhr, status, error) {
                                 console.error(error);
-                                Swal.fire({
+                                swalCustom.fire({
                                     title: status,
                                     icon: 'error',
                                     html: error,
-                                    confirmButtonColor: '#0d6efd'
                                 });
                             }
                         });
