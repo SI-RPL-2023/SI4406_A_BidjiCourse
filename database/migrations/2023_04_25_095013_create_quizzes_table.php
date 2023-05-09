@@ -24,17 +24,16 @@ return new class extends Migration
 
         Schema::create('quiz_questions', function (Blueprint $table) {
             $table->id();
-            // $table->integer('number')->nullable();
             $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
-            $table->text('question');
-            $table->text('answer_explanation')->nullable();
+            $table->longText('question');
+            $table->longText('answer_explanation')->nullable();
             $table->timestamps();
         });
 
         Schema::create('quiz_answers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('quiz_question_id')->constrained()->onDelete('cascade');
-            $table->string('answer');
+            $table->longText('answer');
             $table->boolean('is_correct');
             $table->timestamps();
         });
