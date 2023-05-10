@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
@@ -30,7 +31,7 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->validate(
+        $data = $request->validate(
             [
                 'email' => ['required', 'unique:users', 'email'],
                 'gender' => ['required'],
@@ -43,14 +44,25 @@ class RegisterController extends Controller
                 'full_name.max' => 'Nama maksimal 50 karakter.',
                 'email.unique' => 'Email sudah digunakan.',
                 'email.email' => 'Masukan email yang benar.',
-                'gender.required' => 'Silahkan pilih gender anda.'
+                'gender.required' => 'Silahkan pilih gender kamu.'
             )
         );
-        $credentials['password'] = bcrypt($credentials['password']);
-        User::create($credentials);
+        $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
+        try {
+            $seed = $user->id;
+            $avatar_url = "https://api.dicebear.com/6.x/avataaars/png?seed=$seed&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=gradientLinear&accessoriesProbability=25";
+            $avatar = file_get_contents($avatar_url);
+            $avatar_file_name = "$seed.png";
+            $avatar_file_path = public_path('img/avatars/' . $avatar_file_name);
+            file_put_contents($avatar_file_path, $avatar);
+            $user->update(['avatar' => '/img/avatars/' . $avatar_file_name]);
+        } catch (\Exception $e) {
+            //do nothing...
+        };
         return redirect('/login')
             ->with('alert', 'success')
-            ->with('text', 'Registrasi berhasil, sekarang anda bisa login!');
+            ->with('text', 'Registrasi berhasil, sekarang kamu bisa login!');
     }
 
     /**

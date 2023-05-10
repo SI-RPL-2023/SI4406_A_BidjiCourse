@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->boolean('is_admin')->default(false);
             $table->string('email')->unique();
             $table->string('full_name');
@@ -20,6 +20,23 @@ return new class extends Migration
             $table->string('born_date')->nullable();
             $table->string('number')->nullable();
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
+            $table->enum('theme', [
+                'default',
+                'cerulean',
+                'cosmo',
+                'flatly',
+                'journal',
+                'lumen',
+                'materia',
+                'minty',
+                'sandstone',
+                'simplex',
+                'sketchy',
+                'spacelab',
+                'united',
+                'yeti',
+                'zephyr'
+            ])->default('default');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

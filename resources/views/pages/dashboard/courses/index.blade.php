@@ -1,87 +1,66 @@
 @extends('pages.dashboard.layouts.main')
 @section('head-script')
     <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 @endsection
 @section('main')
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-md-nowrap align-items-center border-bottom mb-3 flex-wrap pt-3 pb-2">
         <h3>Courses</h3>
-        <a href="{{ route('courses.create') }}" class="btn btn-sm btn-primary">
+        <a class="btn btn-sm btn-primary" href="{{ route('courses.create') }}">
             <i class="ti ti-pencil-plus"></i> Add a course
         </a>
     </div>
-    <table id="courses-table" class="table table-striped table-bordered w-100">
+    <table class="table-striped table-bordered w-100 table" id="courses-table">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Status</th>
-                <th>Title</th>
                 <th>Cover</th>
+                <th>Status</th>
+                <th>Name</th>
+                <th>Mata Pelajaran</th>
                 <th>Rating</th>
-                <th>Action</th>
+                <th>Added by</th>
                 <th>Last Edited by</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($courses as $course)
-                {{-- @for ($i = 0; $i < 10; $i++) --}}
                 @php
-                    if (!isset(\App\Models\User::find($course->last_edited_by)->full_name)) {
-                        $last_edited_by = 'deleted user';
-                    } else {
-                        $last_edited_by = \App\Models\User::find($course->last_edited_by)->full_name;
-                    }
-                    if ($course->draft) {
-                        $status = 'Draft';
-                        $bg = 'warning';
-                    } else {
-                        $status = 'Published';
-                        $bg = 'success';
-                    }
-                    if (!$course->rating) {
-                        $rating = 'Not rated';
-                    } else {
-                        $rating = 'Rated';
-                    }
+                    $status = $course->draft ? 'Draft' : 'Published';
+                    $background = $course->draft ? 'warning' : 'success';
+                    $rating = $course->rating ? "$course->rating ($course->rating_total)" : 'Not rated';
                 @endphp
                 <tr>
                     <td>{{ $course->id }}</td>
-                    <td>
-                        <span id="{{ $status }}" class="badge text-bg-{{ $bg }}">{{ $status }}</span>
-                    </td>
-                    <td>{{ $course->title }}</td>
-                    <td><img id="" class="img-fluid rounded" src="{{ $course->cover }}" alt="cover preview"
-                            style="
+                    <td><img class="img-fluid rounded" id="" src="{{ $course->cover }}" alt="cover preview" style="
                         width: 150px;
                         height: auto;
                         object-fit: cover;
                         aspect-ratio: 16 / 9;">
                     </td>
+                    <td>
+                        <span class="badge text-bg-{{ $background }}" data-bs-toggle="tooltip" data-bs-title="{{ $status == 'Draft' ? 'Course ini masih draft, publish course ini agar bisa diakses oleh user' : 'Course ini sudah bisa diakses oleh user' }}">{{ $status }}</span>
+                    </td>
+                    <td>{{ $course->title }}</td>
+                    <td>{{ $course->category->name }}</td>
                     <td>{{ $rating }}</td>
+                    <td>{{ $course->added_by }}<br>({{ $course->created_at }})</td>
+                    <td>{{ $course->last_edited_by }}<br>({{ $course->updated_at }})</td>
                     <td class="text-right">
-                        <div class="d-grid gap-2 d-flex">
-                            <a id="detail" href="{{ route('courses.show', $course->slug) }}"
-                                class="btn btn-sm btn-warning">
-                                <i class="ti ti-eye"></i> Preview
-                            </a>
-                            <a id="edit" href="{{ route('courses.edit', $course->slug) }}"
-                                class="btn btn-sm btn-primary">
-                                <i class="ti ti-edit"></i> Edit
-                            </a>
+                        <div class="d-grid d-flex gap-2">
+                            <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this course's detail" href="{{ route('courses.show', $course->slug) }}"><i class="ti ti-eye"></i></a>
+                            <a class="btn btn-sm btn-primary" id="edit" data-bs-toggle="tooltip" data-bs-title="Edit this course" href="{{ route('courses.edit', $course->slug) }}"><i class="ti ti-edit"></i></a>
                             <form action="{{ route('courses.destroy', $course->slug) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button id="delete" class="btn btn-sm btn-danger delete-course-btn">
-                                    <i class="ti ti-trash"></i> Delete
-                                </button>
+                                <button class="btn btn-sm btn-danger delete-course-btn" id="delete" data-bs-toggle="tooltip" data-bs-title="Delete this course" type="submit"><i class="ti ti-trash"></i></button>
                             </form>
                         </div>
                     </td>
-                    <td>{{ $last_edited_by }}<br>({{ $course->updated_at }})</td>
                 </tr>
-                {{-- @endfor --}}
             @endforeach
         </tbody>
     </table>
@@ -96,26 +75,10 @@
                 searching: true,
                 info: true,
                 stateSave: true,
-                lengthMenu: [5, 10, 25, 50, 100]
+                lengthMenu: [5, 10, 25, 50, 100],
             });
             $('.dataTables_info, .dataTables_paginate').addClass('mt-4 mb-5');
             $('.dataTables_length').addClass('mb-4');
-
-            tippy('#detail', {
-                content: 'View course detail',
-            });
-            tippy('#edit', {
-                content: 'Edit course',
-            });
-            tippy('#delete', {
-                content: 'Delete course',
-            });
-            tippy('#Draft', {
-                content: 'Course ini masih draft, publish course ini agar bisa diakses oleh user',
-            });
-            tippy('#Published', {
-                content: 'Course ini sudah bisa diakses oleh user',
-            });
         })
     </script>
 @endsection

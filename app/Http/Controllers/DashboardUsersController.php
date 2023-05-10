@@ -13,7 +13,8 @@ class DashboardUsersController extends Controller
     public function index()
     {
         return view('pages.dashboard.users.index', [
-            'title' => 'Users Management'
+            'title' => 'Users Management',
+            'users' => User::get()
         ]);
     }
 
@@ -38,7 +39,10 @@ class DashboardUsersController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('pages.dashboard.users.show', [
+            'title' => $user->full_name,
+            'user' => $user
+        ]);
     }
 
     /**
@@ -52,9 +56,25 @@ class DashboardUsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user) //AJAX request in resources\views\pages\dashboard\users\index.blade.php
     {
-        //
+        if ($user->id == auth()->user()->id) {
+            return response()->json([
+                'alert' => 'warning',
+                'html' => 'Untuk alasan keamanan, kamu tidak diperbolehkan mengubah role kamu sendiri.',
+            ]);
+        }
+        $role = $request->role == 1 ? 'Admin' : 'Student';
+        $background = $request->role == 1 ? 'danger' : 'success';
+        $badge = "<span class='badge text-bg-$background'>$role</span>";
+        $user->update(['is_admin' => $request->role]);
+        return response()->json([
+            'alert' => 'info',
+            'html' => "Role <strong>$user->full_name</strong> sekarang adalah $badge",
+            'badge' => $badge,
+            'id' => $user->id,
+            'role' => $request->role
+        ]);
     }
 
     /**
@@ -62,6 +82,17 @@ class DashboardUsersController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if ($user->id == auth()->user()->id) {
+            return redirect(route('users.index'))
+                ->with('alert', 'info')
+                ->with('text', 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akunmu sendiri.');
+        }
+        $user->delete();
+        if (!is_null($user->avatar)) {
+            unlink(public_path($user->avatar));
+        }
+        return redirect(route('users.index'))
+            ->with('alert', 'success')
+            ->with('html', "Akun <strong>$user->full_name</strong> berhasil dihapus");
     }
 }

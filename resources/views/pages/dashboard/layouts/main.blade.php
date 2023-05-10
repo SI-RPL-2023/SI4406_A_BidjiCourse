@@ -5,12 +5,9 @@
     <title>{{ $title ?? config('app.name') }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
     @include('layouts.head-import')
-
     @yield('head-script')
-
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -129,44 +126,26 @@
             box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
         }
     </style>
-
     @yield('style')
-
-    <div class="loading-animation">
+    {{-- <div class="loading-animation">
         <x-loader.pencil></x-loader.pencil>
-    </div>
+    </div> --}}
 </head>
 
 <body>
     @include('pages.dashboard.layouts.navbar')
-
     <div class="container-fluid">
         <div class="row">
             @include('pages.dashboard.layouts.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" data-aos="fade-up" data-aos-duration="1000">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" data-aos="fade-up" data-aos-duration="500">
                 @yield('main')
             </main>
         </div>
     </div>
-
     @include('layouts.body-import')
-
     @yield('script')
-
-    @if (session()->has('alert'))
-        <script>
-            Swal.fire({
-                icon: '{{ session('alert') }}',
-                title: '{{ session('title') }}',
-                text: '{{ session('text') }}',
-                html: '{!! session('html') !!}',
-                confirmButtonColor: '#0d6efd',
-            });
-        </script>
-    @endif
-
+    @include('layouts.alert')
     <div style="margin-top: 300px"></div>
-
 </body>
 
 </html>

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Course;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\DashboardCoursesRequest;
 
 class DashboardCoursesController extends Controller
 {
@@ -17,7 +20,7 @@ class DashboardCoursesController extends Controller
     {
         return view('pages.dashboard.courses.index', [
             'title' => 'Courses Management',
-            'courses' => Course::get()
+            'courses' => Course::with('category')->get()
         ]);
     }
 
@@ -26,70 +29,87 @@ class DashboardCoursesController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.courses.add', [
-            'title' => 'Add New Course'
+        return view('pages.dashboard.courses.form', [
+            'title' => 'Add New Course',
+            'categories' => Category::get()
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeBACKUP(Request $request)
     {
-        // mencegah agar slug tidak diubah
-        if ($request->slug != Str::slug($request->title, '-')) {
-            return redirect('/dashboard/courses')
-                ->with('alert', 'error')
-                ->with('title', 'Submit error')
-                ->with('text', 'Error ini terjadi karena judul dan slug tidak selaras. Apakah anda mencoba menggantinya secara manual?');
-        }
-        if ($request->submit === 'draft') {
+        $data = $request->all();
+        $data['slug'] = Str::slug($data['title']);
+        if ($data['submit'] === 'draft') {
             $draft = true;
-        } elseif ($request->submit === 'done') {
+        } elseif ($data['submit'] === 'done') {
             $draft = false;
         } else {
-            return redirect('/dashboard/courses')
+            return redirect(route('courses.index'))
                 ->with('alert', 'error')
                 ->with('title', 'Submit error')
-                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah anda mencoba menggantinya secara manual?');
+                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah kamu mencoba menggantinya secara manual?');
         };
-        $courseData = $request->validate(
-            [
-                'title' => ['required', 'unique:courses'],
-                'slug' => ['required', 'unique:courses'],
-                'cover' => ['image', 'file', 'max:5120', 'required'],
-                'desc' => 'required',
-                'body' => 'required',
-            ],
-            array(
-                'title.required' => 'Judul course harus di isi.',
-                'title.unique' => 'Course ini sudah ada.',
-                'slug.required' => 'Judul course belum diisi.',
-                'slug.unique' => 'Slug tidak tersedia, silahkan cari judul lain.',
-                'cover.required' => 'Cover harus dipilih.',
-                'cover.image' => 'File tidak didukung.',
-                'cover.max' => 'Ukuran file max 5mb.',
-                'desc.required' => 'Deskripsi harus diisi.',
-                'body.required' => 'Materi harus diisi.',
-            )
-        );
-        $cover_file_name = $request->slug . '.' . $request->cover->extension();
-        $request->file('cover')->move(public_path('/img/courses'), $cover_file_name);
-        $courseData['cover'] = '/img/courses/' . $cover_file_name;
-        $courseData['last_edited_by'] = auth()->user()->id;
-        $courseData['draft'] = $draft;
-        Course::create($courseData);
-        return redirect('/dashboard/courses')
-            ->with('alert', 'success')
-            ->with('html', 'Course <strong>' . $request->title . '</strong> berhasil ditambahkan!');
+        $rules = [
+            'title' => ['required', 'unique:courses'],
+            'slug' => ['required', 'unique:courses'],
+            'cover' => ['image', 'file', 'max:5120', 'required'],
+            'desc' => 'required',
+            'body' => 'required',
+            'category_id' => ['required', Rule::in(Category::pluck('id')->all())],
+        ];
+        $messages = [
+            'title.required' => 'Judul course harus di isi.',
+            'title.unique' => 'Course ini sudah ada.',
+            'slug.required' => 'Judul course belum diisi.',
+            'slug.unique' => 'Slug tidak tersedia, silahkan cari judul lain.',
+            'cover.required' => 'Cover harus dipilih.',
+            'cover.image' => 'File tidak didukung.',
+            'cover.max' => 'Ukuran file max 5mb.',
+            'desc.required' => 'Deskripsi harus diisi.',
+            'body.required' => 'Materi harus diisi.',
+            'category_id.required' => 'Mata pelajaran harus dipilih.',
+            'category_id.in' => 'Mata pelajaran tidak tersedia, silahkan tambahkan terlebih dahulu.',
+        ];
+        $validator = Validator::make($data, $rules, $messages);
+        if ($validator->passes()) {
+            $cover = $data['slug'] . '.' . $data['cover']->extension();
+            $request->file('cover')->move(public_path('/img/courses'), $cover);
+            $data['cover'] = '/img/courses/' . $cover;
+            $data['added_by'] = auth()->user()->full_name;
+            $data['last_edited_by'] = auth()->user()->full_name;
+            $data['draft'] = $draft;
+            Course::create($data);
+            return redirect('/dashboard/courses')
+                ->with('alert', 'success')
+                ->with('html', 'Course <strong>' . $data['title'] . '</strong> berhasil ditambahkan!');
+        }
+        return redirect()->back()->withErrors($validator)->withInput()->with('slug', $data['slug']);
     }
+    public function store(DashboardCoursesRequest $request)
+    {
+        $data = $request->validated();
+        $cover = "{$data['slug']}.{$data['cover']->extension()}";
+        $request->file('cover')->move(public_path('/img/courses'), $cover);
+        $data['cover'] = "/img/courses/$cover";
+        $data['added_by'] = auth()->user()->full_name;
+        $data['last_edited_by'] = auth()->user()->full_name;
+        $data['draft'] = $data['submit'] == 'draft' ? 1 : ($data['submit'] == 'done' ? 0 : 1);
+        Course::create($data);
+        return redirect(route('courses.show', $data['slug']))
+            ->with('alert', 'success')
+            ->with('html', "Course <strong>{$data['title']}</strong> berhasil ditambahkan!");
+    }
+
 
     /**
      * Display the specified resource.
      */
     public function show(Course $course)
     {
-        return view('pages.dashboard.courses.detail', [
+        return view('pages.dashboard.courses.show', [
             'title' => $course->title,
             'course' => $course
         ]);
@@ -100,48 +120,45 @@ class DashboardCoursesController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('pages.dashboard.courses.edit', [
+        return view('pages.dashboard.courses.form', [
             'title' => 'Edit Course: ' . $course->title,
             'course' => $course,
+            'categories' => Category::get()
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Course $course)
+    public function updateBACKUP(Request $request, Course $course)
     {
-        // mencegah agar slug tidak diubah
-        if ($request->slug != Str::slug($request->title, '-')) {
-            return redirect('/dashboard/courses/' . $course->slug . '/edit')
-                ->with('alert', 'error')
-                ->with('title', 'Submit error')
-                ->with('text', 'Error ini terjadi karena judul dan slug tidak selaras. Apakah anda mencoba menggantinya secara manual?');
-        }
+        $data = $request->all();
+        $data['slug'] = Str::slug($data['title']);
         if ($request->submit === 'draft') {
             $draft = true;
         } elseif ($request->submit === 'done') {
             $draft = false;
         } else {
-            return redirect('/dashboard/courses')
+            return redirect(route('courses.index'))
                 ->with('alert', 'error')
                 ->with('title', 'Submit error')
-                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah anda mencoba menggantinya secara manual?');
+                ->with('text', 'Error ini terjadi karena server tidak dapat membaca value submit yang ada. Apakah kamu mencoba menggantinya secara manual?');
         };
         $rules = [
             'desc' => 'required',
             'body' => 'required',
+            'category_id' => ['required', Rule::in(Category::pluck('id')->all())],
         ];
-        if ($request->title != $course->title) {
+        if ($data['title'] != $course->title) {
             $rules['title'] = ['required', 'unique:courses'];
         };
-        if ($request->slug != $course->slug) {
+        if ($data['slug'] != $course->slug) {
             $rules['slug'] = ['required', 'unique:courses'];
         }
-        if ($request->cover) {
+        if (isset($data['cover'])) {
             $rules['cover'] = ['image', 'file', 'max:5120', 'required'];
         };
-        $courseData = $request->validate($rules, array(
+        $messages = [
             'title.required' => 'Judul course harus di isi.',
             'title.unique' => 'Course ini sudah ada.',
             'slug.required' => 'Judul course belum diisi.',
@@ -151,24 +168,63 @@ class DashboardCoursesController extends Controller
             'cover.max' => 'Ukuran file max 5mb.',
             'desc.required' => 'Deskripsi harus diisi.',
             'body.required' => 'Materi harus diisi.',
-        ));
-        if ($request->cover) {
-            unlink(public_path($course->cover));
-            $cover_file_name = $request->slug . '.' . $request->cover->extension();
-            $request->file('cover')->move(public_path('img/courses'), $cover_file_name);
-            $courseData['cover'] = '/img/courses/' . $cover_file_name;
-        } elseif (!$request->cover && $request->slug != $course->slug) {
-            $file_extension = '.' . pathinfo($course->cover, PATHINFO_EXTENSION);
-            $new_path = '/img/courses/' . $request->slug . $file_extension;
-            File::move(public_path($course->cover), public_path($new_path));
-            $courseData['cover'] = $new_path;
+            'category_id.required' => 'Mata pelajaran harus dipilih.',
+            'category_id.in' => 'Mata pelajaran tidak tersedia, silahkan tambahkan terlebih dahulu.',
+        ];
+        $validator = Validator::make($data, $rules, $messages);
+        if ($validator->passes()) {
+            if (isset($data['cover'])) {
+                unlink(public_path($course->cover));
+                $cover = $data['slug'] . '.' . $data['cover']->extension();
+                $request->file('cover')->move(public_path('img/courses'), $cover);
+                $data['cover'] = '/img/courses/' . $cover;
+            } elseif (!isset($data['cover']) && $data['slug'] != $course->slug) {
+                $file_extension = '.' . pathinfo($course->cover, PATHINFO_EXTENSION);
+                $new_path = '/img/courses/' . $data['slug'] . $file_extension;
+                File::move(public_path($course->cover), public_path($new_path));
+                $data['cover'] = $new_path;
+            };
+            $data['last_edited_by'] = auth()->user()->full_name;
+            $data['draft'] = $draft;
+            $course->update($data);
+            return redirect(route('courses.index'))
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->with('alert', 'success')
+                ->with('html', 'Course <strong>' . $course->title . '</strong> berhasil diupdate!');
+        }
+        return redirect()->back()->withErrors($validator)->withInput()->with('slug', $data['slug']);
+    }
+    public function update(DashboardCoursesRequest $request, Course $course)
+    {
+        $data = $request->validated();
+        if (isset($data['cover'])) {
+            try {
+                unlink(public_path($course->cover));
+            } catch (\Exception $e) {
+                // Do nothing
+            }
+            $cover = $data['slug'] . '.' . $data['cover']->extension();
+            $request->file('cover')->move(public_path('img/courses'), $cover);
+            $data['cover'] = "/img/courses/$cover";
+        } elseif (!isset($data['cover']) && $data['slug'] != $course->slug) {
+            try {
+                $file_extension = pathinfo($course->cover, PATHINFO_EXTENSION);
+                $new_path = "/img/courses/{$data['slug']}.$file_extension";
+                File::move(public_path($course->cover), public_path($new_path));
+                $data['cover'] = $new_path;
+            } catch (\Exception $e) {
+                // Do nothing
+            }
         };
-        $courseData['last_edited_by'] = auth()->user()->id;
-        $courseData['draft'] = $draft;
-        Course::find($course->id)->update($courseData);
-        return redirect('/dashboard/courses')
+        $data['last_edited_by'] = auth()->user()->full_name;
+        $data['draft'] = $data['submit'] == 'draft' ? 1 : ($data['submit'] == 'done' ? 0 : 1);
+        $course->update($data);
+        return redirect(route('courses.show', $data['slug']))
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
             ->with('alert', 'success')
-            ->with('html', 'Course <strong>' . $course->title . '</strong> berhasil diupdate!');
+            ->with('html', "Course <strong>{$data['title']}</strong> berhasil diupdate!");
     }
 
     /**
@@ -178,16 +234,8 @@ class DashboardCoursesController extends Controller
     {
         $course->delete();
         unlink(public_path($course->cover));
-        return redirect('/dashboard/courses')
+        return redirect(route('courses.index'))
             ->with('alert', 'success')
             ->with('html', 'Course <strong>' . $course->title . '</strong> berhasil dihapus!');
-    }
-
-        /**
-     * Create a slug from resource's title.
-     */
-    public function createSlug(Request $request)
-    {
-        return Str::slug($request->title, '-');
     }
 }

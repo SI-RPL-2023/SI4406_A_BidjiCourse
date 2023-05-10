@@ -105,7 +105,7 @@
                         style="color: black;">Masuk Sekarang</a></p>
             </div>
             <p class="text-secondary text-center">
-                Dengan melakukan pendaftaran, Anda setuju dengan
+                Dengan melakukan pendaftaran, Kamu setuju dengan
                 <a href="">syarat & ketentuan Bidji Course.</a>
             </p>
         </div>

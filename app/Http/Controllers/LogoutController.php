@@ -13,8 +13,8 @@ class LogoutController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         session()->flush();
-        return redirect('/')
-            ->with('alert', 'success')
-            ->with('text', 'Anda berhasil logout.');
+        return redirect(route('index'))
+            ->with('toast', 'success')
+            ->with('text', 'Kamu berhasil logout.');
     }
 }

@@ -3,14 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasUlids;
 
     /**
      * The attributes that are mass assignable.
@@ -38,8 +40,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function courses()
+    // public function courses()
+    // {
+    //     return $this->hasMany(Course::class);
+    // }
+
+    public function quizResults()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(QuizResult::class);
     }
+
+    // public function favourites()
+    // {
+    //     return $this->hasMany(Favourite::class);
+    // }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Course;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,7 +16,11 @@ class DashboardController extends Controller
     public function index()
     {
         return view('pages.dashboard.index', [
-            'title' => 'Bidji Course | Dashboard'
+            'title' => 'Bidji Course | Dashboard',
+            'courses' => Course::count(),
+            'categories' => Category::count(),
+            'admins' => User::where('is_admin', true)->count(),
+            'students' => User::where('is_admin', false)->count(),
         ]);
     }
 
@@ -62,5 +70,13 @@ class DashboardController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Create a slug from a string.
+     */
+    public function createSlug(Request $request)
+    {
+        return Str::slug($request->string);
     }
 }
