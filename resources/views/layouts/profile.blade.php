@@ -101,6 +101,7 @@
                                         <div class="d-flex align-items-center gap-3">
                                             <img class="img-fluid rounded" id="avatar-preview" src="{{ $avatar_src }}" alt="Profile" style="height: 120px; object-fit: cover; aspect-ratio: 1/1;">
                                             <input class="d-none form-control" id="avatar-input" id="avatar" name="avatar" type="file" accept="image/*">
+                                            <input id="remove-avatar" type="hidden" name="remove_avatar" value="0">
                                             <span>
                                                 Gambar Profile Anda sebaiknya memiliki rasio 1:1 dan berukuran tidak lebih dari 2MB
                                             </span>
@@ -226,6 +227,7 @@
             // Avatar preview
             const avatarPreview = $('#avatar-preview');
             const avatarInput = $('#avatar-input');
+            const removeAvatar = $('#remove-avatar');
             const uploadButton = $('#upload-btn');
             const removeButton = $('#remove-btn');
             const generateButton = $('#generate-btn');
@@ -250,6 +252,7 @@
                     avatarPreview.attr('src', avatarSrc);
                     uploadButton.removeClass('disabled');
                     profileSaveButton.removeClass('disabled');
+                    removeAvatar.val('0');
                     avatarInput.val('');
                     swalCustom.fire({
                         icon: 'warning',
@@ -259,6 +262,7 @@
                     avatarPreview.attr('src', avatarSrc);
                     uploadButton.removeClass('disabled');
                     profileSaveButton.removeClass('disabled');
+                    removeAvatar.val('0');
                     avatarInput.val('');
                     swalCustom.fire({
                         icon: 'warning',
@@ -267,6 +271,7 @@
                 } else {
                     let reader = new FileReader();
                     reader.onload = function(e) {
+                        removeAvatar.val('0');
                         removeButton.removeClass('disabled');
                         uploadButton.removeClass('disabled');
                         profileSaveButton.removeClass('disabled');
@@ -319,6 +324,7 @@
                             avatarPreview.attr('src', imageUrl);
                             avatarPreview.fadeIn();
                         });
+                        removeAvatar.val('0');
                         avatarInput.prop('files', fileList);
                         $(this).html(html);
                         removeButton.removeClass('disabled');
@@ -353,6 +359,7 @@
                 }).then((result) => {
                     if (result.value) {
                         avatarInput.val('');
+                        removeAvatar.val('1');
                         $(this).addClass('disabled');
                         avatarPreview.fadeOut(function() {
                             avatarPreview.attr('src', `{{ '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg' }}`);
