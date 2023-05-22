@@ -66,7 +66,7 @@
                                     <div class="col-lg-3 col-md-4 label">
                                         <i class="ti ti-calendar"></i> Born Date
                                     </div>
-                                    <div class="col-lg-9 col-md-8 fw-bold {{ is_null(auth()->user()->born_date) ? 'fst-italic text-danger' : '' }}">{{ is_null(auth()->user()->born_date) ? 'not_set' : \Carbon\Carbon::parse(auth()->user()->born_date)->format('d F Y') . \Carbon\Carbon::parse(auth()->user()->born_date)->diff(now())->format(' • %y thn') }}</div>
+                                    <div class="col-lg-9 col-md-8 fw-bold {{ is_null(auth()->user()->born_date) ? 'fst-italic text-danger' : '' }}">{{ is_null(auth()->user()->born_date)? 'not_set': \Carbon\Carbon::parse(auth()->user()->born_date)->format('d F Y') .\Carbon\Carbon::parse(auth()->user()->born_date)->diff(now())->format(' • %y thn') }}</div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-3 col-md-4 label">
@@ -236,25 +236,29 @@
                 const fileType = file["type"];
                 const validImageTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/jfif", "image/webp"];
                 const avatarSrc = '{{ $avatar_src }}';
-                const invalidTypeText = '<br>' +
-                    '<div class="d-flex d-grid gap-2 mt-2 justify-content-center">' +
-                    '<span class="badge text-bg-primary">PNG</span>' +
-                    '<span class="badge text-bg-secondary">JPG</span>' +
-                    '<span class="badge text-bg-success">JPEG</span>' +
-                    '<span class="badge text-bg-danger">GIF</span>' +
-                    '<span class="badge text-bg-warning">JFIF</span>' +
-                    '<span class="badge text-bg-info">WEBP</span>' +
-                    '</div>'
+                const invalidTypeText =
+                    `<div class="d-flex d-grid gap-2 mt-2 justify-content-center">
+                        <span class="badge text-bg-primary">PNG</span>
+                        <span class="badge text-bg-secondary">JPG</span>
+                        <span class="badge text-bg-success">JPEG</span>
+                        <span class="badge text-bg-danger">GIF</span>
+                        <span class="badge text-bg-warning">JFIF</span>
+                        <span class="badge text-bg-info">WEBP</span>
+                    </div>`
                 const invalidSizeText = '<span class="badge text-bg-dark">2MB</span>'
                 if ($.inArray(fileType, validImageTypes) < 0) {
                     avatarPreview.attr('src', avatarSrc);
+                    uploadButton.removeClass('disabled');
+                    profileSaveButton.removeClass('disabled');
                     avatarInput.val('');
                     swalCustom.fire({
                         icon: 'warning',
-                        html: 'Ekstensi file yang didukung: ' + invalidTypeText,
+                        html: 'Ekstensi file yang didukung: <br>' + invalidTypeText,
                     })
                 } else if (file.size > 2097152) {
                     avatarPreview.attr('src', avatarSrc);
+                    uploadButton.removeClass('disabled');
+                    profileSaveButton.removeClass('disabled');
                     avatarInput.val('');
                     swalCustom.fire({
                         icon: 'warning',
