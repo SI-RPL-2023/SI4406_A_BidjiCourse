@@ -14,7 +14,7 @@
             margin-top: 100px;
         }
 
-        html {
+        body {
             background: #f8f9fa
         }
 
@@ -141,7 +141,7 @@
     @php
         $userId = auth()->user()->id;
     @endphp
-    <div class="container-fluid" style="background: #f8f9fa">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 mx-md-5 mb-4">
                 @foreach ($questions as $question)
@@ -149,10 +149,7 @@
                         $quizAttempt = \App\Models\QuizAttempt::where('quiz_question_id', $question->id)
                             ->where('user_id', $userId)
                             ->first();
-                        $selectedAnswerId = null;
-                        if ($quizAttempt) {
-                            $selectedAnswerId = $quizAttempt->quiz_answer_id;
-                        }
+                        $selectedAnswerId = $quizAttempt ? $quizAttempt->quiz_answer_id : null;
                         $flag = \App\Models\QuizAttempt::where('user_id', $userId)
                             ->where('quiz_question_id', $question->id)
                             ->where('flag', true)
@@ -160,9 +157,7 @@
                     @endphp
                     <div class="container rounded bg-white" style="padding: 50px">
                         <h5 class="mb-4">Pertanyaan ke <strong class="fs-3">{{ $questions->currentPage() }}</strong> dari <strong class="fs-5">{{ $questions->total() }}</strong></h5>
-                        <div class="alert alert-light mb-3">
-                            <p>{!! $question->question !!}</p>
-                        </div>
+                        <div class="alert mb-3 border border-1 text-black" style="background-color: #f8f9fa">{!! $question->question !!}</div>
                         <p>Pilih jawabanmu:</p>
                         <div class="ml-5">
                             <form id="quiz_radio" action="{{ route('quiz.store') }}" method="POST">
@@ -224,11 +219,11 @@
                     <div class="btn-container">
                         @foreach ($allQuestions as $question)
                             @php
-                                $quizAttempt = \App\Models\QuizAttempt::where('user_id', $userId)
+                                $isAnswered = \App\Models\QuizAttempt::where('user_id', $userId)
                                     ->where('quiz_question_id', $question->id)
                                     ->whereNotNull('quiz_answer_id')
-                                    ->first();
-                                $isAnswered = !is_null($quizAttempt);
+                                    ->exists();
+                                // $isAnswered = !is_null($quizAttempt);
                                 $isFlagged = \App\Models\QuizAttempt::where('user_id', $userId)
                                     ->where('quiz_question_id', $question->id)
                                     ->where('flag', true)
@@ -263,7 +258,7 @@
                     text_size: 0.1,
                     time: {
                         Days: {
-                            show: {{ $course->quiz->time_limit > 1440 ? 'true' : 'false' }},
+                            show: {{ $course->quiz->time_limit > 86400 ? 'true' : 'false' }},
                             text: "Hari"
                         },
                         Hours: {
@@ -282,6 +277,7 @@
                 });
                 const timeout = setInterval(() => {
                     if (countdown.TimeCircles().getTime() <= 0) {
+                        clearInterval(timeout);
                         swalCustom.fire({
                             icon: 'info',
                             title: 'Waktu Habis',
@@ -291,16 +287,15 @@
                         }).then((result) => {
                             $('.finish-attempt').closest('form').submit();
                         });
-                        clearInterval(timeout)
                     }
                 }, 500);
             @endif
             const quiz_id = `{{ $course->quiz->id }}`;
             $.ajaxSetup({
                 headers: {
-                    'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-            })
+            });
             $('#prev, #next, .finish-attempt, .quiz-nav-button').on('click', function() {
                 loader();
             });
@@ -366,7 +361,7 @@
                         console.error(error);
                         Toast.fire({
                             icon: 'error',
-                            text: "Failed to flag question, please refresh the page and try again",
+                            text: 'Failed to flag question, please refresh the page and try again',
                         })
                     }
                 });
@@ -378,7 +373,7 @@
                     url: url,
                     type: 'POST',
                     data: {
-                        quiz_id: quiz_id
+                        quiz_id: `{{ $course->quiz->id }}`
                     },
                     success: function(response) {
                         console.log(response);
@@ -399,7 +394,7 @@
                         console.error(error);
                         Toast.fire({
                             icon: 'error',
-                            text: "Request failed, please refresh the page and try again",
+                            text: 'Request failed, please refresh the page and try again',
                         })
                     }
                 });

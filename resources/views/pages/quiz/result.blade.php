@@ -8,7 +8,7 @@
             margin-top: 100px;
         }
 
-        html {
+        body {
             background: #f8f9fa
         }
 
@@ -147,10 +147,10 @@
     </style>
 @endsection
 @section('main')
-    <div class="container-fluid bg-body-tertiary">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 mx-md-5 mb-4">
-                <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('index') }}">Home</a></li>
                         <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('materi.index') }}">Courses</a></li>
@@ -162,11 +162,15 @@
                     <table class="table">
                         <tbody>
                             <tr>
+                                <td class="result-title">Attempt</td>
+                                <td class="result-text">{{ $result->attempt }}</td>
+                            </tr>
+                            <tr>
                                 <td class="result-title">Course</td>
                                 <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->title }}</a></td>
                             </tr>
                             <tr>
-                                <td class="result-title">Category</td>
+                                <td class="result-title">Mata Pelajaran</td>
                                 <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->category->name }}</a></td>
                             </tr>
                             <tr>
@@ -183,11 +187,11 @@
                             </tr>
                             <tr>
                                 <td class="result-title">Marks</td>
-                                <td class="result-text">{{ $result->correct_answer }}/{{ $result->total_questions }}</td>
+                                <td class="result-text">{{ $result->correct_answer }} / {{ $result->total_questions }}</td>
                             </tr>
                             <tr>
                                 <td class="result-title">Time taken</td>
-                                <td class="result-text">{{ $result->updated_at->diff($result->created_at)->format('%h jam %i menit %s detik') }}</td>
+                                <td class="result-text">{{ $result->updated_at->diff($result->created_at)->format('%h jam • %i menit • %s detik') }}</td>
                             </tr>
                             <tr>
                                 <td class="result-title">Score</td>
@@ -205,14 +209,13 @@
                     <div class="col-md-8 mx-md-5 mb-4">
                         <div class="container rounded bg-white" style="padding: 50px">
                             <h5 class="mb-4">Pertanyaan ke <strong class="fs-3">{{ $loop->iteration }}</strong> dari <strong class="fs-5">{{ $result->total_questions }}</strong></h5>
-                            <div class="alert alert-light mb-3">
-                                <p>{!! $question->question !!}</p>
+                            <div class="alert border-1 mb-3 border text-black" style="background-color: #f8f9fa">
+                                {!! $question->question !!}
                             </div>
-                            @if ($question->is_correct)
-                                <p>Jawabanmu benar <i class="ti ti-check fs-4 text-success"></i></p>
-                            @else
-                                <p>Jawabanmu kurang tepat <i class="ti ti-x fs-4 text-danger"></i></p>
-                            @endif
+                            <p>
+                                Jawabanmu {{ $question->is_correct ? 'benar' : 'kurang tepat' }} 
+                                <i class="ti ti-{{ $question->is_correct ? 'check' : 'x' }} fs-4 text-{{ $question->is_correct ? 'success' : 'danger' }}"></i>
+                            </p>
                             <div class="ml-5">
                                 <div class="radio-container">
                                     @foreach ($question->answers as $answer)
@@ -225,9 +228,7 @@
                                             <input class="quiz-answer text-bg-danger" type="radio" {{ $answer->selected ? 'checked' : '' }} disabled>
                                             <span>{{ chr(64 + $loop->iteration) }}. {{ $answer->option }}</span>
                                         </label>
-                                        @php
-                                            $radioNumber++;
-                                        @endphp
+                                        <?php $radioNumber++ ?>
                                     @endforeach
                                 </div>
                             </div>
@@ -235,13 +236,15 @@
                                 @foreach ($question->answers as $answer)
                                     @if ($answer->is_correct)
                                         <div class="alert alert-warning mt-3">
-                                            <p>Jawaban yang benar adalah: <br><strong>{{ $answer->option }}</strong></p>
+                                            <strong>Jawaban yang benar adalah:</strong>
+                                            <br>{{ $answer->option }}
                                         </div>
                                     @endif
                                 @endforeach
                             @endif
                             <div class="alert alert-success mt-3">
-                                <p>Penjelasan: <br><strong>{!! $question->answer_explanation !!}</strong></p>
+                                <strong>Penjelasan:</strong>
+                                <br>{!! $question->answer_explanation !!}
                             </div>
                         </div>
                     </div>
