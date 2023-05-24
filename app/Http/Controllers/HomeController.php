@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,7 +13,8 @@ class HomeController extends Controller
     public function index()
     {
         return view('pages.landing-page', [
-            'title' => 'Selamat Datang di Bidji Course'
+            'title' => 'Selamat Datang di Bidji Course',
+            'courses' => Course::where('draft', false)->with('category')->orderByDesc('favorite')->limit(5)->get()
         ]);
     }
 

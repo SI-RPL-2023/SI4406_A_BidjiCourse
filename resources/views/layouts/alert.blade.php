@@ -9,6 +9,7 @@
         });
     </script>
 @endif
+
 @if (session()->has('alert-confirm'))
     <script>
         swalCustom.fire({
@@ -27,6 +28,7 @@
         })
     </script>
 @endif
+
 @if (session()->has('toast'))
     <script>
         Toast.fire({
@@ -35,4 +37,13 @@
             html: `{!! session('html') !!}`,
         })
     </script>
+@endif
+
+@if ($errors->any())
+<script>
+    swalCustom.fire({
+        icon: 'error',
+        text: '{{ $errors->first() }}',
+    })
+</script>
 @endif

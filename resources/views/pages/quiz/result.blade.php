@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('navbar')
-    @include('layouts.navbar-simple', ['route' => route('materi.show', $result->quiz->course->slug), 'title' => $title, 'category' => $result->quiz->course->category->name])
+    @include('layouts.navbar-simple', ['route' => route('activities.index') . '#quiz-histories', 'title' => $title, 'category' => $result->quiz->course->category->name, 'categoryRoute' => route('materi.index', ['category' => $result->quiz->course->category->slug])])
 @endsection
 @section('style')
     <style>
@@ -153,8 +153,8 @@
                 <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('index') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('materi.index') }}">Courses</a></li>
-                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->title }}</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('activities.index') }}">Aktifitas</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('activities.index') . '#quiz-histories' }}">Quiz Histories</a></li>
                         <li class="breadcrumb-item active">{{ $result->quiz->name }}</li>
                     </ol>
                 </nav>
@@ -171,7 +171,7 @@
                             </tr>
                             <tr>
                                 <td class="result-title">Mata Pelajaran</td>
-                                <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->category->name }}</a></td>
+                                <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.index', ['category' => $result->quiz->course->category->slug]) }}">{{ $result->quiz->course->category->name }}</a></td>
                             </tr>
                             <tr>
                                 <td class="result-title">State</td>
@@ -213,7 +213,7 @@
                                 {!! $question->question !!}
                             </div>
                             <p>
-                                Jawabanmu {{ $question->is_correct ? 'benar' : 'kurang tepat' }} 
+                                Jawabanmu {{ $question->is_correct ? 'benar' : 'kurang tepat' }}
                                 <i class="ti ti-{{ $question->is_correct ? 'check' : 'x' }} fs-4 text-{{ $question->is_correct ? 'success' : 'danger' }}"></i>
                             </p>
                             <div class="ml-5">
@@ -228,7 +228,7 @@
                                             <input class="quiz-answer text-bg-danger" type="radio" {{ $answer->selected ? 'checked' : '' }} disabled>
                                             <span>{{ chr(64 + $loop->iteration) }}. {{ $answer->option }}</span>
                                         </label>
-                                        <?php $radioNumber++ ?>
+                                        <?php $radioNumber++; ?>
                                     @endforeach
                                 </div>
                             </div>
@@ -253,7 +253,7 @@
             <div class="col-md-4">
                 <div class="sidebar">
                     <h3 class="quiz-nav">Quiz Navigation</h3>
-                    <span class="finish-review" style="cursor: pointer;" x-on:click="document.location.href = `{{ route('materi.show', $result->quiz->course->slug) }}`" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
+                    <span class="finish-review" style="cursor: pointer;" x-on:click="document.location.href = `{{ route('activities.index') . '#quiz-histories' }}`" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
                         <i x-bind:class="hover ? 'ti ti-circle-check' : ''"></i>
                         Finish review...
                     </span>

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('navbar')
-    @include('layouts.navbar-simple', ['route' => route('materi.show', $course->slug), 'title' => $title, 'category' => $course->category->name])
+    @include('layouts.navbar-simple', ['route' => route('materi.show', $course->slug), 'title' => $title, 'category' => $course->category->name, 'categoryRoute' => route('materi.index', ['category' => $course->category->slug])])
 @endsection
 @if ($course->quiz->time_limit)
     @section('head-script')
@@ -157,7 +157,7 @@
                     @endphp
                     <div class="container rounded bg-white" style="padding: 50px">
                         <h5 class="mb-4">Pertanyaan ke <strong class="fs-3">{{ $questions->currentPage() }}</strong> dari <strong class="fs-5">{{ $questions->total() }}</strong></h5>
-                        <div class="alert mb-3 border border-1 text-black" style="background-color: #f8f9fa">{!! $question->question !!}</div>
+                        <div class="alert border-1 mb-3 border text-black" style="background-color: #f8f9fa">{!! $question->question !!}</div>
                         <p>Pilih jawabanmu:</p>
                         <div class="ml-5">
                             <form id="quiz_radio" action="{{ route('quiz.store') }}" method="POST">

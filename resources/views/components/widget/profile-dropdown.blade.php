@@ -16,24 +16,20 @@
     }
 </style>
 @php
-    if (is_null(auth()->user()->avatar)) {
-        $avatar_src = '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg';
-    } else {
-        $avatar_src = auth()->user()->avatar;
-    }
+    $avatar_src = is_null(auth()->user()->avatar) ? '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg' : auth()->user()->avatar;
 @endphp
 <div class="dropdown" x-data="{ open: false }" x-on:click="open = !open" x-on:click.away="open = false" x-on:mouseenter="open = true" x-on:mouseleave="open = false">
     <div class="dropdown-toggle d-flex align-items-center gap-2" type="button">
-        {{ explode(' ', auth()->user()->full_name)[0] }}
         <img class="rounded-circle img-fluid border-3 border-warning border" src="{{ $avatar_src }}" alt="avatar" style="width: 35px; height: 35px; object-fit: cover">
+        {{ explode(' ', auth()->user()->full_name)[0] }}
     </div>
     <template x-if="open" x-transition>
         <ul class="dropdown-menu d-block">
             <li>
-                <a class="dropdown-item" href=""><i class="ti ti-settings"></i> Pengaturan</a>
+                <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="ti ti-settings"></i> Pengaturan</a>
             </li>
             <li>
-                <a class="dropdown-item text-warning" href=""><i class="ti ti-star-filled"></i> Favorite</a>
+                <a class="dropdown-item text-warning" href="{{ route('favorites.index') }}"><i class="ti ti-bookmark-filled"></i> Favorite</a>
             </li>
             <li>
                 <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="ti ti-logout"></i> Logout</a>

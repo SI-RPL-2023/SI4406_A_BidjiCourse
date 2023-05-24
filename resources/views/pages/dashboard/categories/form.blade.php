@@ -62,7 +62,7 @@
                 delayTimer = setTimeout(() => {
                     $.ajax({
                         headers: {
-                            'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
                         data: {

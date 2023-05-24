@@ -50,8 +50,13 @@ class User extends Authenticatable
         return $this->hasMany(QuizResult::class);
     }
 
-    // public function favourites()
-    // {
-    //     return $this->hasMany(Favourite::class);
-    // }
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function activitites()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

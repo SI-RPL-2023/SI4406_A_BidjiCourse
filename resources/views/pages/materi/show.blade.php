@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('navbar')
-    @include('layouts.navbar-simple', ['route' => route('materi.index'), 'title' => $course->title, 'category' => $course->category->name])
+    @include('layouts.navbar-simple', ['route' => route('materi.index'), 'title' => $course->title, 'category' => $course->category->name, 'categoryRoute' => route('materi.index', ['category' => $course->category->slug])])
 @endsection
 @section('footer')
     @include('layouts.footer')
@@ -72,7 +72,7 @@
                         document.location.href = $(this).attr('href');
                         loader();
                     }
-                })
+                });
             });
             $('.continue-quiz').on('click', function(e) {
                 loader();

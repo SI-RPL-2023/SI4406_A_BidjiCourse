@@ -4,11 +4,7 @@
 @section('main')
     @php
         $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akun kamu sendiri' : 'Delete this user';
-        if (is_null($user->avatar)){
-            $avatar_src = '/img/assets/' . ($user->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg';
-        } else {
-            $avatar_src = $user->avatar;
-        }
+        $avatar_src = is_null(auth()->user()->avatar) ? '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg' : auth()->user()->avatar;
     @endphp
     <div class="container mb-5 mt-4 rounded bg-white">
         <div class="row">
@@ -61,11 +57,11 @@
                         </div>
                         <div class="col-md-12">
                             <label class="labels">Tanggal Lahir</label>
-                            <input class="form-control text-secondary {{ is_null($user->bord_date) ? 'fst-italic' : '' }}" type="text" value="{{ is_null($user->born_date) ? 'not_set' : \Carbon\Carbon::parse($user->born_date)->format('d F Y') }}" readonly>
+                            <input class="form-control {{ is_null($user->born_date) ? 'text-danger fst-italic' : 'text-secondary' }}" type="text" value="{{ is_null($user->born_date) ? 'not_set' : \Carbon\Carbon::parse($user->born_date)->format('d F Y') }}" readonly>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="labels">Nomor Telepon</label>
-                            <input class="form-control text-secondary {{ is_null($user->number) ? 'fst-italic' : '' }}" type="text" value="{{ is_null($user->number) ? 'not_set' : $user->number }}" readonly>
+                            <input class="form-control {{ is_null($user->number) ? 'text-danger fst-italic' : 'text-secondary' }}" type="text" value="{{ is_null($user->number) ? 'not_set' : '(+62) '.$user->number }}" readonly>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="labels">Created At</label>

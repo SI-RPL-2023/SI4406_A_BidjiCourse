@@ -6,6 +6,9 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MateriController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardUsersController;
@@ -30,7 +33,7 @@ use App\Http\Controllers\DashboardCategoriesController;
 
 Route::middleware(['guest'])->group(function () {
     //LoginController
-    Route::resource('login', LoginController::class)->except('show'); 
+    Route::resource('login', LoginController::class)->except('show');
     //RegisterController
     Route::resource('register', RegisterController::class)->except('show');
 });
@@ -38,11 +41,22 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     //LogoutController
     Route::get('logout', [LogoutController::class, 'logout'])->name('logout');
+    //ProfileController
+    Route::patch('profile/update/theme', [ProfileController::class, 'updateTheme'])->name('profile.update.theme');
+    Route::patch('profile/update/profiles', [ProfileController::class, 'updateProfiles'])->name('profile.update.profiles');
+    Route::patch('profile/update/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 });
 
 Route::middleware(['auth', 'not_admin'])->group(function () {
     //MateriController
     Route::resource('materi', MateriController::class);
+    Route::get('materi/filter', [MateriController::class, 'filter'])->name('materi.filter');
+    //FavoriteController
+    Route::resource('favorites', FavoriteController::class)->except('show');
+    //ActivityController
+    Route::resource('activities', ActivityController::class)->except('show');
+    //ProfileController
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
     //QuizController
     Route::resource('quiz', QuizController::class);
     Route::get('quiz/result/{ulid}', [QuizController::class, 'result'])->name('quiz.result');
@@ -58,7 +72,8 @@ Route::middleware(['not_admin'])->group(function () {
 Route::middleware(['admin'])->group(function () {
     //DashboardController
     Route::resource('dashboard', DashboardController::class)->except('show');
-    Route::post('getSlug', [DashboardController::class, 'createSlug'])->name('getSlug');
+    Route::get('dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
+    Route::post('dashboard/get-slug', [DashboardController::class, 'createSlug'])->name('getSlug');
     //DashboardUsersController
     Route::resource('dashboard/users', DashboardUsersController::class);
     //DashboardQuizzesController
