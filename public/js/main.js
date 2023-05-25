@@ -1,6 +1,6 @@
-NProgress.configure({
-    showSpinner: false,
-});
+// NProgress.configure({
+//     showSpinner: false,
+// });
 
 NProgress.start();
 
@@ -47,6 +47,7 @@ $(document).ready(function () {
     setTimeout(function () {
         $("main").removeAttr("data-aos data-aos-duration");
     }, 500);
+
     $(document).on("submit", "form", function () {
         loader();
     });
