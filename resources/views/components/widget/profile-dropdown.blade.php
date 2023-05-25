@@ -26,13 +26,17 @@
     <template x-if="open" x-transition>
         <ul class="dropdown-menu d-block">
             <li>
-                <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="ti ti-settings"></i> Pengaturan</a>
+                <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="text-primary ti ti-settings"></i> Pengaturan</a>
             </li>
             <li>
-                <a class="dropdown-item text-warning" href="{{ route('favorites.index') }}"><i class="ti ti-bookmark-filled"></i> Favorite</a>
+                <a class="dropdown-item" href="{{ route('activities.index') }}"><i class="text-success ti ti-history"></i> Aktivitas</a>
             </li>
             <li>
-                <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="ti ti-logout"></i> Logout</a>
+                <a class="dropdown-item" href="{{ route('favorites.index') }}"><i class="text-warning ti ti-bookmarks"></i> Favorit</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" href="{{ route('logout') }}"><i class="text-danger ti ti-logout"></i> Logout</a>
             </li>
         </ul>
     </template>
