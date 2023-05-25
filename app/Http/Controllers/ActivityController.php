@@ -17,7 +17,7 @@ class ActivityController extends Controller
         $activities = Activity::where('user_id', auth()->user()->id)->where('status', 'study')->with('course')->orderByDesc('updated_at')->get();
         $quizResults = QuizResult::with('quiz', 'quiz.course')->orderByDesc('updated_at')->get();
         return view('pages.activity.index', [
-            'title' => 'Favorite Courses',
+            'title' => 'Your Activities',
             'activities' => $activities,
             'quizResults' => $quizResults,
         ]);
