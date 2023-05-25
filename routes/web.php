@@ -31,6 +31,9 @@ use App\Http\Controllers\DashboardCategoriesController;
 //     return redirect(route('index'));
 // });
 
+//MateriController
+Route::get('materi/search/{keyword}', [MateriController::class, 'search'])->name('materi.search');
+
 Route::middleware(['guest'])->group(function () {
     //LoginController
     Route::resource('login', LoginController::class)->except('show');
@@ -50,7 +53,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'not_admin'])->group(function () {
     //MateriController
     Route::resource('materi', MateriController::class);
-    Route::get('materi/filter', [MateriController::class, 'filter'])->name('materi.filter');
     //FavoriteController
     Route::resource('favorites', FavoriteController::class)->except('show');
     //ActivityController
