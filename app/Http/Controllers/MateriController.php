@@ -22,7 +22,7 @@ class MateriController extends Controller
             ->paginate(9)
             ->withQueryString();
         return view('pages.materi.index', [
-            'title' => 'Bidji Course | Materi',
+            'title' => 'Materi',
             'courses' => $courses,
             'categories' => Category::get()
         ]);
@@ -93,5 +93,20 @@ class MateriController extends Controller
     public function destroy(Course $course)
     {
         //
+    }
+
+    /**
+     * Autocomplete ajax.
+     */
+    public function search($keyword)
+    {
+        $titles = Course::select('title')
+            ->where('draft', false)
+            ->where('title', 'LIKE', "%$keyword%")
+            ->limit(5)
+            ->orderBy('title')
+            ->pluck('title')
+            ->toArray();
+        return response()->json($titles);
     }
 }

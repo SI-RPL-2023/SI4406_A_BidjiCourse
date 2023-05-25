@@ -23,17 +23,26 @@
     </style>
 @endsection
 @section('main')
-    <div class="container" style="padding-top: 100px">
+    <div class="container" >
         <h1 class="text-center">Materi</h1>
-        <form action="{{ route('materi.index') }}" method="GET">
-            <input id="hiddenSearch" name="search" type="hidden">
-            <div class="row g-2 justify-content-center d-flex mt-3">
+        <form id="filterForm" action="{{ route('materi.index') }}" method="GET" x-data x-ref="filterForm">
+            <div class="row justify-content-center d-flex mt-3">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <input class="form-control" id="searchBar" name="search" type="search" value="{{ request('search') }}" autocomplete="off" placeholder="Cari materi disini..." required>
+                        <button class="input-group-text text-secondary" type="submit">
+                            <i class="ti ti-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2 justify-content-center d-flex mt-2">
                 <div class="col-md-3">
                     <div class="input-group mb-3">
                         <label class="input-group-text gap-2" for="category">
                             <i class="ti ti-category"></i> Category
                         </label>
-                        <select class="form-select" id="category" name="category">
+                        <select class="form-select" id="category" name="category" x-on:change="$refs.filterForm.submit(); loader()">
                             <option value>Semua</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : null }}>{{ $category->name }}</option>
@@ -46,18 +55,13 @@
                         <label class="input-group-text gap-2" for="sort">
                             <i class="ti ti-arrows-sort"></i> Sort
                         </label>
-                        <select class="form-select" id="sort" name="sort">
+                        <select class="form-select" id="sort" name="sort" x-on:change="$refs.filterForm.submit(); loader()">
                             <option value>Default</option>
                             <option value="title" {{ request('sort') == 'title' ? 'selected' : null }}>Title</option>
                             <option value="new" {{ request('sort') == 'new' ? 'selected' : null }}>Terbaru</option>
                             <option value="old" {{ request('sort') == 'old' ? 'selected' : null }}>Terlama</option>
                         </select>
                     </div>
-                </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary" id="filterApply" type="submit">
-                        <i class="ti ti-check"></i> Apply
-                    </button>
                 </div>
                 @if (request()->all())
                     <div class="col-auto">
@@ -67,6 +71,11 @@
                     </div>
                 @endif
             </div>
+            @if (request()->all() && !$courses->isEmpty())
+                <div class="mt-3 text-center">
+                    <h5>{{ $courses->total() }} materi ditemukan</h5>
+                </div>
+            @endif
         </form>
         @if ($courses->isEmpty())
             <div class="row text-center">
@@ -133,14 +142,6 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            $('#hiddenSearch').val($('#navbarSearch').val());
-            $('#navbarSearch').on('keyup', function() {
-                $('#hiddenSearch').val($(this).val());
-            });
-            $('#navbarSubmit').click(function(e) {
-                e.preventDefault();
-                $('#filterApply').click();
-            });
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
