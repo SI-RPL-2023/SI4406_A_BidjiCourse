@@ -1,7 +1,20 @@
+@section('head-script')
+    <!-- CircleProgress -->
+    <script src="/js/jquery.circle-progress.min.js"></script>
+@endsection
 @php
     $avatar_src = is_null(auth()->user()->avatar) ? '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg' : auth()->user()->avatar;
     $role = auth()->user()->is_admin ? 'Admin' : 'Student';
     $themes = ['default', 'cerulean', 'cosmo', 'flatly', 'journal', 'lumen', 'materia', 'minty', 'sandstone', 'simplex', 'sketchy', 'spacelab', 'united', 'yeti', 'zephyr'];
+    $columnArray = ['email', 'full_name', 'avatar', 'born_date', 'number', 'gender'];
+    $filledColumns = 0;
+    foreach ($columnArray as $column) {
+        if (!is_null(auth()->user()->$column)) {
+            $filledColumns++;
+        }
+    }
+    $profilePercentage = round(($filledColumns / count($columnArray)) * 100);
+    $progressBarColor = $profilePercentage == 100 ? 'LimeGreen' : ($profilePercentage >= 80 ? 'Gold' : ($profilePercentage >= 60 ? 'DarkOrange' : 'Red'));
 @endphp
 <section class="section profile mt-4">
     <div class="row mb-3">
@@ -15,7 +28,7 @@
             </div>
         </div>
         <div class="col-xl-8">
-            <div class="card border shadow">
+            <div class="card border shadow" x-data>
                 <div class="card-body pt-3">
                     <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
@@ -24,7 +37,7 @@
                             </button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" x-ref="profileEditBtn">
                                 <i class="ti ti-user-cog"></i> Edit Profile
                             </button>
                         </li>
@@ -41,8 +54,38 @@
                     </ul>
                     <hr>
                     <div class="tab-content pt-2">
-                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                            <h5 class="card-title fw-bold mb-4 mt-2">Profile Details</h5>
+                        <div class="tab-pane fade show active" id="profile-overview">
+                            <h5 class="card-title fw-bold mb-3 mt-2">Profile Details</h5>
+                            <style>
+                                .circle-progress {
+                                    width: 150px;
+                                    height: auto;
+                                }
+
+                                .circle-progress-value {
+                                    stroke-width: 6px;
+                                    stroke: {{ $progressBarColor }};
+                                    stroke-linecap: round;
+                                }
+
+                                .circle-progress-circle {
+                                    stroke-width: 2px;
+                                }
+                            </style>
+                            <div class="card text-bg-light mb-3 shadow-sm">
+                                <div class="card-body m-3">
+                                    <div id="profileCompletion"></div>
+                                    <h4 class="fw-bold m-0 mt-3">Profile Completion</h4>
+                                    @if ($profilePercentage == 100)
+                                        <p class="mt-3">Anda telah mengisi semua profil dengan lengkap.</p>
+                                    @else
+                                        <p class="mt-3">Dengan melengkapi profil, Anda dapat menikmati layanan Bidji Course dengan maksimal.</p>
+                                        <button class="btn btn-primary btn-sm" x-on:click="$refs.profileEditBtn.click()">
+                                            <span class="fs-6 fw-bold">Lengkapi <i class="ti ti-chevrons-right"></i></span>
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="row-gap-3 grid gap-4">
                                 <div class="row mb-3">
                                     <div class="col-lg-3 col-md-4 label">
@@ -101,7 +144,7 @@
                                         <div class="d-flex align-items-center gap-3">
                                             <img class="img-fluid rounded" id="avatar-preview" src="{{ $avatar_src }}" alt="Profile" style="height: 120px; object-fit: cover; aspect-ratio: 1/1;">
                                             <input class="d-none form-control" id="avatar-input" id="avatar" name="avatar" type="file" accept="image/*">
-                                            <input id="remove-avatar" type="hidden" name="remove_avatar" value="0">
+                                            <input id="remove-avatar" name="remove_avatar" type="hidden" value="0">
                                             <span>
                                                 Gambar Profile Anda sebaiknya memiliki rasio 1:1 dan berukuran tidak lebih dari 2MB
                                             </span>
@@ -224,6 +267,14 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            // Profile completion progress bar
+            $('#profileCompletion').circleProgress({
+                max: 100,
+                value: {{ $profilePercentage }},
+                animationDuration: 2000,
+                textFormat: 'percent',
+            });
+
             // Avatar preview
             const avatarPreview = $('#avatar-preview');
             const avatarInput = $('#avatar-input');
@@ -267,7 +318,7 @@
                     swalCustom.fire({
                         icon: 'warning',
                         html: 'Ukuran file maksimal ' + invalidSizeText,
-                    })
+                    });
                 } else {
                     let reader = new FileReader();
                     reader.onload = function(e) {
