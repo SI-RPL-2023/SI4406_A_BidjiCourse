@@ -12,7 +12,7 @@
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 @endsection
 @section('main')
-    <div class="container" style="padding-top: 100px">
+    <div class="container" >
         <h1 class="text-center">Aktifitas</h1>
         <div class="container-md">
             <div class="row">
@@ -32,9 +32,9 @@
                                             <h5>{{ $activity->course->title }}</h5>
                                         </div>
                                         <div class="col-md-auto d-flex gap-2">
-                                            <a class="text-decoration-none text-primary" href="{{ route('materi.show', $activity->course->slug) }}">Lanjutkan</a>
+                                            <a class="text-decoration-none text-primary" href="{{ route('materi.show', $activity->course->slug) }}"><i class="ti ti-book-2"></i> Lanjutkan</a>
                                             |
-                                            <div class="remove-activities text-decoration-none text-danger" data-slug="{{ $activity->course->slug }}" data-href="{{ route('activities.update', $activity->id) }}" style="cursor: pointer">Hapus Histori</div>
+                                            <div class="remove-activities text-decoration-none text-danger" data-slug="{{ $activity->course->slug }}" data-href="{{ route('activities.update', $activity->id) }}" style="cursor: pointer"><i class="ti ti-trash"></i> Hapus Histori</div>
                                         </div>
                                     </div>
                                 </div>

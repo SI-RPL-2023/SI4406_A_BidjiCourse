@@ -16,7 +16,7 @@
     $profilePercentage = round(($filledColumns / count($columnArray)) * 100);
     $progressBarColor = $profilePercentage == 100 ? 'LimeGreen' : ($profilePercentage >= 80 ? 'Gold' : ($profilePercentage >= 60 ? 'DarkOrange' : 'Red'));
 @endphp
-<section class="section profile mt-4">
+<section class="section profile">
     <div class="row mb-3">
         <div class="col-xl-4">
             <div class="card mb-4 border shadow">

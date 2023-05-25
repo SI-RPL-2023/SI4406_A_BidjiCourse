@@ -13,7 +13,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="container" style="margin-top: 100px">
+    <div class="container" >
         @include('layouts.profile')
     </div>
 @endsection

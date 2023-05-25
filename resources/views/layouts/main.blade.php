@@ -9,6 +9,12 @@
     {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
     @include('layouts.head-import')
     @yield('head-script')
+    <style>
+        /* Needed because of sticky navbar */
+        main {
+            padding-top: 100px;
+        }
+    </style>
     @yield('style')
 </head>
 

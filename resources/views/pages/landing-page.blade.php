@@ -81,13 +81,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        body {
-            overflow-x: hidden;
-            padding-top: 0;
-            padding-bottom: 2rem;
-            color: #5a5a5a;
-        }
-
         .carousel-inner {
             padding: 1em;
         }
@@ -129,26 +122,10 @@
             align-items: center;
         }
 
-        .card img {
-            max-height: 100%;
-        }
-
         @media (max-width: 767px) {
             .card .img-wrapper {
                 height: 17em;
             }
-        }
-
-        .marketing .col-lg-4 {
-            margin-top: 5rem;
-            margin-bottom: 5rem;
-            text-align: center;
-            color: #404040;
-        }
-
-        .marketing .col-lg-4 p {
-            margin-right: .75rem;
-            margin-left: .75rem;
         }
 
         .featurette-divider {
@@ -179,7 +156,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="marketing container" style="margin-top: 100px">
+    <div class="container">
         <div class="row featurette">
             <div class="col-md-7">
                 <h2 class="featurette-heading fw-normal lh-1 mx-5">Belajar disini bisa bikin makin pintar</h2>
@@ -193,7 +170,7 @@
                 <img src="/img/assets/jumbo.svg" width="500" height="500">
             </div>
         </div>
-        <div class="d-flex gap-4 row text-center">
+        <div class="d-flex row gap-4 text-center">
             <div class="col card-cust rounded-1 py-5">
                 <img src="/img/assets/monitor.png" alt="icon" width="150" height="150">
                 <h3 class="fw-semibold my-3">Belajar lewat video</h3>

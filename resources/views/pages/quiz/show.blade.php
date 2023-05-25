@@ -10,10 +10,6 @@
 @endif
 @section('style')
     <style>
-        main {
-            margin-top: 100px;
-        }
-
         body {
             background: #f8f9fa
         }

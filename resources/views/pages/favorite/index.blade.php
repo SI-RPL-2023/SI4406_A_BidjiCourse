@@ -23,7 +23,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="container" style="padding-top: 100px">
+    <div class="container" >
         @if ($courses->isEmpty())
             <div class="row text-center">
                 <div class="col">
