@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class ProfileController extends Controller
     public function index()
     {
         return view('pages.profile.index', [
-            'title' => 'Profile Settings',
+            'title' => 'Profile Settings'
         ]);
     }
 
