@@ -23,12 +23,12 @@
     </style>
 @endsection
 @section('main')
-    <div class="container" style="padding-top: 100px">
+    <div class="container" >
         @if ($courses->isEmpty())
             <div class="row text-center">
                 <div class="col">
                     <img class="img-fluid mb-3" src="/img/assets/bookmark.png" alt="no bookmark" style="width: auto; height: 400px">
-                    <h2>Yah, materi favoritmu kamu kosong nih :(</h2>
+                    <h2>Yah, materi favoritmu kosong nih :(</h2>
                     <p>Jika kamu menemukan materi yang kamu suka, klik icon bookmark. Materi tesebut nanti akan muncul di sini.</p>
                 </div>
             </div>
@@ -40,16 +40,23 @@
                         @foreach ($courses as $course)
                             <div class="col">
                                 <div class="card h-100 shadow-sm" x-data="{ favorite: true, show: false }">
-                                    <img src="{{ $course->cover }}" alt="{{ $course->title }}" style="object-fit: cover;
+                                    <img class="rounded-top" src="{{ $course->cover }}" alt="{{ $course->title }}" style="object-fit: cover;
                                 aspect-ratio: 16 / 9;" x-on:mouseenter="show = true" x-on:mouseleave="show = false">
                                     <div class="favorite-button shadow" data-course-title="{{ $course->title }}" data-course-slug="{{ $course->slug }}" data-bs-toggle="tooltip" data-bs-title="Hapus dari favorite" x-show="show" x-on:click="favorite = !favorite" x-on:mouseenter="show = true" x-on:mouseleave="show = false" x-transition.duration.500ms>
                                         <i class="ti text-warning ti-bookmark-filled fs-5"></i>
                                     </div>
                                     <div class="card-body">
                                         <a class="text-decoration-none" href="" style="font-size: 13px">{{ $course->category->name }}</a>
-                                        <h4 class="card-title">{{ $course->title }}</h4>
+                                        <h4 class="card-title d-flex align-items-center gap-2">
+                                            {{ $course->title }}
+                                            @if ($course->quiz && $course->quiz->status == 'Published')
+                                                <span class="badge bg-success" style="font-size: 11px">Quiz</span>
+                                            @endif
+                                        </h4>
                                         <p class="card-text">{{ $course->desc }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
+                                    </div>
+                                    <div class="card-footer mb-2 border-0 bg-white">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
                                             <div class="badge" style="font-size: 13px; background-color: rgb(234, 234, 234)">
                                                 <span class="text-muted">
                                                     <i class="ti ti-bookmark-filled text-warning"></i>
@@ -64,6 +71,9 @@
                         @endforeach
                     </div>
                 </div>
+            </div>
+            <div class="mt-0">
+                {{ $courses->links() }}
             </div>
         @endif
     </div>
@@ -91,14 +101,18 @@
                         console.log(response);
                         favoriteButton.html(response['icon']);
                         favoriteButton.parent().find('span.favorite-count').text(response['count']);
-                        favoriteButton.parent().parent().fadeOut();
                         Toast.fire({
                             icon: response['toast'],
                             text: response['message']
                         });
                         favoriteCourses--;
                         if (favoriteCourses == 0) {
+                            favoriteButton.parent().parent().animate({
+                                opacity: 0
+                            }, 500);
                             location.reload();
+                        } else {
+                            favoriteButton.parent().parent().fadeOut();
                         }
                     },
                     error: function(error) {
