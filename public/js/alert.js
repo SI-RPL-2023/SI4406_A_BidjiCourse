@@ -29,8 +29,6 @@ $(document).ready(function () {
             html: "Apakah kamu yakin ingin menghapus user ini?",
             icon: "warning",
             showCancelButton: true,
-            
-            
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
@@ -47,8 +45,6 @@ $(document).ready(function () {
             html: "Apakah kamu yakin ingin menghapus pertanyaan ini?",
             icon: "warning",
             showCancelButton: true,
-            
-            
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
@@ -65,8 +61,6 @@ $(document).ready(function () {
             html: "Apakah kamu yakin ingin menghapus course ini? Semua <strong>quiz</strong> yang berhubungan dengan course ini juga akan <strong>terhapus</strong>.",
             icon: "question",
             showCancelButton: true,
-            
-            
             confirmButtonText: "Hapus",
             cancelButtonText: "Cancel",
         }).then((result) => {
@@ -76,8 +70,6 @@ $(document).ready(function () {
                     html: "Apakah kamu benar-benar yakin? Semua yang terhapus <strong>tidak akan bisa dikembalikan lagi</strong>.",
                     icon: "warning",
                     showCancelButton: true,
-                    
-                    
                     confirmButtonText: "Ya, Saya Yakin",
                     cancelButtonText: "Cancel",
                 }).then((result) => {

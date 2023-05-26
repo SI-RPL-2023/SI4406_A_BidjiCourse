@@ -64,7 +64,7 @@
             });
             $('.dataTables_info, .dataTables_paginate').addClass('mt-4 mb-5');
             $('.dataTables_length').addClass('mb-4');
-            $('.role-edit').on('click', function() {
+            $('#users-table').on('click', '.role-edit', function() {
                 const user = $(this).data('user');
                 const role = $(this).data('role');
                 const url = $(this).data('href');
@@ -82,13 +82,14 @@
                             `</select>`,
                         focusConfirm: false,
                         showCancelButton: true,
-                    })
+                    });
                     if (inputValue) {
+                        console.log('tet');
                         $.ajax({
                             url: url,
                             method: 'PATCH',
                             headers: {
-                                'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             data: {
                                 role: $('#role-select').val(),
@@ -99,14 +100,8 @@
                                 $(`button[data-id=${response['id']}]`).data("role", response['role']);
                                 swalCustom.fire({
                                     icon: response['alert'],
-                                    html: response['html'],
-                                })
-                                // .then((result) => {
-                                //     if (result.value) {
-                                //         loader();
-                                //         document.location.href = `{{ route('users.index') }}`;
-                                //     }
-                                // });
+                                    html: response['html']
+                                });
                             },
                             error: function(xhr, status, error) {
                                 console.error(error);

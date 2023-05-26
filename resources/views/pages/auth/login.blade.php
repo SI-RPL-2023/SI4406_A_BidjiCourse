@@ -21,7 +21,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="text-center" style="padding-top: 100px">
+    <div class="text-center" >
         <h3>Masuk yuk buat belajar!</h3>
     </div>
     <div class="d-flex justify-content-center container">

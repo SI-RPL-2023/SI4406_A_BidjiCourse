@@ -21,9 +21,7 @@ return new class extends Migration
             $table->string('cover');
             $table->longText('desc');
             $table->longText('body');
-            // $table->tinyInteger('rating')->nullable()->check('rating >= 1 and rating <= 5');
-            $table->unsignedTinyInteger('rating')->nullable()->min(1)->max(5);
-            $table->integer('rating_total')->nullable();
+            $table->integer('favorite')->default(0);
             $table->string('added_by');
             $table->string('last_edited_by');
             $table->timestamps();

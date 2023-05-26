@@ -180,7 +180,7 @@
                 delayTimer = setTimeout(() => {
                     $.ajax({
                         headers: {
-                            'X-CSRF-TOKEN': `{{ csrf_token() }}`
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
                         data: {
@@ -208,15 +208,15 @@
                 ];
                 const placeholder_src = '/img/assets/drag-drop-upload.png';
                 const old_src = coverPreviewUpdate.attr('old-src');
-                const invalidTypeText = '<br>' +
-                    '<div class="d-flex d-grid gap-2 mt-2 justify-content-center">' +
-                    '<span class="badge text-bg-primary">PNG</span>' +
-                    '<span class="badge text-bg-secondary">JPG</span>' +
-                    '<span class="badge text-bg-success">JPEG</span>' +
-                    '<span class="badge text-bg-danger">GIF</span>' +
-                    '<span class="badge text-bg-warning">JFIF</span>' +
-                    '<span class="badge text-bg-info">WEBP</span>' +
-                    '</div>'
+                const invalidTypeText =
+                    `<div class="d-flex d-grid gap-2 mt-2 justify-content-center">
+                        <span class="badge text-bg-primary">PNG</span>
+                        <span class="badge text-bg-secondary">JPG</span>
+                        <span class="badge text-bg-success">JPEG</span>
+                        <span class="badge text-bg-danger">GIF</span>
+                        <span class="badge text-bg-warning">JFIF</span>
+                        <span class="badge text-bg-info">WEBP</span>
+                    </div>`
                 const invalidSizeText = '<span class="badge text-bg-dark">5MB</span>'
                 if ($.inArray(fileType, validImageTypes) < 0) {
                     coverPreview.attr('src', placeholder_src);
@@ -224,7 +224,7 @@
                     coverInput.val('')
                     swalCustom.fire({
                         icon: 'warning',
-                        html: 'Ekstensi file yang didukung: ' + invalidTypeText,
+                        html: 'Ekstensi file yang didukung: <br>' + invalidTypeText,
                     })
                 } else if (file.size > 5242880) {
                     coverPreview.attr('src', placeholder_src);
@@ -235,22 +235,10 @@
                         html: 'Ukuran file maksimal ' + invalidSizeText,
                     })
                 } else {
-                    const reader = new FileReader();
+                    let reader = new FileReader();
                     reader.onload = function(e) {
-                        var img = new Image();
-                        img.onload = function() {
-                            var canvas = document.createElement("canvas");
-                            canvas.width = this.width;
-                            canvas.height = this.height;
-                            var ctx = canvas.getContext("2d");
-                            ctx.drawImage(this, 0, 0);
-                            canvas.toBlob(function(blob) {
-                                var url = URL.createObjectURL(blob);
-                                coverPreview.attr('src', url);
-                                coverPreviewUpdate.attr('src', url);
-                            });
-                        };
-                        img.src = e.target.result;
+                        coverPreview.attr('src', e.target.result);
+                        coverPreviewUpdate.attr('src', e.target.result);
                     }
                     reader.readAsDataURL(file);
                 }

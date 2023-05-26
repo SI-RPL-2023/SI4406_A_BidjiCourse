@@ -20,7 +20,7 @@
                 <th>Status</th>
                 <th>Name</th>
                 <th>Mata Pelajaran</th>
-                <th>Rating</th>
+                <th>Favorite</th>
                 <th>Added by</th>
                 <th>Last Edited by</th>
                 <th>Action</th>
@@ -31,7 +31,6 @@
                 @php
                     $status = $course->draft ? 'Draft' : 'Published';
                     $background = $course->draft ? 'warning' : 'success';
-                    $rating = $course->rating ? "$course->rating ($course->rating_total)" : 'Not rated';
                 @endphp
                 <tr>
                     <td>{{ $course->id }}</td>
@@ -46,7 +45,7 @@
                     </td>
                     <td>{{ $course->title }}</td>
                     <td>{{ $course->category->name }}</td>
-                    <td>{{ $rating }}</td>
+                    <td>{{ $course->favorite }}</td>
                     <td>{{ $course->added_by }}<br>({{ $course->created_at }})</td>
                     <td>{{ $course->last_edited_by }}<br>({{ $course->updated_at }})</td>
                     <td class="text-right">

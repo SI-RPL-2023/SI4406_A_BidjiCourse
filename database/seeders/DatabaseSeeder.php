@@ -30,17 +30,17 @@ class DatabaseSeeder extends Seeder
         User::create(
             [
                 'is_admin' => true,
-                'full_name' => 'Putu Wisnu Wirayuda Putra',
-                'email' => 'wisnuwirayuda15@gmail.com',
+                'full_name' => 'admin',
+                'email' => 'admin@example.com',
                 'gender' => 'Laki-laki',
-                'password' => bcrypt('12345678'),
+                'password' => bcrypt('admin1234'),
             ]
         );
         User::create(
             [
                 'is_admin' => false,
                 'full_name' => 'user',
-                'email' => 'user@gmail.com',
+                'email' => 'user@example.com',
                 'gender' => 'Laki-laki',
                 'password' => bcrypt('user1234'),
             ]
@@ -65,12 +65,14 @@ class DatabaseSeeder extends Seeder
             // $user->update(['avatar' => '/img/avatars/' . $avatar_file_name]);
         }
 
-        for ($x = 1; $x <= 10; $x++) {
+        $categories = ["Matematika", "Bahasa Inggris", "Bahasa Indonesia", "Fisika", "Kimia", "Biologi", "Sejarah", "Geografi", "Ekonomi", "Sosiologi"];
+
+        foreach ($categories as $category) {
             DB::table('categories')->insert([
                 [
-                    'name' => "Mata Pelajaran $x",
+                    'name' => $category,
                     'code' => strtoupper($faker->lexify()),
-                    'slug' => Str::slug("Mata Pelajaran $x"),
+                    'slug' => Str::slug($category),
                     'added_by' => $faker->name(),
                     'last_edited_by' => $faker->name(),
                     'created_at' => now(),
@@ -79,19 +81,19 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for ($x = 1; $x <= 10; $x++) {
+        foreach (range(1, 20) as $x) {
             $category = $faker->numberBetween(1, 10);
+            $title = ucwords($faker->words($faker->numberBetween(2, 4), true));
             DB::table('courses')->insert([
                 [
                     'draft' => false,
                     'category_id' => $category,
-                    'title' => "Course $x",
-                    'slug' => "course-$x",
+                    'title' => $title,
+                    'slug' => Str::slug($title),
                     'cover' => "https://picsum.photos/640/360?random=$x",
-                    'desc' => "Course Description $x",
+                    'desc' => $faker->text(200),
                     'body' => $faker->text($faker->numberBetween(1000, 3000)),
-                    'rating' => $faker->numberBetween(1, 5),
-                    'rating_total' => $faker->numberBetween(50, 100),
+                    // 'favorite' => $faker->numberBetween(1, 100),
                     'added_by' => $faker->name(),
                     'last_edited_by' => $faker->name(),
                     'created_at' => now(),
@@ -101,21 +103,21 @@ class DatabaseSeeder extends Seeder
 
 
             $quiz = Quiz::create([
-                'name' => "Quiz $x",
-                'status' => 'Published',//$faker->randomElement(['Published', 'Draft']),
+                'name' => $title,
+                'status' => 'Published', //$faker->randomElement(['Published', 'Draft']),
                 'course_id' => $x,
-                'time_limit' => $x % 2 ? $faker->numberBetween(1000, 2000) : null,
+                // 'time_limit' => $x % 2 ? $faker->numberBetween(1000, 2000) : null,
+                'time_limit' => $faker->numberBetween(1000, 2000),
                 'added_by' => $faker->name(),
                 'last_edited_by' => $faker->name(),
             ]);
-            for ($i = 1; $i <= 10; $i++) {
+            foreach (range(1, 10) as $i) {
                 $question = QuizQuestion::create([
-                    // 'number' => $i,
                     'quiz_id' => $quiz->id,
                     'question' => $faker->text(100),
                     'answer_explanation' => $faker->text(200),
                 ]);
-                for ($j = 1; $j <= 4; $j++) {
+                foreach (range(1, 4) as $j) {
                     $exist = QuizAnswer::where('quiz_question_id', $question->id)->where('is_correct', 1)->exists();
                     $correct = $faker->numberBetween(0, 1);
                     if ($exist) {

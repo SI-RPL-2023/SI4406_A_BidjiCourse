@@ -1,14 +1,10 @@
 @extends('layouts.main')
 @section('navbar')
-    @include('layouts.navbar-simple', ['route' => route('materi.show', $result->quiz->course->slug), 'title' => $title, 'category' => $result->quiz->course->category->name])
+    @include('layouts.navbar-simple', ['route' => route('activities.index') . '#quiz-histories', 'title' => $title, 'category' => $result->quiz->course->category->name, 'categoryRoute' => route('materi.index', ['category' => $result->quiz->course->category->slug])])
 @endsection
 @section('style')
     <style>
-        main {
-            margin-top: 100px;
-        }
-
-        html {
+        body {
             background: #f8f9fa
         }
 
@@ -147,14 +143,14 @@
     </style>
 @endsection
 @section('main')
-    <div class="container-fluid bg-body-tertiary">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 mx-md-5 mb-4">
-                <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('index') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('materi.index') }}">Courses</a></li>
-                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->title }}</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('activities.index') }}">Aktifitas</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ route('activities.index') . '#quiz-histories' }}">Quiz Histories</a></li>
                         <li class="breadcrumb-item active">{{ $result->quiz->name }}</li>
                     </ol>
                 </nav>
@@ -162,12 +158,16 @@
                     <table class="table">
                         <tbody>
                             <tr>
+                                <td class="result-title">Attempt</td>
+                                <td class="result-text">{{ $result->attempt }}</td>
+                            </tr>
+                            <tr>
                                 <td class="result-title">Course</td>
                                 <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->title }}</a></td>
                             </tr>
                             <tr>
-                                <td class="result-title">Category</td>
-                                <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.show', $result->quiz->course->slug) }}">{{ $result->quiz->course->category->name }}</a></td>
+                                <td class="result-title">Mata Pelajaran</td>
+                                <td class="result-text"><a class="text-decoration-none" href="{{ route('materi.index', ['category' => $result->quiz->course->category->slug]) }}">{{ $result->quiz->course->category->name }}</a></td>
                             </tr>
                             <tr>
                                 <td class="result-title">State</td>
@@ -183,11 +183,11 @@
                             </tr>
                             <tr>
                                 <td class="result-title">Marks</td>
-                                <td class="result-text">{{ $result->correct_answer }}/{{ $result->total_questions }}</td>
+                                <td class="result-text">{{ $result->correct_answer }} / {{ $result->total_questions }}</td>
                             </tr>
                             <tr>
                                 <td class="result-title">Time taken</td>
-                                <td class="result-text">{{ $result->updated_at->diff($result->created_at)->format('%h jam %i menit %s detik') }}</td>
+                                <td class="result-text">{{ $result->updated_at->diff($result->created_at)->format('%h jam • %i menit • %s detik') }}</td>
                             </tr>
                             <tr>
                                 <td class="result-title">Score</td>
@@ -205,14 +205,13 @@
                     <div class="col-md-8 mx-md-5 mb-4">
                         <div class="container rounded bg-white" style="padding: 50px">
                             <h5 class="mb-4">Pertanyaan ke <strong class="fs-3">{{ $loop->iteration }}</strong> dari <strong class="fs-5">{{ $result->total_questions }}</strong></h5>
-                            <div class="alert alert-light mb-3">
-                                <p>{!! $question->question !!}</p>
+                            <div class="alert border-1 mb-3 border text-black" style="background-color: #f8f9fa">
+                                {!! $question->question !!}
                             </div>
-                            @if ($question->is_correct)
-                                <p>Jawabanmu benar <i class="ti ti-check fs-4 text-success"></i></p>
-                            @else
-                                <p>Jawabanmu kurang tepat <i class="ti ti-x fs-4 text-danger"></i></p>
-                            @endif
+                            <p>
+                                Jawabanmu {{ $question->is_correct ? 'benar' : 'kurang tepat' }}
+                                <i class="ti ti-{{ $question->is_correct ? 'check' : 'x' }} fs-4 text-{{ $question->is_correct ? 'success' : 'danger' }}"></i>
+                            </p>
                             <div class="ml-5">
                                 <div class="radio-container">
                                     @foreach ($question->answers as $answer)
@@ -225,9 +224,7 @@
                                             <input class="quiz-answer text-bg-danger" type="radio" {{ $answer->selected ? 'checked' : '' }} disabled>
                                             <span>{{ chr(64 + $loop->iteration) }}. {{ $answer->option }}</span>
                                         </label>
-                                        @php
-                                            $radioNumber++;
-                                        @endphp
+                                        <?php $radioNumber++; ?>
                                     @endforeach
                                 </div>
                             </div>
@@ -235,13 +232,15 @@
                                 @foreach ($question->answers as $answer)
                                     @if ($answer->is_correct)
                                         <div class="alert alert-warning mt-3">
-                                            <p>Jawaban yang benar adalah: <br><strong>{{ $answer->option }}</strong></p>
+                                            <strong>Jawaban yang benar adalah:</strong>
+                                            <br>{{ $answer->option }}
                                         </div>
                                     @endif
                                 @endforeach
                             @endif
                             <div class="alert alert-success mt-3">
-                                <p>Penjelasan: <br><strong>{!! $question->answer_explanation !!}</strong></p>
+                                <strong>Penjelasan:</strong>
+                                <br>{!! $question->answer_explanation !!}
                             </div>
                         </div>
                     </div>
@@ -250,7 +249,7 @@
             <div class="col-md-4">
                 <div class="sidebar">
                     <h3 class="quiz-nav">Quiz Navigation</h3>
-                    <span class="finish-review" style="cursor: pointer;" x-on:click="document.location.href = `{{ route('materi.show', $result->quiz->course->slug) }}`" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
+                    <span class="finish-review" style="cursor: pointer;" x-on:click="document.location.href = `{{ route('activities.index') . '#quiz-histories' }}`" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" x-bind:class="hover ? 'text-success' : ''">
                         <i x-bind:class="hover ? 'ti ti-circle-check' : ''"></i>
                         Finish review...
                     </span>
