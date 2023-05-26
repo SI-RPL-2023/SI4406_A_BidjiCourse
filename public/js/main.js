@@ -1,19 +1,28 @@
+// NProgress.configure({
+//     showSpinner: false,
+// });
+
+NProgress.start();
+
+const progress = setInterval(() => {
+    NProgress.inc();
+}, 1000);
+
 AOS.init();
 
 // Loading animation
-function loader() {
+function loader(text = "Loading...", width = 150) {
     Swal.fire({
         showConfirmButton: false,
         allowOutsideClick: false,
         heightAuto: false,
-        width: 150,
+        width: width,
         didOpen: () => {
             Swal.showLoading();
         },
-        text: "Loading...",
+        text: text,
     });
 }
-// loader();
 
 // Wait for Element function
 function waitForElm(selector) {
@@ -38,22 +47,19 @@ $(document).ready(function () {
     setTimeout(function () {
         $("main").removeAttr("data-aos data-aos-duration");
     }, 500);
+
     $(document).on("submit", "form", function () {
         loader();
     });
 
-    // Tooltip
+    // Trigger bootstrap tooltip
     const tooltipTriggerList = $('[data-bs-toggle="tooltip"]');
     const tooltipList = [...tooltipTriggerList].map(
         (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
     );
 });
 
-// $(window).on("load", function () {
-//     $(".loading-animation").fadeOut("slow");
-//     Swal.close();
-//     setTimeout(function () {
-//         $(".loading-animation").remove();
-//         $("main").removeAttr("data-aos data-aos-duration");
-//     }, 500);
-// });
+$(window).on("load", function () {
+    clearInterval(progress);
+    NProgress.done();
+});

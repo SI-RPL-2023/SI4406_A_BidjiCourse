@@ -33,25 +33,25 @@
             <?php $x = 0; ?>
             <label class="form-label">Course</label>
             <select class="form-select" id="course" name="course_id" required>
+                <option selected>Pilih course...</option>
                 @if (isset($quiz))
                     <option value="{{ $quiz->course->id }}" selected>
-                        {{ $quiz->course->category->name }} - {{ $quiz->course->title }}
+                        {{ $quiz->course->title }} - {{ $quiz->course->category->name }}
                     </option>
-                @else
-                    <option selected>Pilih course...</option>
+                    <?php $x++; ?>
                 @endif
                 @foreach ($courses as $course)
                     @if ($course->quiz)
                         @continue
                     @else
-                        <?php $x++; ?>
                         <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : (isset($quiz) && $quiz->course->id == $course->id ? 'selected' : '') }}>
-                            {{ $course->category->name }} - {{ $course->title }}
+                            {{ $course->title }} - {{ $course->category->name }}
                         </option>
+                        <?php $x++; ?>
                     @endif
                 @endforeach
                 @if ($x == 0)
-                    <option>Tidak ada course yang belum memiliki quiz, silahkan tambahkan course baru untuk menambah quiz</option>
+                    <option selected>Tidak ada course yang belum memiliki quiz, silahkan tambahkan course baru untuk menambah quiz</option>
                 @endif
             </select>
         </div>
@@ -74,14 +74,14 @@
             <div class="row g-2">
                 <div class="col">
                     <div class="input-group">
-                        <input class="form-control" id="time_minutes" name="time_minutes" type="number" value="{{ old('time_minutes', $time_minutes) }}" x-bind:disabled="!timeSwitch">
-                        <span class="input-group-text">Menit</span>
+                        <input class="form-control" id="time_hours" name="time_hours" type="number" value="{{ old('time_hours', $time_hours) }}" x-bind:disabled="!timeSwitch">
+                        <span class="input-group-text">Jam</span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <input class="form-control" id="time_hours" name="time_hours" type="number" value="{{ old('time_hours', $time_hours) }}" x-bind:disabled="!timeSwitch">
-                        <span class="input-group-text">Jam</span>
+                        <input class="form-control" id="time_minutes" name="time_minutes" type="number" value="{{ old('time_minutes', $time_minutes) }}" x-bind:disabled="!timeSwitch">
+                        <span class="input-group-text">Menit</span>
                     </div>
                 </div>
             </div>

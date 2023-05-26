@@ -63,11 +63,6 @@
             height: 100vh;
         }
 
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
-
         .nav-scroller {
             position: relative;
             z-index: 2;
@@ -86,17 +81,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        body {
-            overflow-x: hidden;
-        }
-
-
-        body {
-            padding-top: 0;
-            padding-bottom: 2rem;
-            color: #5a5a5a;
-        }
-
         .carousel-inner {
             padding: 1em;
         }
@@ -105,7 +89,6 @@
             margin: 0 0.5em;
             box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
             border: none;
-            background-color: #EFEFEF
         }
 
         .carousel-control-prev,
@@ -139,27 +122,10 @@
             align-items: center;
         }
 
-        .card img {
-            max-height: 100%;
-        }
-
         @media (max-width: 767px) {
             .card .img-wrapper {
                 height: 17em;
             }
-        }
-
-        .marketing .col-lg-4 {
-            margin-top: 5rem;
-            margin-bottom: 5rem;
-            text-align: center;
-            color: #404040;
-
-        }
-
-        .marketing .col-lg-4 p {
-            margin-right: .75rem;
-            margin-left: .75rem;
         }
 
         .featurette-divider {
@@ -190,38 +156,37 @@
     </style>
 @endsection
 @section('main')
-    <div class="container marketing" style="margin-top: 100px">
+    <div class="container">
         <div class="row featurette">
-            <div class="col-md-7 ">
+            <div class="col-md-7">
                 <h2 class="featurette-heading fw-normal lh-1 mx-5">Belajar disini bisa bikin makin pintar</h2>
                 <br>
                 <p class="lead mx-5">Karena materi di Bidji Course ini simpel dan lengkap. Pokoknya bakal sesuai dengan
                     kebutuhanmu.</p>
                 <br>
-                <a href="#" class="btn btn-cust-color text-white mx-5">Mulai bergabung</a>
+                <a class="btn btn-dark mx-5 text-white" href="{{ route('materi.index') }}">Mulai Belajar</a>
             </div>
             <div class="col-md-5">
-                <img src="img/jumbo.svg" width="500" height="500">
+                <img src="/img/assets/jumbo.svg" width="500" height="500">
             </div>
         </div>
-        <!-- Three columns of text below the carousel -->
-        <div class="d-flex gap-4">
-            <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="img/monitor.png" width="150" height="150" alt="icon">
+        <div class="d-flex row gap-4 text-center">
+            <div class="col card-cust rounded-1 py-5">
+                <img src="/img/assets/monitor.png" alt="icon" width="150" height="150">
                 <h3 class="fw-semibold my-3">Belajar lewat video</h3>
                 <p>Meskipun belajar online, kamu bisa tetap dapat gambarannya</p>
             </div>
-            <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="img/icon flexible.png" width="150" height="150" alt="icon">
+            <div class="col card-cust rounded-1 py-5">
+                <img src="/img/assets/icon flexible.png" alt="icon" width="150" height="150">
                 <h3 class="fw-semibold my-3">Belajar lebih flexible</h3>
                 <p>Tetap bisa belajar kapanpun dan dimanapun kamu berada</p>
             </div>
-            <div class="col-lg-4 card-cust py-5 rounded-1">
-                <img src="img/icon mobile.png" width="150" height="150" alt="icon">
+            <div class="col card-cust rounded-1 py-5">
+                <img src="/img/assets/icon mobile.png" alt="icon" width="150" height="150">
                 <h3 class="fw-semibold my-3">Akses yang mudah</h3>
                 <p>Gunakan intenet dan gadget sehari-harimu untuk belajar yang lebih efektif</p>
             </div>
-        </div><!-- /.row -->
+        </div>
 
         <hr class="featurette-divider">
 
@@ -233,115 +198,49 @@
             </div>
             <div class="col-md-5 order-md-1">
                 <div class="col-md-5">
-                    <img src="img/bakar.jpg" width="500" height="350">
+                    <img class="rounded" src="/img/assets/bakar.jpg" width="500" height="350">
                 </div>
             </div>
         </div>
 
         <hr class="featurette-divider">
 
-        <h1 class="mx-4">Materi di Bidji</h1>
-        <div id="carouselExampleControls" class="carousel" data-bs-ride="carousel">
+        <h1 class="mx-4">Rekomendasi Materi</h1>
+        <div class="carousel" id="carouselExampleControls" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/math.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Matematika</h5>
-                            <p class="card-text">Disini bisa belajar aljabar, himpunan, linear, segitiga & segiempat, dan
-                                peluang.</p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
+                @foreach ($courses as $course)
+                    <div class="carousel-item">
+                        <div class="card h-100">
+                            <div class="img-wrapper">
+                                <img class="rounded-top d-block w-100" src="{{ $course->cover }}" alt="{{ $course->title }}" style="object-fit: cover; aspect-ratio: 16 / 9;">
+                            </div>
+                            <div class="card-body">
+                                <a class="text-decoration-none" href="{{ route('materi.index', ['category' => $course->category->slug]) }}" style="font-size: 13px">{{ $course->category->name }}</a>
+                                <h5 class="card-title mt-2">{{ $course->title }}</h5>
+                                <p class="card-text">{{ $course->desc }}</p>
+                            </div>
+                            <div class="card-footer border-0 bg-white">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="badge" style="font-size: 13px; background-color: rgb(234, 234, 234)">
+                                        <span class="text-muted"><i class="ti ti-bookmark-filled text-warning"></i>
+                                            {{ $course->favorite }}</span>
+                                    </div>
+                                    <a class="btn btn-sm btn-dark" href="{{ route('materi.show', $course->slug) }}">Belajar Sekarang</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/science.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Ilmu Pengetahuan Alam</h5>
-                            <p class="card-text">Disini bisa belajar ekologi, reproduksi, gerak dan gaya, kelistrikan, dan
-                                tata surya.</p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/english.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Bahasa Inggris</h5>
-                            <p class="card-text">Disini bisa belajar grammar, descriptive text, narative text, report, dan
-                                advertisement</p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/globe.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Ilmu Pengetahuan Sosial</h5>
-                            <p class="card-text">Disini bisa belajar letak geografis, sejarah, ekonomi, interaksi sosial,
-                                dan badan usaha</p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/garuda.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pendidikan Kewarganegaraan</h5>
-                            <p class="card-text">Disini bisa belajar UUD 1945, pancasila, norma, hukum, dan sejarah
-                                indonesia </p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/indo.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Bahasa indonesia</h5>
-                            <p class="card-text">Disini bisa belajar puisi, surat, literasi buku, fabel, dan teks deskripsi
-                            </p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card">
-                        <div class="img-wrapper"><img src="img/mosque.jpg" class="d-block w-100" alt="..."> </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pendidikan Agama Islam</h5>
-                            <p class="card-text">Disini bisa belajar sejarah islam, tajwid, zakat, haji, dan qurban</p>
-                            <a href="#" class="btn btn-cust-color">Coba belajar</a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="prev">
+            <button class="carousel-control-prev" data-bs-target="#carouselExampleControls" data-bs-slide="prev" type="button">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="next">
+            <button class="carousel-control-next" data-bs-target="#carouselExampleControls" data-bs-slide="next" type="button">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-
-
-
-        <!-- Marketing messaging and featurettes
-                          ================================================== -->
-        <!-- Wrap the rest of the page in another container to center all the content. -->
-
-
-
-        <!-- START THE FEATURETTES -->
-
 
         <hr class="featurette-divider">
 
@@ -352,50 +251,45 @@
             </div>
             <div class="col-md-5">
                 <div class="col-md-5">
-                    <img src="img/quiz.jpg" width="500" height="350">
+                    <img class="rounded" src="img/assets/quiz.jpg" width="500" height="350">
                 </div>
             </div>
         </div>
 
         <hr class="featurette-divider">
 
-        <!-- /END THE FEATURETTES -->
-
-
-        <div class="bg bg-cust-color bold-shadow rounded-4 text-center text-white p-5">
+        <div class="bg bg-cust-color bold-shadow rounded-4 p-5 text-center text-white">
             <h2 class="font-weight-500 mb-3">Tunggu apa lagi?</h2>
             <p>Yuk belajar bareng Bidji Course</p>
-            <a href="" class="btn btn-cust-color-sec remove-style-link mt-3 gtm-reg-btn-a ">Buat Akun</a>
+            <a class="btn btn-light remove-style-link gtm-reg-btn-a mt-3" href="{{ route('register.index') }}">Buat Akun</a>
         </div>
 
-    </div><!-- /.container -->
+    </div>
 @endsection
 @section('script')
     <script>
-        var multipleCardCarousel = document.querySelector(
-            "#carouselExampleControls"
-        );
-        if (window.matchMedia("(min-width: 768px)").matches) {
+        var multipleCardCarousel = $('#carouselExampleControls');
+        if (window.matchMedia('(min-width: 768px)').matches) {
             var carousel = new bootstrap.Carousel(multipleCardCarousel, {
                 interval: false,
             });
-            var carouselWidth = $(".carousel-inner")[0].scrollWidth;
-            var cardWidth = $(".carousel-item").width();
+            var carouselWidth = $('.carousel-inner')[0].scrollWidth;
+            var cardWidth = $('.carousel-item').width();
             var scrollPosition = 0;
-            $("#carouselExampleControls .carousel-control-next").on("click", function() {
+            $('#carouselExampleControls .carousel-control-next').on('click', function() {
                 if (scrollPosition < carouselWidth - cardWidth * 4) {
                     scrollPosition += cardWidth;
-                    $("#carouselExampleControls .carousel-inner").animate({
+                    $('#carouselExampleControls .carousel-inner').animate({
                             scrollLeft: scrollPosition
                         },
                         600
                     );
                 }
             });
-            $("#carouselExampleControls .carousel-control-prev").on("click", function() {
+            $('#carouselExampleControls .carousel-control-prev').on('click', function() {
                 if (scrollPosition > 0) {
                     scrollPosition -= cardWidth;
-                    $("#carouselExampleControls .carousel-inner").animate({
+                    $('#carouselExampleControls .carousel-inner').animate({
                             scrollLeft: scrollPosition
                         },
                         600
@@ -403,7 +297,7 @@
                 }
             });
         } else {
-            $(multipleCardCarousel).addClass("slide");
+            $(multipleCardCarousel).addClass('slide');
         }
     </script>
 @endsection

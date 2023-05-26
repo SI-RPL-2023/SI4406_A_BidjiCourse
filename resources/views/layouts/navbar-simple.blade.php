@@ -6,7 +6,7 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ms-auto d-block text-center">
-                <a class="text-decoration-none" href="" style="font-size: 13px">{{ $category }}</a>
+                <a class="text-decoration-none" href="{{ $categoryRoute }}" style="font-size: 13px">{{ $category }}</a>
                 <div class="fs-5">{{ $title }}</div>
             </ul>
             <ul class="navbar-nav ms-auto">

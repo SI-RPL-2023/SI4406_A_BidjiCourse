@@ -1,9 +1,6 @@
 @extends('layouts.main')
 @section('navbar')
-    @include('layouts.navbar-simple', ['route' => route('materi.index'), 'title' => $course->title, 'category' => $course->category->name])
-@endsection
-@section('footer')
-    @include('layouts.footer')
+    @include('layouts.navbar-simple', ['route' => route('materi.index'), 'title' => $course->title, 'category' => $course->category->name, 'categoryRoute' => route('materi.index', ['category' => $course->category->slug])])
 @endsection
 @section('style')
     <style>
@@ -28,7 +25,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="d-flex justify-content-center" style="padding-top: 100px">
+    <div class="d-flex justify-content-center" >
         <div class="container">
             <div class="materi">
                 <img class="img-fluid mb-4 mt-2 rounded" id="course-cover" src="{{ $course->cover }}" alt="{{ $course->title }}">
@@ -44,7 +41,11 @@
                         ->exists();
                 @endphp
                 <div class="d-flex justify-content-center mt-5">
-                    <a class="{{ !$ongoing ? 'attempt' : 'continue' }}-quiz btn btn-{{ !$ongoing ? 'success' : 'warning' }}" href="{{ route('quiz.show', $course->slug) }}">{{ !$ongoing ? 'Kerjakan' : 'Lanjutkan' }} Quiz</a>
+                    @if ($ongoing)
+                        <a class="btn btn-warning" href="{{ route('quiz.show', $course->slug) }}" onclick="loader()">Lanjutkan Quiz</a>
+                    @else
+                        <a class="attempt-quiz btn btn-success" href="{{ route('quiz.show', $course->slug) }}">Kerjakan Quiz</a>
+                    @endif
                 </div>
             @endif
         </div>
@@ -72,10 +73,7 @@
                         document.location.href = $(this).attr('href');
                         loader();
                     }
-                })
-            });
-            $('.continue-quiz').on('click', function(e) {
-                loader();
+                });
             });
         });
     </script>

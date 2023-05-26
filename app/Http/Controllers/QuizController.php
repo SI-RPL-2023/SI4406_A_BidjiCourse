@@ -52,15 +52,17 @@ class QuizController extends Controller
      */
     public function show($courseSlug)
     {
-        $course = Course::where('slug', $courseSlug)->first();
-        if (empty($course)) {
-            return abort(404); //jika user mencoba merubah slug
+        $course = Course::where('slug', $courseSlug)->firstOrFail();
+        if ($course->draft) {
+            return redirect(route('materi.index'))
+                ->with('alert', 'info')
+                ->with('html', "Quiz <strong>{$course->quiz->name}</strong> belum dapat diakses untuk saat ini.");
         }
+        // if (!$course->quiz) {
+        //     return redirect()->back()->withErrors('Quiz not found');
+        // }
         $user_id = auth()->user()->id;
         $title = "Quiz - $course->title";
-        if (!$course->quiz) {
-            return redirect()->back()->withErrors('Quiz not found');
-        }
         $questions = $course->quiz->questions()->paginate(1);
         $allQuestions = $course->quiz->questions;
         $result = $course->quiz->results()->where('user_id', $user_id);
@@ -259,7 +261,7 @@ class QuizController extends Controller
         $result = QuizResult::where('id', $uuid)
             ->where('user_id', auth()->user()->id)
             ->where('state', 'Finished')
-            ->first();
+            ->firstOrFail();
         if (empty($result)) {
             return abort(404);
         }
