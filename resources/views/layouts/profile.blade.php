@@ -275,7 +275,6 @@
                 animationDuration: 2000,
                 textFormat: 'percent',
             });
-
             // Avatar preview
             const avatarPreview = $('#avatar-preview');
             const avatarInput = $('#avatar-input');
@@ -284,7 +283,6 @@
             const removeButton = $('#remove-btn');
             const generateButton = $('#generate-btn');
             const profileSaveButton = $('#profile-save-btn');
-
             function imagePreview(files) {
                 const file = files;
                 const fileType = file["type"];

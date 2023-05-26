@@ -143,18 +143,18 @@ class ProfileController extends Controller
             User::find(auth()->user()->id)->update([
                 'password' => bcrypt($request->new_password)
             ]);
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            session()->flush();
+            return redirect(route('login.index'))
+                ->with('alert', 'success')
+                ->with('text', 'Password berhasil diganti, silahkan login kembali dengan password yang sudah anda ubah.');
         } else {
             return back()
                 ->with('alert', 'error')
                 ->with('text', 'Password lama anda salah!');
         };
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        session()->flush();
-        return redirect(route('login.index'))
-            ->with('alert', 'success')
-            ->with('text', 'Password berhasil diganti, silahkan login kembali dengan password yang sudah anda ubah.');
     }
 
     /**

@@ -44,6 +44,8 @@ function waitForElm(selector) {
 }
 
 $(document).ready(function () {
+    $("img").attr("loading", "lazy");
+
     setTimeout(function () {
         $("main").removeAttr("data-aos data-aos-duration");
     }, 500);
