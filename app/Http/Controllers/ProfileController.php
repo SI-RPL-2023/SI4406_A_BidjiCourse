@@ -114,11 +114,15 @@ class ProfileController extends Controller
             $data['avatar'] = "/img/avatars/$avatar";
         }
         User::find(auth()->user()->id)->update($data);
-        return redirect(route((auth()->user()->is_admin ? 'dashboard.settings' : 'profile.index')))
+        return response()
+            ->redirectTo(route((auth()->user()->is_admin ? 'dashboard.settings' : 'profile.index')))
             ->with('alert', 'success')
             ->with('html', 'Profile berhasil diupdate.')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-            ->header('Pragma', 'no-cache');
+            ->withHeaders([
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ]);
     }
 
     /**

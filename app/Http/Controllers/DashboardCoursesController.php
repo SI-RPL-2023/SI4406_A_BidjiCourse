@@ -105,11 +105,15 @@ class DashboardCoursesController extends Controller
         $data['last_edited_by'] = auth()->user()->full_name;
         $data['draft'] = $data['submit'] == 'draft' ? 1 : ($data['submit'] == 'done' ? 0 : 1);
         $course->update($data);
-        return redirect(route('courses.show', $data['slug']))
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-            ->header('Pragma', 'no-cache')
+        return response()
+            ->redirectTo(route('courses.show', $data['slug']))
             ->with('alert', 'success')
-            ->with('html', "Course <strong>{$data['title']}</strong> berhasil diupdate!");
+            ->with('html', "Course <strong>{$data['title']}</strong> berhasil diupdate!")
+            ->withHeaders([
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ]);
     }
 
     /**
