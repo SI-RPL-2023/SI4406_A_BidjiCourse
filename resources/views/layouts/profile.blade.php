@@ -21,7 +21,7 @@
         <div class="col-xl-4">
             <div class="card mb-4 border shadow">
                 <div class="card-body profile-card d-flex flex-column align-items-center justify-content-center pt-4 text-center">
-                    <img class="rounded-circle img-fluid shadow" src="{{ $avatar_src }}" alt="Avatar" style="height: 150px">
+                    <img class="rounded-circle img-fluid shadow" src="{{ $avatar_src }}" alt="Avatar" style="height: 150px; object-fit: cover; aspect-ratio: 1/1;">
                     <p class="h4 fw-bold mt-4">{{ auth()->user()->full_name }}</p>
                     <p>{{ $role }}</p>
                 </div>
