@@ -116,7 +116,7 @@
         </div>
     </div>
 @endsection
-@if (!$quizResults->isEmpty())
+@if (!$quizResults->isEmpty() || !$activities->isEmpty())
     @section('script')
         <script>
             $(document).ready(function() {
