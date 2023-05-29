@@ -58,9 +58,6 @@ class QuizController extends Controller
                 ->with('alert', 'info')
                 ->with('html', "Quiz <strong>{$course->quiz->name}</strong> belum dapat diakses untuk saat ini.");
         }
-        // if (!$course->quiz) {
-        //     return redirect()->back()->withErrors('Quiz not found');
-        // }
         $user_id = auth()->user()->id;
         $title = "Quiz - $course->title";
         $questions = $course->quiz->questions()->paginate(1);
@@ -165,10 +162,7 @@ class QuizController extends Controller
         $quizResult = QuizResult::where('quiz_id', $quiz->id)
             ->where('user_id', $user_id)
             ->where('state', 'Ongoing')
-            ->first();
-        if (empty($quizResult)) {
-            return abort(404); //jika user mencoba merubah request quiz id pada halaman html
-        }
+            ->firstOrFail();
         $attempt = QuizAttempt::where('quiz_id', $quiz->id)
             ->where('user_id', $user_id)
             ->whereNotNull('quiz_answer_id')
@@ -262,9 +256,6 @@ class QuizController extends Controller
             ->where('user_id', auth()->user()->id)
             ->where('state', 'Finished')
             ->firstOrFail();
-        if (empty($result)) {
-            return abort(404);
-        }
         $qna = json_decode($result->qna);
         $title = "Quiz Review - {$result->quiz->course->title}";
         return view('pages.quiz.result', compact('result', 'title', 'qna'));
