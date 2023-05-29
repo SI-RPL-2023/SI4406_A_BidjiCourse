@@ -57,9 +57,9 @@
                     <label for="gender" class="form-label" style="font-size: 20px; font-weight: 600;">Jenis
                         Kelamin</label>
                     <select class="form-select @error('gender') is-invalid @enderror" name="gender" id="gender">
-                        <option value="" selected>Pilih Gender</option>
-                        <option value="Laki-laki">Laki-Laki</option>
-                        <option value="Perempuan">Perempuan</option>
+                        <option value="">Pilih Gender</option>
+                        <option value="Laki-laki" {{ old('gender') == 'Laki-laki' ? 'selected' : null }}>Laki-Laki</option>
+                        <option value="Perempuan" {{ old('gender') == 'Perempuan' ? 'selected' : null }}>Perempuan</option>
                     </select>
                     @error('gender')
                         <div class="text-danger text-start" style="font-size: 13px">
