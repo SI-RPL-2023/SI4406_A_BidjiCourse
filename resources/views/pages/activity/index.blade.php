@@ -5,14 +5,16 @@
 @section('footer')
     @include('layouts.footer')
 @endsection
-@section('head-script')
-    <!-- DataTables -->
-    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-@endsection
+@if (!$quizResults->isEmpty())
+    @section('head-script')
+        <!-- DataTables -->
+        <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    @endsection
+@endif
 @section('main')
-    <div class="container" >
+    <div class="container">
         <h1 class="text-center">Aktifitas</h1>
         <div class="container-md">
             <div class="row">
@@ -116,10 +118,10 @@
         </div>
     </div>
 @endsection
-@if (!$quizResults->isEmpty() || !$activities->isEmpty())
-    @section('script')
-        <script>
-            $(document).ready(function() {
+@section('script')
+    <script>
+        $(document).ready(function() {
+            @if (!$quizResults->isEmpty())
                 $('#quiz-histories-table').DataTable({
                     pageLength: 10,
                     scrollX: true,
@@ -131,56 +133,56 @@
                 });
                 $('.dataTables_info, .dataTables_paginate').addClass('mt-4 mb-5');
                 $('.dataTables_length').addClass('mb-4');
+            @endif
 
-                let activities = {{ $activities->count() }};
-                $('.remove-activities').click(function() {
-                    swalCustom.fire({
-                        title: "Hapus Histori Belajar",
-                        html: "Apakah kamu yakin ingin menghapus histori belajarmu?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Hapus",
-                        cancelButtonText: "Cancel",
-                    }).then((result) => {
-                        if (result.value) {
-                            loader('Menghapus...', 200);
-                            const url = $(this).data('href');
-                            const slug = $(this).data('slug');
-                            const html = $(this).html();
-                            $(this).html('Menghapus...');
-                            $.ajax({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                url: url,
-                                type: 'PATCH',
-                                success: function(response) {
-                                    Swal.close();
-                                    console.log(response);
-                                    Toast.fire({
-                                        icon: response['toast'],
-                                        text: response['message']
-                                    });
-                                    activities--;
-                                    $(`#${slug}`).fadeOut();
-                                    if (activities == 0) {
-                                        location.reload();
-                                    }
-                                },
-                                error: function(error) {
-                                    Swal.close();
-                                    console.error(error);
-                                    $(`#${slug}`).html(html);
-                                    Toast.fire({
-                                        icon: 'error',
-                                        text: 'Gagal menghapus histori pembelajaran.',
-                                    });
+            let activities = {{ $activities->count() }};
+            $('.remove-activities').click(function() {
+                swalCustom.fire({
+                    title: "Hapus Histori Belajar",
+                    html: "Apakah kamu yakin ingin menghapus histori belajarmu?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Hapus",
+                    cancelButtonText: "Cancel",
+                }).then((result) => {
+                    if (result.value) {
+                        loader('Menghapus...', 200);
+                        const url = $(this).data('href');
+                        const slug = $(this).data('slug');
+                        const html = $(this).html();
+                        $(this).html('Menghapus...');
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: url,
+                            type: 'PATCH',
+                            success: function(response) {
+                                Swal.close();
+                                console.log(response);
+                                Toast.fire({
+                                    icon: response['toast'],
+                                    text: response['message']
+                                });
+                                activities--;
+                                $(`#${slug}`).fadeOut();
+                                if (activities == 0) {
+                                    location.reload();
                                 }
-                            });
-                        }
-                    });
+                            },
+                            error: function(error) {
+                                Swal.close();
+                                console.error(error);
+                                $(`#${slug}`).html(html);
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: 'Gagal menghapus histori pembelajaran.',
+                                });
+                            }
+                        });
+                    }
                 });
             });
-        </script>
-    @endsection
-@endif
+        });
+    </script>
+@endsection
