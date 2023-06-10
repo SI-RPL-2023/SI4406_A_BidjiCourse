@@ -5,7 +5,7 @@
 @php
     $avatar_src = is_null(auth()->user()->avatar) ? '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg' : auth()->user()->avatar;
     $role = auth()->user()->is_admin ? 'Admin' : 'Student';
-    $themes = ['default', 'cerulean', 'cosmo', 'flatly', 'journal', 'lumen', 'materia', 'minty', 'sandstone', 'simplex', 'sketchy', 'spacelab', 'united', 'yeti', 'zephyr'];
+    $themes = App\Models\Theme::pluck('name');
     $columnArray = ['email', 'full_name', 'avatar', 'born_date', 'number', 'gender'];
     $filledColumns = 0;
     foreach ($columnArray as $column) {
@@ -207,13 +207,28 @@
                                     <div class="col-md-8 col-lg-9">
                                         <select class="form-select" id="theme" name="theme" required>
                                             @foreach ($themes as $theme)
-                                                <option value="{{ $theme }}" {{ auth()->user()->theme == $theme ? 'selected' : '' }}>{{ ucwords($theme) }}</option>
+                                                <option value="{{ $theme }}" {{ auth()->user()->theme == $theme ? 'selected' : null }}>{{ ucwords($theme) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row mb-4">
+                                    <label class="col-md-4 col-lg-3 col-form-label" for="theme">Preview</label>
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-auto">
+                                            <button class="btn btn-primary" type="button">Primary</button>
+                                            <button class="btn btn-secondary" type="button">Secondary</button>
+                                            <button class="btn btn-success" type="button">Success</button>
+                                            <button class="btn btn-info" type="button">Info</button>
+                                            <button class="btn btn-warning" type="button">Warning</button>
+                                            <button class="btn btn-danger" type="button">Danger</button>
+                                            <button class="btn btn-light" type="button">Light</button>
+                                            <button class="btn btn-dark" type="button">Dark</button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="text-center">
-                                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                                    <button class="btn btn-primary disabled" id="theme-save-btn" type="submit">Save Changes</button>
                                 </div>
                             </form>
                         </div>
@@ -275,6 +290,35 @@
                 animationDuration: 2000,
                 textFormat: 'percent',
             });
+            // Real-time theme changer
+            $('#theme').on('change', function() {
+                loader();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        name: $(this).val()
+                    },
+                    url: `{{ route('theme.source') }}`,
+                    type: 'POST',
+                    success: function(response) {
+                        console.log(response);
+                        $('#theme-import').attr('href', response);
+                        $('#theme-save-btn').removeClass('disabled');
+                        Swal.close();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        $('#theme-save-btn').removeClass('disabled');
+                        Swal.close();
+                        Toast.fire({
+                            icon: 'error',
+                            text: "Can't preview theme.",
+                        })
+                    }
+                });
+            });
             // Avatar preview
             const avatarPreview = $('#avatar-preview');
             const avatarInput = $('#avatar-input');
@@ -283,6 +327,7 @@
             const removeButton = $('#remove-btn');
             const generateButton = $('#generate-btn');
             const profileSaveButton = $('#profile-save-btn');
+
             function imagePreview(files) {
                 const file = files;
                 const fileType = file["type"];

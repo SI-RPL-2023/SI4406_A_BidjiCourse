@@ -25,10 +25,12 @@
     </style>
 @endsection
 @section('main')
-    <div class="d-flex justify-content-center" >
+    <div class="d-flex justify-content-center">
         <div class="container">
             <div class="materi">
-                <img class="img-fluid mb-4 mt-2 rounded" id="course-cover" src="{{ $course->cover }}" alt="{{ $course->title }}">
+                <div class="d-flex justify-content-center">
+                    <img class="img-fluid mb-4 mt-2 rounded" id="course-cover" src="{{ $course->cover }}" alt="{{ $course->title }}">
+                </div>
                 <br>
                 {!! $course->body !!}
             </div>
@@ -56,7 +58,8 @@
         $(document).ready(function() {
             $('.attempt-quiz').on('click', function(e) {
                 e.preventDefault();
-                const html = '<p>Ukur sampai mana pemahamanmu tentang course ini dengan mengerjakan quiz</p>' +
+                const html =
+                    '<p>Ukur sampai mana pemahamanmu tentang course ini dengan mengerjakan quiz</p>' +
                     `<span>Jumlah soal: <strong><span class="badge text-bg-warning border">{{ isset($course->quiz) ? count($course->quiz->questions) : '' }}</span></strong></span><br>`
                 @if ($course->quiz && $course->quiz->time_limit)
                     +'<span>Waktu pengerjaan: <strong><span class="badge text-bg-success border">{{ floor($course->quiz->time_limit / 60) }} Menit</span></strong></span><br>'

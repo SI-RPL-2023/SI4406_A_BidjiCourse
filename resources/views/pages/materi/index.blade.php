@@ -30,7 +30,7 @@
                 <div class="col-auto">
                     <div class="input-group">
                         <input class="form-control" id="searchBar" name="search" type="search" value="{{ request('search') }}" autocomplete="off" placeholder="Cari materi disini..." required>
-                        <button class="input-group-text text-secondary" type="submit">
+                        <button class="input-group-text text-dark" type="submit">
                             <i class="ti ti-search"></i>
                         </button>
                     </div>

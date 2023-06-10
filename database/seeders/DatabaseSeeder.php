@@ -6,11 +6,11 @@ namespace Database\Seeders;
 use App\Models\Quiz;
 use App\Models\User;
 use App\Models\QuizAnswer;
-use Faker\Factory as Faker;
 use Illuminate\Support\Str;
 use App\Models\QuizQuestion;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,8 +25,35 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $faker = Faker::create('id_ID');
 
+        // Themes
+        $bootswatch = Http::get('https://bootswatch.com/api/5.json')->object();
+        DB::table('themes')->insert([
+            [
+                'name' => 'default',
+                'description' => 'Default Bootstrap theme',
+                'source' => 'https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+        foreach ($bootswatch->themes as $theme) {
+            DB::table('themes')->insert([
+                [
+                    'name' => strtolower($theme->name),
+                    'description' => $theme->description,
+                    'thumbnail' => $theme->thumbnail,
+                    'source' => $theme->cssCdn,
+                    'source_backup' => $theme->cssMin,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        }
+
+        $faker = fake('id_ID');
+
+        // Users
         User::create(
             [
                 'is_admin' => true,
@@ -45,28 +72,28 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('user1234'),
             ]
         );
+        // for ($x = 1; $x <= 10; $x++) {
+        //     $user = User::create(
+        //         [
+        //             'is_admin' => false,
+        //             'full_name' => $faker->name(),
+        //             'email' => $faker->freeEmail(),
+        //             'gender' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //             'password' => bcrypt('123'),
+        //         ]
+        //     );
+        //     $seed = $user->id;
+        //     $avatar_url = "https://api.dicebear.com/6.x/avataaars/png?seed=$seed&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=gradientLinear&accessoriesProbability=25";
+        //     $avatar = file_get_contents($avatar_url);
+        //     $avatar_file_name = "$seed.png";
+        //     $avatar_file_path = public_path('img/avatars/' . $avatar_file_name);
+        //     file_put_contents($avatar_file_path, $avatar);
+        //     $user->update(['avatar' => '/img/avatars/' . $avatar_file_name]);
+        // }
 
-        for ($x = 1; $x <= 10; $x++) {
-            $user = User::create(
-                [
-                    'is_admin' => false,
-                    'full_name' => $faker->name(),
-                    'email' => $faker->freeEmail(),
-                    'gender' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-                    'password' => bcrypt('123'),
-                ]
-            );
-            // $seed = $user->id;
-            // $avatar_url = "https://api.dicebear.com/6.x/avataaars/png?seed=$seed&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=gradientLinear&accessoriesProbability=25";
-            // $avatar = file_get_contents($avatar_url);
-            // $avatar_file_name = "$seed.png";
-            // $avatar_file_path = public_path('img/avatars/' . $avatar_file_name);
-            // file_put_contents($avatar_file_path, $avatar);
-            // $user->update(['avatar' => '/img/avatars/' . $avatar_file_name]);
-        }
 
+        // Categories
         $categories = ["Matematika", "Bahasa Inggris", "Bahasa Indonesia", "Fisika", "Kimia", "Biologi", "Sejarah", "Geografi", "Ekonomi", "Sosiologi"];
-
         foreach ($categories as $category) {
             DB::table('categories')->insert([
                 [
@@ -81,6 +108,8 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+
+        // Courses
         foreach (range(1, 20) as $x) {
             $category = $faker->numberBetween(1, 10);
             $title = ucwords($faker->words($faker->numberBetween(2, 4), true));
@@ -102,6 +131,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
 
+            // Quizzes
             $quiz = Quiz::create([
                 'name' => $title,
                 'status' => 'Published', //$faker->randomElement(['Published', 'Draft']),

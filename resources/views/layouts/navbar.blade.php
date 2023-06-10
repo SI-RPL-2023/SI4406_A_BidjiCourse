@@ -16,7 +16,7 @@
                     <form action="{{ route('materi.index') }}" method="GET" id="filterForm">
                         <div class="input-group m-auto">
                             <input class="form-control" id="searchBar" name="search" type="search" value="{{ request('search') }}" autocomplete="off" placeholder="Mau belajar apa hari ini?" required>
-                            <button class="input-group-text text-secondary" id="navbarSubmit" type="submit">
+                            <button class="input-group-text text-dark" id="navbarSubmit" type="submit">
                                 <i class="ti ti-search"></i>
                             </button>
                         </div>

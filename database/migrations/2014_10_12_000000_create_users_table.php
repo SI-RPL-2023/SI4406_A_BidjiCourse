@@ -20,23 +20,7 @@ return new class extends Migration
             $table->string('born_date')->nullable();
             $table->string('number')->nullable();
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
-            $table->enum('theme', [
-                'default',
-                'cerulean',
-                'cosmo',
-                'flatly',
-                'journal',
-                'lumen',
-                'materia',
-                'minty',
-                'sandstone',
-                'simplex',
-                'sketchy',
-                'spacelab',
-                'united',
-                'yeti',
-                'zephyr'
-            ])->default('default');
+            $table->string('theme')->default('default');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

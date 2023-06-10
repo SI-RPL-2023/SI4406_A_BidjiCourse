@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Activity;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +57,7 @@ class ProfileController extends Controller
      */
     public function updateTheme(Request $request)
     {
-        $themes = ['default', 'cerulean', 'cosmo', 'flatly', 'journal', 'lumen', 'materia', 'minty', 'sandstone', 'simplex', 'sketchy', 'spacelab', 'united', 'yeti', 'zephyr'];
+        $themes = Theme::pluck('name');
         $request->validate(
             [
                 'theme' => ['required', Rule::in($themes)]

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\ProfileController;
@@ -48,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('profile/update/theme', [ProfileController::class, 'updateTheme'])->name('profile.update.theme');
     Route::patch('profile/update/profiles', [ProfileController::class, 'updateProfiles'])->name('profile.update.profiles');
     Route::patch('profile/update/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+    //ThemeController
+    Route::post('theme/source', [ThemeController::class, 'getSource'])->name('theme.source');
 });
 
 Route::middleware(['auth', 'not_admin'])->group(function () {

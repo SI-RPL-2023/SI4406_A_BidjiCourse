@@ -7,8 +7,13 @@
 <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet">
 <!-- SweetAlert2 -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Bootstrap -->
-<link href="/css/themes/{{ auth()->user() ? auth()->user()->theme : 'default' }}.min.css" rel="stylesheet" />
+<!-- Theme -->
+@php
+    $theme = App\Models\Theme::select('source')
+        ->where('name', auth()->user()->theme ?? 'default')
+        ->first();
+@endphp
+<link id="theme-import" href="{{ $theme->source }}" rel="stylesheet" />
 <!-- Tabler Icons -->
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
 <!--Animation-->
