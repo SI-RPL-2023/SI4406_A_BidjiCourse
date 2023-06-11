@@ -23,7 +23,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="container" >
+    <div class="container">
         @if ($courses->isEmpty())
             <div class="row text-center">
                 <div class="col">
@@ -92,7 +92,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: `{{ route('favorites.store') }}`,
+                    url: `{{ route('favorites.store', [], false) }}`,
                     type: 'POST',
                     data: {
                         course_slug: courseSlug

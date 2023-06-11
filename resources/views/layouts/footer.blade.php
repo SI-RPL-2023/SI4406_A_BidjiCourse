@@ -59,6 +59,7 @@
                     <p><i class="ti ti-code me-2"></i> Herro Arya Setiawan</p>
                     <p><i class="ti ti-code me-2"></i> Alfatha Huga Anaku</p>
                     <p><i class="ti ti-chart-bar me-2"></i> Nazla Nabila</p>
+                    <p><i class="ti ti-code me-2"></i> Fathan</p>
                 </div>
             </div>
         </div>

@@ -169,7 +169,7 @@
                                 </div>
                             </form>
                             <br>
-                            <span class="flag_toggle" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bs-title="Tandai pertanyaan ini jika kamu ingin mengerjakannya nanti" data-quiz-id="{{ $course->quiz->id }}" data-question-id="{{ $question->id }}" data-url="{{ route('quiz.flag', [$course->quiz->id, $question->id]) }}
+                            <span class="flag_toggle" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bs-title="Tandai pertanyaan ini jika kamu ingin mengerjakannya nanti" data-quiz-id="{{ $course->quiz->id }}" data-question-id="{{ $question->id }}" data-url="{{ route('quiz.flag', [$course->quiz->id, $question->id], false) }}
                                 " style="cursor: pointer;">
                                 <i class="flag_icon ti ti-flag{{ $flag ? '-filled text-danger' : '' }}"></i>
                                 <span class="flag_text">{{ $flag ? 'Remove flag' : 'Flag question' }}</span>
@@ -183,7 +183,7 @@
                                     <form id="finish" action="{{ route('quiz.update', $course->quiz->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <button class="finish-attempt btn btn-dark" data-url="{{ route('quiz.check', $course->quiz->id) }}" type="submit"><i class="ti ti-circle-check"></i> Finish Attempt</button>
+                                        <button class="finish-attempt btn btn-dark" data-url="{{ route('quiz.check', $course->quiz->id, false) }}" type="submit"><i class="ti ti-circle-check"></i> Finish Attempt</button>
                                     </form>
                                 @else
                                     <a class="btn btn-dark" id="next" href="{{ $questions->nextPageUrl() }}">Next <i class="ti ti-chevron-right"></i></a>
@@ -306,7 +306,7 @@
                 const formData = $('#quiz_radio').serialize();
                 console.log(formData);
                 $.ajax({
-                    url: `{{ route('quiz.store') }}`,
+                    url: `{{ route('quiz.store', [], false) }}`,
                     type: 'POST',
                     data: formData,
                     success: function(response) {

@@ -36,7 +36,7 @@
                                         <div class="col-md-auto d-flex gap-2">
                                             <a class="text-decoration-none text-primary" href="{{ route('materi.show', $activity->course->slug) }}"><i class="ti ti-book-2"></i> Lanjutkan</a>
                                             |
-                                            <div class="remove-activities text-decoration-none text-danger" data-slug="{{ $activity->course->slug }}" data-href="{{ route('activities.update', $activity->id) }}" style="cursor: pointer"><i class="ti ti-trash"></i> Hapus Histori</div>
+                                            <div class="remove-activities text-decoration-none text-danger" data-slug="{{ $activity->course->slug }}" data-href="{{ route('activities.update', $activity->id, false) }}" style="cursor: pointer"><i class="ti ti-trash"></i> Hapus Histori</div>
                                         </div>
                                     </div>
                                 </div>

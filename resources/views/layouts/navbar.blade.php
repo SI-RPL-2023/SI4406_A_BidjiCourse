@@ -64,7 +64,7 @@
             data: {
                 src: async (query) => {
                     try {
-                        const source = await fetch(`{{ url('materi/search') }}/${query}`);
+                        const source = await fetch(`{{ route('materi.search', [], false) }}?keyword=${query}`);
                         const data = await source.json();
                         return data;
                     } catch (error) {

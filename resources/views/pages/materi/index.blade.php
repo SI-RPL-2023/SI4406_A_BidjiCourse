@@ -23,7 +23,7 @@
     </style>
 @endsection
 @section('main')
-    <div class="container" >
+    <div class="container">
         <h1 class="text-center">Materi</h1>
         <form id="filterForm" action="{{ route('materi.index') }}" method="GET" x-data x-ref="filterForm">
             <div class="row justify-content-center d-flex mt-3">
@@ -154,7 +154,7 @@
                 const icon = $(this).html();
                 $(this).html('<span class="spinner-border spinner-border-sm"></span>');
                 $.ajax({
-                    url: `{{ route('favorites.store') }}`,
+                    url: `{{ route('favorites.store', [], false) }}`,
                     type: 'POST',
                     data: {
                         course_slug: courseSlug

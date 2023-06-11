@@ -186,7 +186,7 @@
                         data: {
                             string: $(this).val()
                         },
-                        url: `{{ route('getSlug') }}`,
+                        url: `{{ route('getSlug', [], false) }}`,
                         success: function(response) {
                             $('#slug').val(response);
                         }

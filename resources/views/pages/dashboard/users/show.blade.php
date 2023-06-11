@@ -4,7 +4,7 @@
 @section('main')
     @php
         $delete_tlp = auth()->user()->id == $user->id ? 'Untuk alasan keamanan, kamu tidak diperbolehkan menghapus akun kamu sendiri' : 'Delete this user';
-        $avatar_src = is_null(auth()->user()->avatar) ? '/img/assets/' . (auth()->user()->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg' : auth()->user()->avatar;
+        $avatar_src = $user->avatar ?? '/img/assets/' . ($user->gender == 'Perempuan' ? 'fe' : '') . 'male-avatar.jpg';
     @endphp
     <div class="container mb-5 mt-4 rounded bg-white">
         <div class="row">
@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="labels">Nomor Telepon</label>
-                            <input class="form-control {{ is_null($user->number) ? 'text-danger fst-italic' : 'text-secondary' }}" type="text" value="{{ is_null($user->number) ? 'not_set' : '(+62) '.$user->number }}" readonly>
+                            <input class="form-control {{ is_null($user->number) ? 'text-danger fst-italic' : 'text-secondary' }}" type="text" value="{{ is_null($user->number) ? 'not_set' : '(+62) ' . $user->number }}" readonly>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="labels">Created At</label>

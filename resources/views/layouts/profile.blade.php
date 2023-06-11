@@ -300,7 +300,7 @@
                     data: {
                         name: $(this).val()
                     },
-                    url: `{{ route('theme.source') }}`,
+                    url: `{{ route('theme.source', [], false) }}`,
                     type: 'POST',
                     success: function(response) {
                         console.log(response);

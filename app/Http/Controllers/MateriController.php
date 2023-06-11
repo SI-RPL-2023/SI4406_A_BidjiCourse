@@ -98,11 +98,11 @@ class MateriController extends Controller
     /**
      * Autocomplete ajax.
      */
-    public function search($keyword)
+    public function search(Request $request)
     {
         $titles = Course::select('title')
             ->where('draft', false)
-            ->where('title', 'LIKE', "%$keyword%")
+            ->where('title', 'LIKE', "%$request->keyword%")
             ->limit(5)
             ->orderBy('title')
             ->pluck('title')

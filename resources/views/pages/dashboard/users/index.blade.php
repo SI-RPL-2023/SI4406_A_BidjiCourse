@@ -34,7 +34,7 @@
                         <div class="d-grid d-flex gap-2">
                             <a class="btn btn-sm btn-warning" id="detail" data-bs-toggle="tooltip" data-bs-title="View this user's detail" href="{{ route('users.show', $user->id) }}"><i class="ti ti-eye"></i></a>
                             <span data-bs-toggle="tooltip" data-bs-title="{{ $edit_tlp }}" tabindex="0">
-                                <button class="role-edit btn btn-sm btn-primary {{ auth()->user()->id == $user->id ? 'disabled' : '' }}" id="edit" data-id="{{ $user->id }}" data-role="{{ $user->is_admin }}" data-href="{{ route('users.update', $user->id) }}" data-user="{{ $user->full_name }}"><i class="ti ti-edit"></i></button>
+                                <button class="role-edit btn btn-sm btn-primary {{ auth()->user()->id == $user->id ? 'disabled' : '' }}" id="edit" data-id="{{ $user->id }}" data-role="{{ $user->is_admin }}" data-href="{{ route('users.update', $user->id, false) }}" data-user="{{ $user->full_name }}"><i class="ti ti-edit"></i></button>
                             </span>
                             <form action="{{ route('users.destroy', $user->id) }}" method="post">
                                 @csrf

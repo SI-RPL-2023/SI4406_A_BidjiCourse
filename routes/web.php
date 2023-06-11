@@ -33,7 +33,7 @@ use App\Http\Controllers\DashboardCategoriesController;
 // });
 
 //MateriController
-Route::get('materi/search/{keyword}', [MateriController::class, 'search'])->name('materi.search');
+Route::get('materi/search', [MateriController::class, 'search'])->name('materi.search');
 
 Route::middleware(['guest'])->group(function () {
     //LoginController
