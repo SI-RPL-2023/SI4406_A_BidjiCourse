@@ -5,7 +5,6 @@
             title: `{{ session('title') }}`,
             text: `{{ session('text') }}`,
             html: `{!! session('html') !!}`,
-            confirmButtonColor: '#2d6efd',
         });
     </script>
 @endif
@@ -40,10 +39,10 @@
 @endif
 
 @if ($errors->any())
-<script>
-    swalCustom.fire({
-        icon: 'error',
-        text: '{{ $errors->first() }}',
-    })
-</script>
+    <script>
+        swalCustom.fire({
+            icon: 'error',
+            text: '{{ $errors->first() }}',
+        })
+    </script>
 @endif

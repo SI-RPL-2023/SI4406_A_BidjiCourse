@@ -71,7 +71,7 @@ class ProfileController extends Controller
             'theme' => $request->theme
         ]);
         $theme = ucwords($request->theme);
-        return redirect(route((auth()->user()->is_admin ? 'dashboard.settings' : 'profile.index')))
+        return redirect()->back()
             ->with('alert', 'success')
             ->with('html', "Tema <strong>$theme</strong> berhasil diterapkan.");
     }
@@ -114,10 +114,9 @@ class ProfileController extends Controller
             $data['avatar'] = "/img/avatars/$avatar";
         }
         User::find(auth()->user()->id)->update($data);
-        return response()
-            ->redirectTo(route((auth()->user()->is_admin ? 'dashboard.settings' : 'profile.index')))
+        return redirect()->back()
             ->with('alert', 'success')
-            ->with('html', 'Profile berhasil diupdate.')
+            ->with('text', 'Profile berhasil diupdate.')
             ->withHeaders([
                 'Cache-Control' => 'no-cache, no-store, must-revalidate',
                 'Pragma' => 'no-cache',

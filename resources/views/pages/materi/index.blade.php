@@ -63,7 +63,7 @@
                         </select>
                     </div>
                 </div>
-                @if (request()->all())
+                @if (request('category') || request('search'))
                     <div class="col-auto">
                         <a class="btn btn-danger text-decoration-none" href="{{ route('materi.index') }}" onclick="loader()">
                             <i class="ti ti-reload"></i> Reset
@@ -71,7 +71,7 @@
                     </div>
                 @endif
             </div>
-            @if (request()->all() && !$courses->isEmpty())
+            @if ((request('category') || request('search')) && !$courses->isEmpty())
                 <div class="mt-3 text-center">
                     <h5>{{ $courses->total() }} materi ditemukan</h5>
                 </div>
