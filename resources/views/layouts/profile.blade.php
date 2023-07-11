@@ -110,13 +110,13 @@
                                     <div class="col-lg-3 col-md-4 label">
                                         <i class="ti ti-calendar"></i> Born Date
                                     </div>
-                                    <div class="col-lg-9 col-md-8 fw-bold {{ is_null(auth()->user()->born_date) ? 'fst-italic text-danger' : '' }}">{{ is_null(auth()->user()->born_date)? 'not_set': \Carbon\Carbon::parse(auth()->user()->born_date)->format('d F Y') .\Carbon\Carbon::parse(auth()->user()->born_date)->diff(now())->format(' • %y thn') }}</div>
+                                    <div class="col-lg-9 col-md-8 fw-bold {{ is_null(auth()->user()->born_date) ? 'fst-italic text-danger' : null }}">{{ is_null(auth()->user()->born_date)? 'not_set': \Carbon\Carbon::parse(auth()->user()->born_date)->format('d F Y') .\Carbon\Carbon::parse(auth()->user()->born_date)->diff(now())->format(' • %y thn') }}</div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-3 col-md-4 label">
                                         <i class="ti ti-phone"></i> Phone
                                     </div>
-                                    <div class="col-lg-9 col-md-8 fw-bold {{ is_null(auth()->user()->number) ? 'fst-italic text-danger' : '' }}">{{ is_null(auth()->user()->number) ? 'not_set' : '(+62) ' . auth()->user()->number }}</div>
+                                    <div class="col-lg-9 col-md-8 fw-bold {{ is_null(auth()->user()->number) ? 'fst-italic text-danger' : null }}">{{ is_null(auth()->user()->number) ? 'not_set' : '(+62) ' . auth()->user()->number }}</div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-3 col-md-4 label">
@@ -154,7 +154,7 @@
                                             <div class="btn btn-primary btn-sm" id="upload-btn">
                                                 <i class="ti ti-upload"></i> Upload
                                             </div>
-                                            <div class="btn btn-danger btn-sm {{ is_null(auth()->user()->avatar) ? 'disabled' : '' }}" id="remove-btn">
+                                            <div class="btn btn-danger btn-sm {{ is_null(auth()->user()->avatar) ? 'disabled' : null }}" id="remove-btn">
                                                 <i class="ti ti-trash"></i> Remove
                                             </div>
                                             <div class="btn btn-success btn-sm" id="generate-btn" style="width: 120px">
@@ -173,15 +173,15 @@
                                     <label class="col-md-4 col-lg-3 col-form-label" for="gender">Gender</label>
                                     <div class="col-md-8 col-lg-9">
                                         <select class="form-select" id="gender" name="gender">
-                                            <option value="Laki-laki" {{ auth()->user()->gender == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                                            <option value="Perempuan" {{ auth()->user()->gender == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                            <option value="Laki-laki" {{ auth()->user()->gender == 'Laki-laki' ? 'selected' : null }}>Laki-laki</option>
+                                            <option value="Perempuan" {{ auth()->user()->gender == 'Perempuan' ? 'selected' : null }}>Perempuan</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-md-4 col-lg-3 col-form-label" for="born_date">Born Date</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input class="form-control" id="born_date" name="born_date" type="date" value="{{ auth()->user()->born_date }}">
+                                        <input class="form-control {{ auth()->user()->born_date ? null : 'is-invalid' }}" id="born_date" name="born_date" type="date" value="{{ auth()->user()->born_date }}">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -189,7 +189,7 @@
                                     <div class="col-md-8 col-lg-9">
                                         <div class="input-group">
                                             <span class="input-group-text">+62</span>
-                                            <input class="form-control" id="number" name="number" type="tel" value="{{ auth()->user()->number }}" placeholder="Enter your phone number...">
+                                            <input class="form-control {{ auth()->user()->number ? null : 'is-invalid' }}" id="number" name="number" type="tel" value="{{ auth()->user()->number }}" placeholder="Enter your phone number...">
                                         </div>
                                     </div>
                                 </div>
