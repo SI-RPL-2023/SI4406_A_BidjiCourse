@@ -150,7 +150,7 @@
             $('.favorite-button').click(function() {
                 const courseTitle = $(this).data('course-title');
                 const courseSlug = $(this).data('course-slug');
-                const favoriteButton = $(`.favorite-button[data-course-slug=${courseSlug}]`)
+                const favoriteButton = $(this);
                 const icon = $(this).html();
                 $(this).html('<span class="spinner-border spinner-border-sm"></span>');
                 $.ajax({
