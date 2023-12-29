@@ -50,6 +50,11 @@ $(document).ready(function () {
         $("main").removeAttr("data-aos data-aos-duration");
     }, 500);
 
+    // $("a").click(function () {
+    //     NProgress.start();
+    //     NProgress.set(0.3);
+    // });
+
     $(document).on("submit", "form", function () {
         loader();
     });
